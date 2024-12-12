@@ -46,6 +46,7 @@
                 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
                     Add Category
                 </button>
+
                 <table class="table table-striped mb-0">
                     <thead>
                         <tr>
@@ -113,8 +114,6 @@
     </div>
 
 
-
-
     <!-- Edit Modal -->
     <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -176,10 +175,12 @@
                 description: document.getElementById('add-description').value,
             };
 
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
             fetch('/category', {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'X-CSRF-TOKEN': csrfToken,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(formData),
@@ -187,7 +188,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert(data.message);
                         location.reload(); // Reload to update the table
                     } else {
                         alert('Error: ' + data.message);
@@ -198,6 +198,8 @@
                     alert('Something went wrong. Check the console for details.');
                 });
         });
+
+
 
 
         // Edit Button - Opens the Edit Modal
@@ -240,7 +242,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert('Category updated successfully');
                         location.reload(); // Reload table
                     } else {
                         alert('Error updating category');
@@ -267,7 +268,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert('Category deleted successfully');
+                    
                         document.getElementById(`category-row-${deleteId}`).remove();
                         bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
                     } else {

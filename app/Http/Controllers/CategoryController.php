@@ -27,30 +27,7 @@ class CategoryController extends Controller
     }
 
 
-    public function store(Request $request)
-    {
-        try {
-            dd($request);
-            // Validate the incoming request
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string|max:255',
-            ]);
-
-            // Create a new category
-            CategoryModel::create([
-                'name' => $request->name,
-                'description' => $request->description,
-            ]);
-            // Return success response
-            return response()->json(['success' => true, 'message' => 'Category added successfully']);
-        } catch (\Exception $e) {
-            // Log and return error response
-            \Log::error('Add Category Error: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Something went wrong'], 500);
-        }
-    }
-
+    
 
 
     public function update(Request $request, $id)
@@ -73,6 +50,36 @@ class CategoryController extends Controller
             return response()->json(['success' => false, 'message' => 'Something went wrong'], 500);
         }
     }
+
+
+
+
+    public function store(Request $request)
+{
+    try {
+        // Validate the incoming request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+        ]);
+
+        // Create a new category
+        CategoryModel::create([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        // Return success response
+        return response()->json(['success' => true]);
+
+    } catch (\Exception $e) {
+        // Log and return error response
+        \Log::error('Add Category Error: ' . $e->getMessage());
+        return response()->json(['success' => false, 'message' => 'Something went wrong'], 500);
+    }
+}
+
+
 
 
     public function destroy($id)

@@ -30,6 +30,7 @@ Route::get('/category', [CategoryController::class, 'index'])->name('Category');
 
 Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
 
+
 Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
 
 // Update a category

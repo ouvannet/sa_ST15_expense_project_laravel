@@ -4,6 +4,8 @@
 <meta name="description" content="@yield('metaDescription')" />
 <meta name="author" content="@yield('metaAuthor')" />
 <meta name="keywords" content="@yield('metaKeywords')" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 
 @stack('metaTag')
 <style>
