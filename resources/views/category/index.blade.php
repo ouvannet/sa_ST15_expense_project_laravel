@@ -135,6 +135,7 @@
         document.getElementById('addCategoryForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            
             const formData = {
                 name: document.getElementById('add-name').value,
                 description: document.getElementById('add-description').value,
