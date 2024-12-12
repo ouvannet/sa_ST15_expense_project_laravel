@@ -12,9 +12,12 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 
+
+
+
+
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-// Logout
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
@@ -24,6 +27,26 @@ Route::get('/', function () {
 
 Route::get('/expense', [ExpenseController::class, 'index'])->name('Expense');
 Route::get('/category', [CategoryController::class, 'index'])->name('Category');
+
+Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
+
+Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+
+// Update a category
+Route::put('/category/{id}', [CategoryController::class, 'update']);
+
+// Delete a category
+Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+
+
+
+
+
+
+
+
+
 Route::get('/recurring', [RecurringController::class, 'index'])->name('Recurring');
 Route::get('/report', [ReportController::class, 'index'])->name('Report');
 Route::get('/user', [UserController::class, 'index'])->name('User');

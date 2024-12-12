@@ -6,6 +6,15 @@
 <meta name="keywords" content="@yield('metaKeywords')" />
 
 @stack('metaTag')
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box
+    }
+
+
+</style>
 
 <!-- ================== BEGIN BASE CSS STYLE ================== -->
 <link href="/assets/css/vendor.min.css" rel="stylesheet" />
