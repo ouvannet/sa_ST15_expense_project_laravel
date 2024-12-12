@@ -25,25 +25,26 @@ Route::get('/', function () {
 })->middleware('auth');
 
 
+
+//This are all the routes for expense;
 Route::get('/expense', [ExpenseController::class, 'index'])->name('Expense');
+Route::post('/expense', [ExpenseController::class, 'add'])->name('Expense.add');
+Route::get('/expense/{id}/edit', [ExpenseController::class, 'edit'])->name('Expense.edit');
+Route::put('/expense/{id}', [ExpenseController::class, 'update']);
+Route::delete('/expense/{id}', [ExpenseController::class, 'destroy'])->name('Expense.destroy');
+
+
+
+
+
+
+
+//This are all the routes for category;
 Route::get('/category', [CategoryController::class, 'index'])->name('Category');
-
-Route::post('/category', [CategoryController::class, 'store'])->name('category.store');
-
-
+Route::post('/category', [CategoryController::class, 'add'])->name('category.add');
 Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-
-// Update a category
 Route::put('/category/{id}', [CategoryController::class, 'update']);
-
-// Delete a category
 Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
-
-
-
-
-
-
 
 
 
@@ -53,9 +54,16 @@ Route::get('/report', [ReportController::class, 'index'])->name('Report');
 Route::get('/user', [UserController::class, 'index'])->name('User');
 Route::get('/role', [RoleController::class, 'index'])->name('Role');
 Route::get('/permission', [PermissionController::class, 'index'])->name('Permission');
+
+
+
+
+//This are all the routes for department;
 Route::get('/department', [DepartmentController::class, 'index'])->name('Department');
-
-
+Route::post('/department', [DepartmentController::class, 'add'])->name('department.add');
+Route::get('/department/{id}/edit', [DepartmentController::class, 'edit'])->name('department.edit');
+Route::put('/department/{id}', [DepartmentController::class, 'update']);
+Route::delete('/department/{id}', [DepartmentController::class, 'destroy'])->name('department.destroy');
 
 
 

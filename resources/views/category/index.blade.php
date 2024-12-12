@@ -1,38 +1,3 @@
-{{-- @extends('layouts.app')
-@section('title', 'Categories')
-@section('content')
-    <div id="categoriesTable" class="mb-5">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="mb-3 fw-bold">Categories List</h5>
-                <table class="table table-striped mb-0">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($categories as $category)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $category->name }}</td>
-                                <td>{{ $category->description }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="text-center">No categories available.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-@endsection --}}
-
-
 
 @extends('layouts.app')
 
@@ -53,7 +18,7 @@
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Actions</th>
+                            <th scope="col" class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,15 +27,15 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $category->name }}</td>
                                 <td>{{ $category->description }}</td>
-                                <td>
+                                <td class="d-flex justify-content-end gap-2">
                                     <!-- Edit Button -->
-                                    <button class="btn btn-sm btn-warning edit-btn" data-id="{{ $category->id }}"
+                                    <button class="btn btn-sm btn-warning edit-btn px-3" data-id="{{ $category->id }}"
                                         data-name="{{ $category->name }}" data-description="{{ $category->description }}">
                                         Edit
                                     </button>
 
                                     <!-- Delete Button -->
-                                    <button class="btn btn-sm btn-danger delete-btn" data-id="{{ $category->id }}">
+                                    <button class="btn btn-sm btn-danger delete-btn px-3" data-id="{{ $category->id }}">
                                         Delete
                                     </button>
                                 </td>

@@ -15,19 +15,14 @@ class CategoryController extends Controller
     {
         // Fetch categories from the database
         $categories = CategoryModel::all();
-
         // Return the view with the data
         return view('category.index', compact('categories'));
     }
     public function edit($id)
     {
-
         $category = CategoryModel::findOrFail($id);
         return view('categories.edit', compact('category'));
     }
-
-
-    
 
 
     public function update(Request $request, $id)
@@ -51,35 +46,30 @@ class CategoryController extends Controller
         }
     }
 
+    public function add(Request $request)
+    {
+        try {
+            // Validate the incoming request
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string|max:255',
+            ]);
 
+            // Create a new category
+            CategoryModel::create([
+                'name' => $request->name,
+                'description' => $request->description,
+            ]);
 
+            // Return success response
+            return response()->json(['success' => true]);
 
-    public function store(Request $request)
-{
-    try {
-        // Validate the incoming request
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:255',
-        ]);
-
-        // Create a new category
-        CategoryModel::create([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
-
-        // Return success response
-        return response()->json(['success' => true]);
-
-    } catch (\Exception $e) {
-        // Log and return error response
-        \Log::error('Add Category Error: ' . $e->getMessage());
-        return response()->json(['success' => false, 'message' => 'Something went wrong'], 500);
+        } catch (\Exception $e) {
+            // Log and return error response
+            \Log::error('Add Category Error: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Something went wrong'], 500);
+        }
     }
-}
-
-
 
 
     public function destroy($id)
