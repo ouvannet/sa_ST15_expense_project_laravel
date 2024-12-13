@@ -30,13 +30,8 @@ Route::get('/', function () {
 Route::get('/expense', [ExpenseController::class, 'index'])->name('Expense');
 Route::post('/expense', [ExpenseController::class, 'add'])->name('Expense.add');
 Route::get('/expense/{id}/edit', [ExpenseController::class, 'edit'])->name('Expense.edit');
-Route::put('/expense/{id}', [ExpenseController::class, 'update']);
+Route::put('/expense/{id}', [ExpenseController::class, 'update'])->name('Expense.update');
 Route::delete('/expense/{id}', [ExpenseController::class, 'destroy'])->name('Expense.destroy');
-
-
-
-
-
 
 
 //This are all the routes for category;

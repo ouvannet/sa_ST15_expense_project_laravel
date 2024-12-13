@@ -28,13 +28,39 @@ class ExpenseController extends Controller
         ]);
 
         ExpenseModel::create($request->all());
-
         return response()->json(['success' => true, 'message' => 'Expense added successfully!']);
     }
 
+    public function edit($id)
+    {
+        $expenses = ExpenseModel::findOrFail($id);
+        return view('expense.edit', compact('expenses'));
+    }
+
+
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'categories_id' => 'required|integer',
+    //         'user_id' => 'required|integer',
+    //         'budget' => 'required|numeric',
+    //         'budget_balance' => 'required|numeric',
+    //         'description' => 'nullable|string|max:255',
+    //         'attachment' => 'nullable|string',
+    //         'status' => 'required|string|max:50',
+    //         'assign' => 'required|string|max:100',
+    //         'date' => 'required|date',
+    //     ]);
+
+    //     $expense = ExpenseModel::findOrFail($id);
+    //     $expense->update($request->all());
+
+    //     return response()->json(['success' => true, 'message' => 'Expense updated successfully!']);
+    // }
+
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'categories_id' => 'required|integer',
             'user_id' => 'required|integer',
             'budget' => 'required|numeric',
@@ -47,10 +73,11 @@ class ExpenseController extends Controller
         ]);
 
         $expense = ExpenseModel::findOrFail($id);
-        $expense->update($request->all());
+        $expense->update($validated);
 
-        return response()->json(['success' => true, 'message' => 'Expense updated successfully!']);
+        return response()->json(['message' => 'Expense updated successfully.']);
     }
+
 
     public function destroy($id)
     {
@@ -61,5 +88,5 @@ class ExpenseController extends Controller
     }
 }
 
-    
+
 

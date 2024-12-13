@@ -1,8 +1,6 @@
 
 @extends('layouts.app')
-
 @section('title', 'Categories')
-
 @section('content')
     <div id="categoriesTable" class="mb-5">
         <div class="card">
@@ -135,7 +133,6 @@
         document.getElementById('addCategoryForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            
             const formData = {
                 name: document.getElementById('add-name').value,
                 description: document.getElementById('add-description').value,
@@ -234,7 +231,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                    
                         document.getElementById(`category-row-${deleteId}`).remove();
                         bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
                     } else {
