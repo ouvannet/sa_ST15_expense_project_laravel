@@ -38,8 +38,16 @@
                                 <td>{{ $expense->budget }}</td>
                                 <td>{{ $expense->budget_balance }}</td>
                                 <td>{{ $expense->description }}</td>
-                                <td>{{ $expense->attachment }}</td>
-                                <td>{{ $expense->status }}</td>
+                                <td>
+                                    <a href="{{ $expense->attachment }}" class="btn btn-sm btn-light">
+                                        <img src="/images/icon/attachment.png" width="15px">
+                                    </a>
+                                </td>
+                                <td>
+                                    <?= $expense->status=='Approved'?'<span class="badge text-bg-success">Approved</span>':'';?>
+                                    <?= $expense->status=='Pending'?'<span class="badge text-bg-warning">Pending</span>':'';?>
+                                    <?= $expense->status=='Rejected'?'<span class="badge text-bg-danger">Rejected</span>':'';?>
+                                </td>
                                 <td>{{ $expense->assign }}</td>
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
                                 <td class="d-flex justify-content-end gap-2">

@@ -11,6 +11,17 @@ class UserModel extends Model
 {
     use HasFactory;
     protected $table = 'tbl_user';
+    // public $timestamps = false;
+    protected $fillable = [
+        'name',
+        'gender',
+        'dob',
+        'email',
+        'phone',
+        'password',
+        'department_id',
+        'role_id',
+    ];
     public function role()
     {
         return $this->belongsTo(RoleModel::class, 'role_id', 'id');

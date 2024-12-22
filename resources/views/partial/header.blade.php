@@ -114,4 +114,5 @@
     </div>
     <!-- END menu -->
 </div>
+<div class="modal fade" id="globalModalView" tabindex="-1" aria-labelledby="globalModalView" aria-hidden="true"></div>
 <!-- END #header -->
