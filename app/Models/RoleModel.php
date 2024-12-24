@@ -13,6 +13,10 @@ class RoleModel extends Model
 {
     use HasFactory;
     protected $table = 'tbl_role';
+    // public $timestamps = false;
+    protected $fillable = [
+        'name',
+    ];
     
     public function users()
     {

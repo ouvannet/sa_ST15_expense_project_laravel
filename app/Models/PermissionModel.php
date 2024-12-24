@@ -11,6 +11,9 @@ class PermissionModel extends Model
 {
     use HasFactory;
     protected $table = 'tbl_permissions';
+    protected $fillable = [
+        'name',
+    ];
     public function roles()
     {
         return $this->belongsToMany(RoleModel::class, 'tbl_permission_role', 'permission_id', 'role_id');
