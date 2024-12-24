@@ -44,9 +44,11 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <?= $expense->status=='Approved'?'<span class="badge text-bg-success">Approved</span>':'';?>
-                                    <?= $expense->status=='Pending'?'<span class="badge text-bg-warning">Pending</span>':'';?>
-                                    <?= $expense->status=='Rejected'?'<span class="badge text-bg-danger">Rejected</span>':'';?>
+                                    <div onclick="changeStatus('{{$expense->status}}')">
+                                        <?= $expense->status=='Approved'?'<span class="badge text-bg-success">Approved</span>':'';?>
+                                        <?= $expense->status=='Pending'?'<span class="badge text-bg-warning">Pending</span>':'';?>
+                                        <?= $expense->status=='Rejected'?'<span class="badge text-bg-danger">Rejected</span>':'';?>
+                                    </div>
                                 </td>
                                 <td>{{ $expense->assign }}</td>
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
@@ -85,7 +87,35 @@
     </div>
 
 
-
+    <div class="modal fade" id="UpdateStatusExpenseModal" tabindex="-1" aria-labelledby="addExpenseLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="max-width:400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addExpenseLabel">Update Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addExpenseForm">
+                        <div class="row">
+                            <!-- Status -->
+                            <div class="col-md-12 mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="update_ex_status" required>
+                                    <option value="" disabled selected>Select Status</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success">Update Status</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="addExpenseModal" tabindex="-1" aria-labelledby="addExpenseLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -270,6 +300,10 @@
 
 @push('js')
     <script>
+        function changeStatus(st){
+            $("#update_ex_status").val(st);
+            $("#UpdateStatusExpenseModal").modal('toggle');
+        }
         let deleteId = null;
 
         document.getElementById('addExpenseForm').addEventListener('submit', function(e) {
