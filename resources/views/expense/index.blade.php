@@ -217,10 +217,6 @@
                                     <option value="Approved">Approved</option>
                                     <option value="Rejected">Rejected</option>
                                 </select>
-
-
-                                {{-- <label for="edit-status" class="form-label">Status</label>
-                                <input type="text" class="form-control" id="edit-status" required> --}}
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="edit-assign" class="form-label">Assign To</label>

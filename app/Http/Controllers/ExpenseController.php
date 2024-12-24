@@ -25,7 +25,6 @@ class ExpenseController extends Controller
         )
         ->get();
 
-      
         $categories = CategoryModel::all();
         $users = UserModel::all();
 
