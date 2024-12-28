@@ -151,6 +151,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        
                         location.reload(); // Reload to update the table
                     } else {
                         alert('Error: ' + data.message);
@@ -205,6 +206,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        
                         location.reload(); // Reload table
                     } else {
                         alert('Error updating category');

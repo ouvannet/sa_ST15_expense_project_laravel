@@ -2,7 +2,6 @@
 @section('title', 'Expenses')
 @section('content')
 
-
     <!-- Expenses Table -->
     <div id="expensesTable" class="mb-5">
         <div class="card">
@@ -15,7 +14,8 @@
                 <table class="table table-striped mb-0">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Reference Number</th>
                             <th scope="col">Category</th>
                             <th scope="col">User</th>
                             <th scope="col">Budget</th>
@@ -33,6 +33,12 @@
                         @forelse ($expenses as $expense)
                             <tr id="expense-row-{{ $expense->id }}">
                                 <td>{{ $loop->iteration }}</td>
+                                {{-- <td>{{ $expense->reference_number}}</td> --}}
+                                
+                                <td><a href="{{ route('expense.show', ['id' => $expense->id]) }}">
+                                        {{ $expense->reference_number }}
+                                    </a></td>
+
                                 <td>{{ $expense->category_name }}</td> <!-- Category Name -->
                                 <td>{{ $expense->user_name }}</td> <!-- User Name -->
                                 <td>{{ $expense->budget }}</td>
@@ -44,32 +50,37 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <div onclick="changeStatus('{{$expense->status}}')">
-                                        <?= $expense->status=='Approved'?'<span class="badge text-bg-success">Approved</span>':'';?>
-                                        <?= $expense->status=='Pending'?'<span class="badge text-bg-warning">Pending</span>':'';?>
-                                        <?= $expense->status=='Rejected'?'<span class="badge text-bg-danger">Rejected</span>':'';?>
+                                    <div onclick="changeStatus('{{ $expense->status }}')">
+                                        <select
+                                            class="form-select update-status-select  {{ $expense->status == 'Approved' ? 'text-success' : ($expense->status == 'Rejected' ? 'text-danger' : 'text-warning') }}"
+                                            data-expense-id="{{ $expense->id }}">
+                                            <option value="Pending" {{ $expense->status == 'Pending' ? 'selected' : '' }}>
+                                                Pending</option>
+                                            <option value="Approved"
+                                                {{ $expense->status == 'Approved' ? 'selected' : '' }}>Approved</option>
+                                            <option value="Rejected"
+                                                {{ $expense->status == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                                        </select>
                                     </div>
                                 </td>
+
                                 <td>{{ $expense->assign }}</td>
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
                                 <td class="d-flex justify-content-end gap-2">
                                     <!-- Edit Button -->
-                                    <button class="btn btn-sm btn-warning edit-btn"
-                                        data-id="{{ $expense->id }}"
-                                        data-category="{{ $expense->categories_id }}"
-                                        data-user="{{ $expense->user_id }}"
-                                        data-budget="{{ $expense->budget }}"
-                                        data-balance="{{ $expense->budget_balance }}"
+                                    <button class="btn btn-sm btn-warning edit-btn py-2 " data-id="{{ $expense->id }}"
+                                        data-reference_number={{ $expense->reference_number }}
+                                        data-category="{{ $expense->categories_id }}" data-user="{{ $expense->user_id }}"
+                                        data-budget="{{ $expense->budget }}" data-balance="{{ $expense->budget_balance }}"
                                         data-description="{{ $expense->description }}"
-                                        data-attachment="{{ $expense->attachment }}"
-                                        data-status="{{ $expense->status }}"
+                                        data-attachment="{{ $expense->attachment }}" data-status="{{ $expense->status }}"
                                         data-assign="{{ $expense->assign }}"
                                         data-date="{{ \Illuminate\Support\Str::before($expense->date, ' ') }}">
                                         Edit
                                     </button>
-                    
+
                                     <!-- Delete Button -->
-                                    <button class="btn btn-sm btn-danger delete-btn" data-id="{{ $expense->id }}">
+                                    <button class="btn btn-sm btn-danger delete-btn " data-id="{{ $expense->id }}">
                                         Delete
                                     </button>
                                 </td>
@@ -80,14 +91,14 @@
                             </tr>
                         @endforelse
                     </tbody>
-                    
                 </table>
             </div>
         </div>
     </div>
 
 
-    <div class="modal fade" id="UpdateStatusExpenseModal" tabindex="-1" aria-labelledby="addExpenseLabel" aria-hidden="true">
+    <div class="modal fade" id="UpdateStatusExpenseModal" tabindex="-1" aria-labelledby="addExpenseLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg" style="max-width:400px;">
             <div class="modal-content">
                 <div class="modal-header">
@@ -126,6 +137,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="addExpenseForm">
+                        @csrf
                         <div class="row">
                             <!-- Category -->
                             <div class="col-md-6 mb-3">
@@ -150,12 +162,12 @@
                             <!-- Budget -->
                             <div class="col-md-6 mb-3">
                                 <label for="budget" class="form-label">Budget</label>
-                                <input type="number" class="form-control" id="budget" required>
+                                <input type="number" class="form-control" id="budget" value="111" required>
                             </div>
                             <!-- Balance -->
                             <div class="col-md-6 mb-3">
                                 <label for="balance" class="form-label">Balance</label>
-                                <input type="number" class="form-control" id="balance" required>
+                                <input type="number" class="form-control" id="balance" value="111" required>
                             </div>
                             <!-- Description -->
                             <div class="col-md-6 mb-3">
@@ -165,7 +177,7 @@
                             <!-- Attachment -->
                             <div class="col-md-6 mb-3">
                                 <label for="attachment" class="form-label">Attachment</label>
-                                <input type="file" class="form-control" id="attachment" required>
+                                <input type="file" class="form-control" id="attachment">
                             </div>
                             <!-- Status -->
                             <div class="col-md-6 mb-3">
@@ -189,15 +201,14 @@
                             </div>
                         </div>
                         <div class="text-end">
-                            <button type="submit" class="btn btn-success">Add Expense</button>
+                            <button id="btn_submit_create_exp" type="button" class="btn btn-success">Add
+                                Expense</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-
 
     <!-- Edit Expense Modal -->
     <div class="modal fade" id="editExpenseModal" tabindex="-1" aria-labelledby="editExpenseLabel" aria-hidden="true">
@@ -272,9 +283,6 @@
         </div>
     </div>
 
-    
-
-
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -300,13 +308,15 @@
 
 @push('js')
     <script>
-        function changeStatus(st){
-            $("#update_ex_status").val(st);
-            $("#UpdateStatusExpenseModal").modal('toggle');
-        }
+        // function changeStatus(st) {
+        //     $("#update_ex_status").val(st);
+        //     $("#UpdateStatusExpenseModal").modal('toggle');
+        // }
         let deleteId = null;
 
-        document.getElementById('addExpenseForm').addEventListener('submit', function(e) {
+
+
+        document.getElementById('btn_submit_create_exp').addEventListener('click', function(e) {
             e.preventDefault();
 
             // Collect form data
@@ -322,19 +332,20 @@
                 date: document.getElementById('date').value
             };
 
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
             // Send data to backend using Fetch API
             fetch('/expense', {
                     method: 'POST',
                     headers: {
+                        'X-CSRF-TOKEN': csrfToken,
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     body: JSON.stringify(formData)
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-
                         location.reload(); // Reload page to update table
                     } else {
                         alert('Error: ' + data.message);
@@ -342,10 +353,51 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Something went wrong. Please check the console for details.');
                 });
         });
 
+
+        document.querySelectorAll('.update-status-select').forEach(select => {
+            select.addEventListener('change', function() {
+                const expenseId = this.dataset.expenseId; // Assuming you have a `data-expense-id` attribute
+                const newStatus = this.value;
+
+                this.classList.remove('text-success', 'text-danger', 'text-warning');
+                if (newStatus === 'Approved') {
+                    this.classList.add('text-success');
+                } else if (newStatus === 'Rejected') {
+                    this.classList.add('text-danger');
+                } else if (newStatus === 'Pending') {
+                    this.classList.add('text-warning');
+                }
+
+                // Send the status update request to the server
+                fetch(`/expense/${expenseId}/status`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            status: newStatus
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Status updated successfully!');
+
+                        } else {
+                            alert('Failed to update status. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+            });
+        });
 
 
 
@@ -353,6 +405,7 @@
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const data = this.dataset;
+
 
                 // Populate form fields
                 document.getElementById('edit-expense-id').value = data.id;
@@ -365,13 +418,12 @@
                 document.getElementById('edit-status').value = data.status;
                 document.getElementById('edit-assign').value = data.assign;
                 document.getElementById('edit-date').value = data
-                    .date; // Make sure this matches 'data-date'
+                    .date;
 
                 // Open the modal
                 new bootstrap.Modal(document.getElementById('editExpenseModal')).show();
             });
         });
-
 
 
         document.getElementById('editExpenseForm').addEventListener('submit', function(e) {
@@ -392,7 +444,6 @@
                         attachment: document.getElementById('edit-attachment').value,
                         status: document.getElementById('edit-status').value,
                         assign: document.getElementById('edit-assign').value,
-
                         date: document.getElementById('edit-date').value
                     })
                 }).then(response => response.json())
@@ -403,7 +454,6 @@
                 .catch(error => console.error('Error:', error));
 
         });
-
 
 
         document.querySelectorAll('.delete-btn').forEach(button => {

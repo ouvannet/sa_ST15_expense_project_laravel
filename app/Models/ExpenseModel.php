@@ -20,6 +20,9 @@ class ExpenseModel extends Model
         'attachment',
         'status',
         'assign',
-        'date'
+        'date',
+        'reference_number',
     ];
+    
+
 }

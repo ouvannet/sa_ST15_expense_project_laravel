@@ -15,6 +15,7 @@ class CategoryController extends Controller
     {
         // Fetch categories from the database
         $categories = CategoryModel::all();
+        
         // Return the view with the data
         return view('category.index', compact('categories'));
     }

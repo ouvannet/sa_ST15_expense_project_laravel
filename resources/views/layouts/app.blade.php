@@ -5,6 +5,8 @@
 	{{var_dump(user_permission('create_expense'))}}
 <head>
     @include('partial.head')
+   
+
 </head>
 
 <body class="{{ !empty($bodyClass) ? $bodyClass : '' }}">
