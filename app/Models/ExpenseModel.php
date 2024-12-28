@@ -4,11 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ExpenseUsage; 
 
 class ExpenseModel extends Model
 {
     use HasFactory;
     public $timestamps = false; // Disable Eloquent's timestamps
+
+    public function usages()
+    {
+        return $this->hasMany(ExpenseUsage::class, 'expense_id');
+    }
+
 
     protected $table = 'tbl_expense'; // Make sure the table name matches
     protected $fillable = [
@@ -23,6 +30,6 @@ class ExpenseModel extends Model
         'date',
         'reference_number',
     ];
-    
+
 
 }

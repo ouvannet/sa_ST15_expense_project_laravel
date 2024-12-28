@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class ExpenseUsage extends Model
+{
+    use HasFactory;
+    public $timestamps = false; // Disable Eloquent's timestamps
+    protected $table = 'expense_usages'; // Make sure the table name matches
+}

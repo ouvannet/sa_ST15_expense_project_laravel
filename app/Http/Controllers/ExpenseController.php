@@ -171,12 +171,19 @@ class ExpenseController extends Controller
         return response()->json(['success' => true, 'message' => 'Expense deleted successfully!']);
     }
 
+    // public function show($id)
+    // {
+    //     $expense = ExpenseModel::findOrFail($id);
+
+    //     return view('expense.show', ['expense' => $expense]);
+    // }
     public function show($id)
     {
-        $expense = ExpenseModel::findOrFail($id);
+        $expense = ExpenseModel::with('usages')->findOrFail($id);
 
         return view('expense.show', ['expense' => $expense]);
     }
+
 
 
     public function useBalance(Request $request, $id)
