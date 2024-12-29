@@ -34,7 +34,7 @@
                             <tr id="expense-row-{{ $expense->id }}">
                                 <td>{{ $loop->iteration }}</td>
                                 {{-- <td>{{ $expense->reference_number}}</td> --}}
-                                
+
                                 <td><a href="{{ route('expense.show', ['id' => $expense->id]) }}">
                                         {{ $expense->reference_number }}
                                     </a></td>
@@ -165,11 +165,11 @@
                                 <input type="number" class="form-control" id="budget" value="111" required>
                             </div>
                             <!-- Balance -->
-                            <div class="col-md-6 mb-3">
+                            {{-- <div class="col-md-6 mb-3">
                                 <label for="balance" class="form-label">Balance</label>
                                 <input type="number" class="form-control" id="balance" value="111" required>
                             </div>
-                            <!-- Description -->
+                            <!-- Description --> --}}
                             <div class="col-md-6 mb-3">
                                 <label for="description" class="form-label">Description</label>
                                 <textarea class="form-control" id="description" rows="2" required></textarea>
@@ -324,7 +324,7 @@
                 categories_id: document.getElementById('category').value,
                 user_id: document.getElementById('user').value,
                 budget: document.getElementById('budget').value,
-                budget_balance: document.getElementById('balance').value,
+                budget_balance: document.getElementById('budget').value,
                 description: document.getElementById('description').value,
                 attachment: document.getElementById('attachment').value,
                 status: document.getElementById('status').value,

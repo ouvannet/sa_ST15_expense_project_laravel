@@ -100,14 +100,14 @@ class ExpenseController extends Controller
 
             $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
 
-
             if (!$reference) {
                 return response()->json(['success' => false, 'message' => 'Reference data not found!'], 404);
             }
 
+
             // Get the current value and generate the reference number
             $currentValue = $reference->value;
-            $referenceNumber = str_pad($currentValue, 3, '0', STR_PAD_LEFT); // Format as 001, 002, etc.
+            $referenceNumber = str_pad($currentValue, 3, '0', STR_PAD_LEFT); 
 
             // Create the expense record
             $expenseData = $request->all();
@@ -177,6 +177,7 @@ class ExpenseController extends Controller
 
     //     return view('expense.show', ['expense' => $expense]);
     // }
+
     public function show($id)
     {
         $expense = ExpenseModel::with('usages')->findOrFail($id);
