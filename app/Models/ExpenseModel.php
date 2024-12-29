@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ExpenseUsage; 
+use App\Models\ExpenseUsage;
 
 class ExpenseModel extends Model
 {
@@ -31,5 +31,15 @@ class ExpenseModel extends Model
         'reference_number',
     ];
 
+
+    public function category()
+    {
+        return $this->belongsTo(CategoryModel::class, 'categories_id'); // Adjust with your table and column names
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class, 'user_id'); // Adjust with your table and column names
+    }
 
 }

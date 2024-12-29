@@ -38,7 +38,6 @@
                                 <td><a href="{{ route('expense.show', ['id' => $expense->id]) }}">
                                         {{ $expense->reference_number }}
                                     </a></td>
-
                                 <td>{{ $expense->category_name }}</td> <!-- Category Name -->
                                 <td>{{ $expense->user_name }}</td> <!-- User Name -->
                                 <td>{{ $expense->budget }}</td>
@@ -164,16 +163,8 @@
                                 <label for="budget" class="form-label">Budget</label>
                                 <input type="number" class="form-control" id="budget" value="111" required>
                             </div>
-                            <!-- Balance -->
-                            {{-- <div class="col-md-6 mb-3">
-                                <label for="balance" class="form-label">Balance</label>
-                                <input type="number" class="form-control" id="balance" value="111" required>
-                            </div>
-                            <!-- Description --> --}}
-                            <div class="col-md-6 mb-3">
-                                <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" rows="2" required></textarea>
-                            </div>
+
+
                             <!-- Attachment -->
                             <div class="col-md-6 mb-3">
                                 <label for="attachment" class="form-label">Attachment</label>
@@ -194,11 +185,17 @@
                                 <label for="assign" class="form-label">Assign</label>
                                 <input type="number" class="form-control" id="assign" required>
                             </div>
+                            <!-- Description -->
+                            <div class="col-md-6 mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" rows="4" required></textarea>
+                            </div>
                             <!-- Date -->
                             <div class="col-md-6 mb-3">
                                 <label for="date" class="form-label">Date</label>
                                 <input type="date" class="form-control" id="date" required>
                             </div>
+
                         </div>
                         <div class="text-end">
                             <button id="btn_submit_create_exp" type="button" class="btn btn-success">Add

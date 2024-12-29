@@ -35,7 +35,6 @@ class ExpenseController extends Controller
         $users = UserModel::all();
 
 
-
         return view('expense.index', compact('expenses', 'categories', 'users'));
     }
 
@@ -107,7 +106,7 @@ class ExpenseController extends Controller
 
             // Get the current value and generate the reference number
             $currentValue = $reference->value;
-            $referenceNumber = str_pad($currentValue, 3, '0', STR_PAD_LEFT); 
+            $referenceNumber = str_pad($currentValue, 3, '0', STR_PAD_LEFT);
 
             // Create the expense record
             $expenseData = $request->all();
@@ -171,19 +170,24 @@ class ExpenseController extends Controller
         return response()->json(['success' => true, 'message' => 'Expense deleted successfully!']);
     }
 
+
     // public function show($id)
     // {
-    //     $expense = ExpenseModel::findOrFail($id);
+    //     $expense = ExpenseModel::with('usages')->findOrFail($id);
+
+
 
     //     return view('expense.show', ['expense' => $expense]);
     // }
 
+    // ExpenseController.php
     public function show($id)
     {
-        $expense = ExpenseModel::with('usages')->findOrFail($id);
+        $expense = ExpenseModel::with(['category', 'user', 'usages'])->findOrFail($id);
 
-        return view('expense.show', ['expense' => $expense]);
+        return view('expense.show', compact('expense'));
     }
+
 
 
 
