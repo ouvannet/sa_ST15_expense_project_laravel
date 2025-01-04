@@ -35,7 +35,7 @@ Route::delete('/expense/{id}', [ExpenseController::class, 'destroy'])->name('Exp
 Route::put('/expense/{id}/status', [ExpenseController::class, 'updateStatus']);
 
 
-Route::get('/expense/{id}', [ExpenseController::class, 'show'])->name('expense.show');
+Route::get('/expense/{id}', [ExpenseController::class, 'showUseBalance'])->name('expense.show');
 Route::post('/expense/{id}/use', [ExpenseController::class, 'useBalance'])->name('expense.use');
 
 

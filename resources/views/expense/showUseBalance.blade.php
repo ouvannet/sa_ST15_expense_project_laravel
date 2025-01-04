@@ -1,30 +1,3 @@
-{{-- @extends('layouts.app')
-@section('title', 'Expenses')
-@section('content')
-<div class="container">
-
-    <a href="{{ route('Expense') }}">Home</a>
-
-    <h3>Manage Expense: {{ $expense->reference_number }}</h3>
-    <p><strong>Category:</strong> {{ $expense->category_name }}</p>
-    <p><strong>User:</strong> {{ $expense->user_name }}</p>
-    <p><strong>Budget:</strong> {{ $expense->budget }}</p>
-    <p><strong>Balance:</strong> {{ $expense->budget_balance }}</p>
-
-    @if ($expense->budget_balance > 0)
-        <form action="{{ route('expense.use', ['id' => $expense->id]) }}" method="POST">
-            @csrf
-            <div class="mb-3">
-                <label for="amount" class="form-label">Amount to Use:</label>
-                <input type="number" class="form-control" id="amount" name="amount" min="1" max="{{ $expense->budget_balance }}" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Use Balance</button>
-        </form>
-    @else
-        <p class="text-danger">You've used all your budget for this expense.</p>
-    @endif
-</div>
-@endsection --}}
 
 
 @extends('layouts.app')
@@ -42,6 +15,7 @@
                         <p><strong>Reference Number: </strong> {{ $expense->reference_number }}</p>
                         <p>Category: {{ $expense->category->name ?? 'N/A' }}</p>
                         <p>User: {{ $expense->user->name ?? 'N/A' }}</p>
+                        <p>Department: {{ $expense->us->name ?? 'N/A' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Budget:</strong> {{ number_format($expense->budget, 2) }} USD</p>

@@ -13,9 +13,6 @@ use App\Models\ReferenceModel;
 
 class ExpenseController extends Controller
 {
-
-
-
     public function index()
     {
         $expenses = DB::table('tbl_expense')
@@ -78,6 +75,57 @@ class ExpenseController extends Controller
 
     // }
 
+    // public function add(Request $request)
+    // {
+    //     $request->validate([
+    //         'categories_id' => 'required|integer',
+    //         'user_id' => 'required|integer',
+    //         'budget' => 'required|numeric',
+    //         'budget_balance' => 'required|numeric',
+    //         'description' => 'nullable|string|max:255',
+    //         'attachment' => 'nullable|string',
+    //         'status' => 'required|string|max:50',
+    //         'assign' => 'required|string|max:100',
+    //         'date' => 'required|date',
+    //     ]);
+
+    //     try {
+
+    //         DB::beginTransaction();
+
+
+    //         $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
+
+    //         if (!$reference) {
+    //             return response()->json(['success' => false, 'message' => 'Reference data not found!'], 404);
+    //         }
+
+
+    //         // Get the current value and generate the reference number
+    //         $currentValue = $reference->value;
+    //         $referenceNumber = str_pad($currentValue, 3, '0', STR_PAD_LEFT);
+
+    //         // Create the expense record
+    //         $expenseData = $request->all();
+    //         $expenseData['reference_number'] = $referenceNumber;
+
+    //         ExpenseModel::create($expenseData);
+
+    //         // Increment the value in tbl_reference
+    //         DB::table('tbl_reference')
+    //             ->where('id', $reference->id)
+    //             ->increment('value');
+    //         DB::commit();
+
+    //         return response()->json(['success' => true, 'message' => 'Expense added successfully!']);
+    //     } catch (\Exception $e) {
+
+    //         DB::rollBack();
+
+    //         return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+    //     }
+    // }
+
     public function add(Request $request)
     {
         $request->validate([
@@ -92,45 +140,26 @@ class ExpenseController extends Controller
             'date' => 'required|date',
         ]);
 
-        try {
+        // Fetch the current value from tbl_reference where type = 'expense'
+        $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
 
-            DB::beginTransaction();
-
-
-            $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
-
-            if (!$reference) {
-                return response()->json(['success' => false, 'message' => 'Reference data not found!'], 404);
-            }
-
-
-            // Get the current value and generate the reference number
-            $currentValue = $reference->value;
-            $referenceNumber = str_pad($currentValue, 3, '0', STR_PAD_LEFT);
-
-            // Create the expense record
-            $expenseData = $request->all();
-            $expenseData['reference_number'] = $referenceNumber;
-
-            ExpenseModel::create($expenseData);
-
-            // Increment the value in tbl_reference
-            DB::table('tbl_reference')
-                ->where('id', $reference->id)
-                ->increment('value');
-
-
-            DB::commit();
-
-            return response()->json(['success' => true, 'message' => 'Expense added successfully!']);
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        if (!$reference) {
+            return response()->json(['success' => false, 'message' => 'Reference type not found!'], 400);
         }
-    }
 
+        // Format the reference number as EXP0001, EXP0002, etc.
+        $formattedReference = sprintf('EXP%04d', $reference->value);
+
+        // Insert the new expense into tbl_expense
+        $expense = ExpenseModel::create(array_merge($request->all(), [
+            'reference_number' => $formattedReference,
+        ]));
+
+        // Increment the value in tbl_reference
+        DB::table('tbl_reference')->where('type', 'expense')->increment('value');
+
+        return response()->json(['success' => true, 'message' => 'Expense added successfully!', 'data' => $expense]);
+    }
 
     public function edit($id)
     {
@@ -170,26 +199,11 @@ class ExpenseController extends Controller
         return response()->json(['success' => true, 'message' => 'Expense deleted successfully!']);
     }
 
-
-    // public function show($id)
-    // {
-    //     $expense = ExpenseModel::with('usages')->findOrFail($id);
-
-
-
-    //     return view('expense.show', ['expense' => $expense]);
-    // }
-
-    // ExpenseController.php
-    public function show($id)
+    public function showUseBalance($id)
     {
         $expense = ExpenseModel::with(['category', 'user', 'usages'])->findOrFail($id);
-
-        return view('expense.show', compact('expense'));
+        return view('expense.showUseBalance', compact('expense'));
     }
-
-
-
 
     public function useBalance(Request $request, $id)
     {
@@ -224,11 +238,6 @@ class ExpenseController extends Controller
             return redirect()->route('expense.show', ['id' => $id])->withErrors(['error' => $e->getMessage()]);
         }
     }
-
-
-
-
-
 }
 
 

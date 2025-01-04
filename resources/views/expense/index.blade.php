@@ -34,12 +34,13 @@
                             <tr id="expense-row-{{ $expense->id }}">
                                 <td>{{ $loop->iteration }}</td>
                                 {{-- <td>{{ $expense->reference_number}}</td> --}}
-
-                                <td><a href="{{ route('expense.show', ['id' => $expense->id]) }}">
-                                        {{ $expense->reference_number }}
-                                    </a></td>
-                                <td>{{ $expense->category_name }}</td> <!-- Category Name -->
-                                <td>{{ $expense->user_name }}</td> <!-- User Name -->
+                                <td>
+                                    <a class="text-decoration-none btn btn-sm btn-primary" href="{{ route('expense.show', ['id' => $expense->id]) }}">
+                                            {{ $expense->reference_number }}
+                                        </a>
+                                </td>
+                                <td>{{ $expense->category_name }}</td>
+                                <td>{{ $expense->user_name }}</td>
                                 <td>{{ $expense->budget }}</td>
                                 <td>{{ $expense->budget_balance }}</td>
                                 <td>{{ $expense->description }}</td>
