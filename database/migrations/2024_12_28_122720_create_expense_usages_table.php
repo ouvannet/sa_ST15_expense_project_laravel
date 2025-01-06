@@ -11,12 +11,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('expense_usages', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('expense_id');
-            $table->decimal('amount', 10, 2);
-            $table->timestamp('used_at');
-            $table->foreign('expense_id')->references('id')->on('tbl_expense')->onDelete('cascade');
+       
+
+        Schema::create('tbl_expense_usage', function (Blueprint $table) {
+            $table->id(); // `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT
+            $table->unsignedBigInteger('expense_id'); // `expense_id` bigint(20) unsigned NOT NULL
+            $table->decimal('amount', 10, 2); // `amount` decimal(10,2) NOT NULL
+
+
+            $table->foreign('expense_id')->references('id')->on('tbl_expenses')->onDelete('cascade');
+            $table->timestamp('used_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP')); // `used_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+            $table->timestamps(); // `created_at` and `updated_at` with NULL defaults
+
+            $table->index('expense_id', 'expense_id'); // KEY `expense_id` (`expense_id`)
         });
     }
     
@@ -26,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expense_usages');
+        Schema::dropIfExists('tbl_expense_usage');
     }
 };

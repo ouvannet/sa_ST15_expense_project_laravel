@@ -48,84 +48,6 @@ class ExpenseController extends Controller
         return response()->json(['success' => true, 'message' => 'Status updated successfully']);
     }
 
-
-
-    // public function add(Request $request)
-    // {
-
-
-    //     $request->validate([
-    //         'categories_id' => 'required|integer',
-    //         'user_id' => 'required|integer',
-    //         'budget' => 'required|numeric',
-    //         'budget_balance' => 'required|numeric',
-    //         'description' => 'nullable|string|max:255',
-    //         'attachment' => 'nullable|string',
-    //         'status' => 'required|string|max:50',
-    //         'assign' => 'required|string|max:100',
-    //         'date' => 'required|date',
-
-    //     ]);
-
-
-
-    //     ExpenseModel::create($request->all());
-
-    //     return response()->json(['success' => true, 'message' => 'Expense added successfully!']);
-
-    // }
-
-    // public function add(Request $request)
-    // {
-    //     $request->validate([
-    //         'categories_id' => 'required|integer',
-    //         'user_id' => 'required|integer',
-    //         'budget' => 'required|numeric',
-    //         'budget_balance' => 'required|numeric',
-    //         'description' => 'nullable|string|max:255',
-    //         'attachment' => 'nullable|string',
-    //         'status' => 'required|string|max:50',
-    //         'assign' => 'required|string|max:100',
-    //         'date' => 'required|date',
-    //     ]);
-
-    //     try {
-
-    //         DB::beginTransaction();
-
-
-    //         $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
-
-    //         if (!$reference) {
-    //             return response()->json(['success' => false, 'message' => 'Reference data not found!'], 404);
-    //         }
-
-
-    //         // Get the current value and generate the reference number
-    //         $currentValue = $reference->value;
-    //         $referenceNumber = str_pad($currentValue, 3, '0', STR_PAD_LEFT);
-
-    //         // Create the expense record
-    //         $expenseData = $request->all();
-    //         $expenseData['reference_number'] = $referenceNumber;
-
-    //         ExpenseModel::create($expenseData);
-
-    //         // Increment the value in tbl_reference
-    //         DB::table('tbl_reference')
-    //             ->where('id', $reference->id)
-    //             ->increment('value');
-    //         DB::commit();
-
-    //         return response()->json(['success' => true, 'message' => 'Expense added successfully!']);
-    //     } catch (\Exception $e) {
-
-    //         DB::rollBack();
-
-    //         return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-    //     }
-    // }
-
     public function add(Request $request)
     {
         $request->validate([
@@ -213,6 +135,7 @@ class ExpenseController extends Controller
             'amount' => 'required|numeric|min:1|max:' . $expense->budget_balance,
         ]);
 
+
         try {
             // Begin a transaction
             DB::beginTransaction();
@@ -222,7 +145,7 @@ class ExpenseController extends Controller
             $expense->save();
 
             // Log the usage in a new table (optional)
-            DB::table('expense_usages')->insert([
+            DB::table('tbl_expense_usage')->insert([
                 'expense_id' => $expense->id,
                 'amount' => $request->amount,
                 'used_at' => now(),

@@ -9,5 +9,5 @@ class ExpenseUsage extends Model
 {
     use HasFactory;
     public $timestamps = false; // Disable Eloquent's timestamps
-    protected $table = 'expense_usages'; // Make sure the table name matches
+    protected $table = 'tbl_expense_usage'; // Make sure the table name matches
 }
