@@ -9,7 +9,7 @@
 
 @section('content')
 	<h1 class="page-header mb-3">
-		Hi, Fuck. <small>here's what's happening with your store today.</small>
+		Fuck you <small>Welcome Back. How are you doing?</small>
 	</h1>
 	
 	<!-- BEGIN row -->

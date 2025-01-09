@@ -144,7 +144,7 @@ class ExpenseController extends Controller
             $expense->budget_balance -= $request->amount;
             $expense->save();
 
-            // Log the usage in a new table (optional)
+            // Log the usage in a new table
             DB::table('tbl_expense_usage')->insert([
                 'expense_id' => $expense->id,
                 'amount' => $request->amount,

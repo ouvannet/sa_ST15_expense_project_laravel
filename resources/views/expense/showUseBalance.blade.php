@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
                 <h3>Manage Expense</h3>
-                <a href="{{ route('Expense') }}" class="btn btn-secondary btn-sm ">Back</a>
+                <a href="{{ route('Expense') }}" class="btn btn-secondary btn-sm">Back</a>
             </div>
             <div class="card-body">
                 <div class="row mb-4">
