@@ -32,6 +32,8 @@ class PermissionController extends Controller
         $permission=PermissionModel::find($permission_id);
         return view('permission.action.edit',['permission'=>$permission]);
     }
+
+
     public function update(Request $req){
         $all=$req->all();
         $permission=PermissionModel::find($all['permission_id']);
@@ -44,6 +46,8 @@ class PermissionController extends Controller
         }
         return ($message);
     }
+
+    
     public function destroy($permission_id){
         $permission = PermissionModel::find($permission_id);
         if ($permission) {

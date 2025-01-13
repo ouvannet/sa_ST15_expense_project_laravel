@@ -41,7 +41,7 @@
                                 </td>
                                 <td>{{ $expense->category_name }}</td>
                                 <td>{{ $expense->user_name }}</td>
-                                <td>{{ $expense->budget }}</td>
+                                <td>{{ $expense->budget}}</td>
                                 <td>{{ $expense->budget_balance }}</td>
                                 <td>{{ $expense->description }}</td>
                                 <td>
@@ -312,8 +312,7 @@
         // }
         let deleteId = null;
 
-
-
+        
         document.getElementById('btn_submit_create_exp').addEventListener('click', function(e) {
             e.preventDefault();
 

@@ -14,7 +14,6 @@ class DepartmentController extends Controller
     public function index(){
 
         $departments = DepartmentModel::all();
-        //var_dump($users);
         return view('department.index', compact('departments')); 
     }
 

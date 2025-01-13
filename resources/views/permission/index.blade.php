@@ -7,6 +7,7 @@
     <script src="/assets/js/demo/dashboard.demo.js"></script>
 @endpush
 
+
 @section('content')
     <!-- Expenses Table -->
     <div id="permissionTable" class="mb-5">
@@ -50,6 +51,9 @@
         </div>
     </div>
 @endsection
+
+
+
 @push('js')
     <script>
         function reloadPage(){
@@ -57,6 +61,8 @@
                 location.reload();
             }, 1000);
         }
+
+
         $("#btn_add_permission").click(function(){
             $.ajax({
                 url: "{{ route('permission.add') }}",
@@ -67,16 +73,18 @@
                     $("#globalModalView").modal('toggle');
                 },
                 error: function (xhr) {
-                    console.log(xhr);
-                    
+                    console.log(xhr);           
                 }
             });
         })
+
+
+
         $(document).on('click',"#btn_submit_add_permission",function(){
             const formData = $("#addpermissionForm").serializeArray();
             console.table(formData);
             $.ajax({
-                url: "{{ route('permission.submit_add') }}",
+                url: "{{route('permission.submit_add') }}",
                 type: 'POST',
                 data: formData,
                 success: function (response) {
@@ -140,6 +148,7 @@
                 }
             });
         })
+
 
         function delete_permission(permission_id){
             Swal.fire({

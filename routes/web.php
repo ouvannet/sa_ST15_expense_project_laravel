@@ -43,11 +43,23 @@ Route::post('/expense/{id}/use', [ExpenseController::class, 'useBalance'])->name
 
 
 //This are all the routes for category;
+// Route::get('/category', [CategoryController::class, 'index'])->name('Category');
+// Route::post('/category', [CategoryController::class, 'add'])->name('category.add');
+// Route::post('/category_add', [CategoryController::class, 'submit_add'])->name('category.submit_add');
+
+// Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+// Route::put('/category', [CategoryController::class, 'update'])->name('categories.update');;
+// Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+
 Route::get('/category', [CategoryController::class, 'index'])->name('Category');
-Route::post('/category', [CategoryController::class, 'add'])->name('category.add');
-Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-Route::put('/category/{id}', [CategoryController::class, 'update']);
-Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+Route::get('/category_add', [CategoryController::class, 'add'])->name('category.add');
+Route::post('/category_add', [CategoryController::class, 'submit_add'])->name('category.submit_add');
+
+Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
+Route::put('/category', [CategoryController::class, 'update']);
+Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
 
 
 

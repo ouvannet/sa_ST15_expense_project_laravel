@@ -14,7 +14,7 @@
             <!-- Left Image Section -->
             <div class="col-md-6 d-none d-md-block">
                 <div class="h-100">
-                    <img src="/assets/img/loginimage.jpg" 
+                    <img src="/assets/img/login_image.jpg" 
                          alt="Login Image" 
                          class="img-fluid w-100 h-100" 
                          style="object-fit: cover;">
