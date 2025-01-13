@@ -130,7 +130,7 @@
 
         $(document).on('click',"#btn_submit_edit_category",function(){
             const formData = $("#addCategoryForm").serializeArray();
-            console.log("fcdd");
+            
             console.table(formData);
             $.ajax({
                 url: "/category",

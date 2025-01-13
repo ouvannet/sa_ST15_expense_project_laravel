@@ -43,13 +43,6 @@ Route::post('/expense/{id}/use', [ExpenseController::class, 'useBalance'])->name
 
 
 //This are all the routes for category;
-// Route::get('/category', [CategoryController::class, 'index'])->name('Category');
-// Route::post('/category', [CategoryController::class, 'add'])->name('category.add');
-// Route::post('/category_add', [CategoryController::class, 'submit_add'])->name('category.submit_add');
-
-// Route::get('/category/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-// Route::put('/category', [CategoryController::class, 'update'])->name('categories.update');;
-// Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
 
 Route::get('/category', [CategoryController::class, 'index'])->name('Category');
@@ -63,15 +56,23 @@ Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('c
 
 
 
-
 Route::get('/recurring', [RecurringController::class, 'index'])->name('Recurring');
 Route::get('/report', [ReportController::class, 'index'])->name('Report');
+
+
 //This are all the routes for department;
+
+
 Route::get('/department', [DepartmentController::class, 'index'])->name('Department');
-Route::post('/department', [DepartmentController::class, 'add'])->name('department.add');
+Route::get('/department_add', [DepartmentController::class, 'add'])->name('department.add');
+Route::post('/department_add', [DepartmentController::class, 'submit_add'])->name('department.submit_add');
+
 Route::get('/department/{id}/edit', [DepartmentController::class, 'edit'])->name('department.edit');
-Route::put('/department/{id}', [DepartmentController::class, 'update']);
+Route::put('/department', [DepartmentController::class, 'update']);
 Route::delete('/department/{id}', [DepartmentController::class, 'destroy'])->name('department.destroy');
+
+
+
 
 //This are all the routes for user;
 Route::get('/user', [UserController::class, 'index'])->name('User');
