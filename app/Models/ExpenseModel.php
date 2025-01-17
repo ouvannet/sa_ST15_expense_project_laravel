@@ -31,15 +31,32 @@ class ExpenseModel extends Model
         'reference_number',
     ];
 
-
     public function category()
     {
-        return $this->belongsTo(CategoryModel::class, 'categories_id'); // Adjust with your table and column names
+        return $this->belongsTo(CategoryModel::class, 'categories_id', 'id');
     }
 
-    public function user()
+    // public function user()
+    // {
+    //     return $this->belongsTo(UserModel::class, 'user_id', 'id');
+    // }
+
+    // public function assign()
+    // {
+    //     return $this->belongsTo(UserModel::class, 'assign', 'id');
+    // }
+
+
+    public function requester()
     {
-        return $this->belongsTo(UserModel::class, 'user_id'); // Adjust with your table and column names
+        return $this->belongsTo(UserModel::class, 'user_id', 'id');
     }
+
+    public function approver()
+    {
+        return $this->belongsTo(UserModel::class, 'assign', 'id');
+    }
+
+
 
 }

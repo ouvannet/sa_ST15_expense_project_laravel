@@ -34,4 +34,10 @@ class UserModel extends Model
     {
         return $this->role->permissions->contains('name', $permissionName);
     }
+
+    public function assignedExpenses()
+    {
+        return $this->hasMany(ExpenseModel::class, 'assign', 'id');
+    }
+
 }

@@ -38,6 +38,7 @@ Route::put('/expense/{id}/status', [ExpenseController::class, 'updateStatus']);
 Route::get('/expense/{id}', [ExpenseController::class, 'showUseBalance'])->name('expense.show');
 Route::post('/expense/{id}/use', [ExpenseController::class, 'useBalance'])->name('expense.use');
 
+Route::get('expense/preview-html/{id}',[ExpenseController::class,'previewHTML'])->name('expense.previewHtml');
 
 
 

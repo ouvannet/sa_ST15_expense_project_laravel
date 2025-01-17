@@ -9,30 +9,28 @@ use App\Models\ExpenseModel;
 use App\Models\CategoryModel;
 use App\Models\UserModel;
 use App\Models\ReferenceModel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class ExpenseController extends Controller
 {
     public function index()
     {
-        $expenses = DB::table('tbl_expense')
-            ->join('tbl_categories', 'tbl_expense.categories_id', '=', 'tbl_categories.id')
-            ->join('tbl_user', 'tbl_expense.user_id', '=', 'tbl_user.id')
+        // $expenses = ExpenseModel::with(['category', 'user', 'assign'])->get();
+
+        // //dd($expenses);
+        // $categories = CategoryModel::all();
+        // $users = UserModel::all();
 
 
-            ->select(
-                'tbl_expense.*',
-                'tbl_categories.name as category_name',
-                'tbl_user.name as user_name'
-            )
-            ->get();
+        // return view('expense.index', compact('expenses', 'categories', 'users'));
 
-
+        $expenses = ExpenseModel::with(['category', 'requester', 'approver'])->get();
         $categories = CategoryModel::all();
         $users = UserModel::all();
 
-
         return view('expense.index', compact('expenses', 'categories', 'users'));
+
     }
 
     public function updateStatus(Request $request, $id)
@@ -113,12 +111,21 @@ class ExpenseController extends Controller
     }
 
 
-    public function destroy($id)
+    public function destroy($expense_id)
     {
-        $expense = ExpenseModel::findOrFail($id);
-        $expense->delete();
+        // $expense = ExpenseModel::findOrFail($id);
+        // $expense->delete();
 
-        return response()->json(['success' => true, 'message' => 'Expense deleted successfully!']);
+        // return response()->json(['success' => true, 'message' => 'Expense deleted successfully!']);
+
+        $expense = ExpenseModel::find($expense_id);
+        if ($expense) {
+            $expense->delete();
+            $message = ['status' => 1, 'message' => 'Delete Permission Success'];
+        } else {
+            $message = ['status' => 0, 'message' => 'Delete Permission Failed'];
+        }
+        return ($message);
     }
 
     public function showUseBalance($id)
@@ -161,6 +168,39 @@ class ExpenseController extends Controller
             return redirect()->route('expense.show', ['id' => $id])->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+
+    public function previewHtml($id)
+    {
+        // Retrieve the expense and related data
+        $expense = ExpenseModel::with('category', 'user')->findOrFail($id);
+
+        // Data to be passed to the view
+        $data = [
+            'reference_number' => $expense->reference_number,
+            'category_name' => $expense->category->name,
+            'user_name' => $expense->user->name,
+            'budget' => $expense->budget,
+            'budget_balance' => $expense->budget_balance,
+            'description' => $expense->description,
+            'status' => $expense->status,
+            'date' => \Carbon\Carbon::parse($expense->date)->format('Y-m-d'),
+            'attachment' => $expense->attachment,
+        ];
+
+        // Return the rendered HTML view
+        return view('expense.invoice', $data)->render();
+    }
+
+
+
+
+
+
+
+
+
+
 }
 
 

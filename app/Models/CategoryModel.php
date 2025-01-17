@@ -12,4 +12,6 @@ class CategoryModel extends Model
     
     protected $table = 'tbl_categories'; // Make sure the table name matches
     protected $fillable = ['name', 'description'];
+
+
 }
