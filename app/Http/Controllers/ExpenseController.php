@@ -170,16 +170,21 @@ class ExpenseController extends Controller
     }
 
 
-    public function previewHtml($id)
+    public function preview($id)
     {
         // Retrieve the expense and related data
-        $expense = ExpenseModel::with('category', 'user')->findOrFail($id);
+        $expense = ExpenseModel::with('category', 'requester', 'approver')->findOrFail($id);
+        
+        if (!$expense) {
+            return response()->json(['error' => 'Expense not found'], 404);
+        }
 
         // Data to be passed to the view
         $data = [
             'reference_number' => $expense->reference_number,
-            'category_name' => $expense->category->name,
-            'user_name' => $expense->user->name,
+            'category_name' => $expense->category->name ?? 'N/A',
+            'user_name' => $expense->requester->name ?? 'N/A',
+            'assign_name' => $expense->approver->name ?? 'N/A',
             'budget' => $expense->budget,
             'budget_balance' => $expense->budget_balance,
             'description' => $expense->description,
@@ -188,13 +193,39 @@ class ExpenseController extends Controller
             'attachment' => $expense->attachment,
         ];
 
+
         // Return the rendered HTML view
-        return view('expense.invoice', $data)->render();
+       
+        return response()->json(['html' => view('expense.invoice', $data)->render()]);
+
     }
 
 
 
 
+    // public function preview($id)
+    // {
+    //     $expense = ExpenseModel::with('category', 'user', 'assign')->find($id);
+
+    //     if (!$expense) {
+    //         return response()->json(['error' => 'Expense not found'], 404);
+    //     }
+
+    //     $data = [
+    //         'reference_number' => 'ABC123',
+    //         'category_name' => 'Example Category',
+    //         'user_name' => 'John Doe',
+    //         'assign_name' => 'Jane Doe',
+    //         'budget' => 1000,
+    //         'budget_balance' => 500,
+    //         'description' => 'Sample expense description',
+    //         'status' => 'Pending',
+    //         'date' => '2025-01-17',
+    //         'attachment' => '/path/to/attachment',
+    //     ];
+
+    //     return response()->json(['html' => view('expense.invoice', $data)->render()]);
+    // }
 
 
 

@@ -138,35 +138,45 @@
             $(document).ready(function() {
                 // Handle the "Preview" button click
                 $('.preview-btn').on('click', function() {
-                    const expenseId = $(this).data('id');
-
+                    const id = $(this).data('id');
+                
                     // Fetch the invoice HTML from the server
                     $.ajax({
-                        url: `/expense/preview-html/${expenseId}`,
+                        url: `/expense/preview/${id}`,
                         method: 'GET',
+                       
                         beforeSend: function() {
                             $('#invoiceContent').html(
-                                '<p class="text-center text-muted">Loading...</p>');
+                                '<p class="text-center text-muted">Loading...</p>'
+                            );
                         },
                         success: function(response) {
-                            // Load the invoice content into the modal
-                            $('#invoiceContent').html(response);
+                            if (response.html) {
+                                // Load the invoice content into the modal
+                                $('#invoiceContent').html(response.html);
+                            } else if (response.error) {
+                                $('#invoiceContent').html(
+                                    `<p class="text-center text-danger">${response.error}</p>`
+                                );
+                            }
                         },
                         error: function() {
                             $('#invoiceContent').html(
                                 '<p class="text-center text-danger">Failed to load the invoice. Please try again later.</p>'
-                                );
-                        }
+                            );
+                        },
                     });
                 });
+            });
 
-                // Handle the "Print" button click
-                $('.print-btn').on('click', function() {
-                    const content = $('#invoiceContent').html();
 
-                    // Open a new print window
-                    const printWindow = window.open('', '_blank');
-                    printWindow.document.write(`
+            // Handle the "Print" button click
+            $('.print-btn').on('click', function() {
+                const content = $('#invoiceContent').html();
+
+                // Open a new print window
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
                 <html>
                     <head>
                         <title>Invoice</title>
@@ -177,12 +187,8 @@
                     </body>
                 </html>
             `);
-                    printWindow.document.close();
-                });
+                printWindow.document.close();
             });
-
-
-
 
 
             document.getElementById('btn_submit_create_exp').addEventListener('click', function(e) {

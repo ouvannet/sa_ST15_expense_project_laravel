@@ -36,15 +36,15 @@ class ExpenseModel extends Model
         return $this->belongsTo(CategoryModel::class, 'categories_id', 'id');
     }
 
-    // public function user()
-    // {
-    //     return $this->belongsTo(UserModel::class, 'user_id', 'id');
-    // }
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class, 'user_id', 'id');
+    }
 
-    // public function assign()
-    // {
-    //     return $this->belongsTo(UserModel::class, 'assign', 'id');
-    // }
+    public function assign()
+    {
+        return $this->belongsTo(UserModel::class, 'assign', 'id');
+    }
 
 
     public function requester()
