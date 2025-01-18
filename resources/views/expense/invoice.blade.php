@@ -19,6 +19,10 @@
                 <td>{{ $user_name }}</td>
             </tr>
             <tr>
+                <th>Assign</th>
+                <td>{{ $assign_name }}</td>
+            </tr>
+            <tr>
                 <th>Budget</th>
                 <td>${{ number_format($budget, 2) }}</td>
             </tr>
@@ -41,9 +45,34 @@
             @if ($attachment)
                 <tr>
                     <th>Attachment</th>
-                    <td><a href="{{ $attachment }}">View Attachment</a></td>
+                    <td><a href="{{ $attachment }}" target="_blank">View Attachment</a></td>
                 </tr>
             @endif
+        </tbody>
+    </table>
+
+    <!-- Usage Section -->
+    <h3 class="mt-4">Expense Usages</h3>
+    <table class="table table-bordered mt-2">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Used at</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($usages as $index => $usage)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $usage->used_at }}</td>
+                    <td>${{ number_format($usage->amount, 2) }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="3" class="text-center">No usage records available.</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 

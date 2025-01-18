@@ -11,11 +11,7 @@ class ExpenseModel extends Model
     use HasFactory;
     public $timestamps = false; // Disable Eloquent's timestamps
 
-    public function usages()
-    {
-        return $this->hasMany(ExpenseUsage::class, 'expense_id');
-    }
-
+   
 
     protected $table = 'tbl_expense'; // Make sure the table name matches
     protected $fillable = [
@@ -30,6 +26,8 @@ class ExpenseModel extends Model
         'date',
         'reference_number',
     ];
+
+
 
     public function category()
     {
@@ -55,6 +53,11 @@ class ExpenseModel extends Model
     public function approver()
     {
         return $this->belongsTo(UserModel::class, 'assign', 'id');
+    }
+
+    public function usages()
+    {
+        return $this->hasMany(ExpenseUsage::class, 'expense_id');
     }
 
 

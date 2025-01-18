@@ -173,11 +173,13 @@ class ExpenseController extends Controller
     public function preview($id)
     {
         // Retrieve the expense and related data
-        $expense = ExpenseModel::with('category', 'requester', 'approver')->findOrFail($id);
+        $expense = ExpenseModel::with('category', 'requester', 'approver','usages')->findOrFail($id);
         
         if (!$expense) {
             return response()->json(['error' => 'Expense not found'], 404);
         }
+
+
 
         // Data to be passed to the view
         $data = [
@@ -186,11 +188,16 @@ class ExpenseController extends Controller
             'user_name' => $expense->requester->name ?? 'N/A',
             'assign_name' => $expense->approver->name ?? 'N/A',
             'budget' => $expense->budget,
+            
             'budget_balance' => $expense->budget_balance,
+            'usages' => $expense->usages, // Pass the related usages
             'description' => $expense->description,
             'status' => $expense->status,
             'date' => \Carbon\Carbon::parse($expense->date)->format('Y-m-d'),
             'attachment' => $expense->attachment,
+
+
+
         ];
 
 
@@ -199,36 +206,6 @@ class ExpenseController extends Controller
         return response()->json(['html' => view('expense.invoice', $data)->render()]);
 
     }
-
-
-
-
-    // public function preview($id)
-    // {
-    //     $expense = ExpenseModel::with('category', 'user', 'assign')->find($id);
-
-    //     if (!$expense) {
-    //         return response()->json(['error' => 'Expense not found'], 404);
-    //     }
-
-    //     $data = [
-    //         'reference_number' => 'ABC123',
-    //         'category_name' => 'Example Category',
-    //         'user_name' => 'John Doe',
-    //         'assign_name' => 'Jane Doe',
-    //         'budget' => 1000,
-    //         'budget_balance' => 500,
-    //         'description' => 'Sample expense description',
-    //         'status' => 'Pending',
-    //         'date' => '2025-01-17',
-    //         'attachment' => '/path/to/attachment',
-    //     ];
-
-    //     return response()->json(['html' => view('expense.invoice', $data)->render()]);
-    // }
-
-
-
 
 
 
