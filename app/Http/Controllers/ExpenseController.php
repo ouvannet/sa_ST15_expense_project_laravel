@@ -180,7 +180,6 @@ class ExpenseController extends Controller
         }
 
 
-
         // Data to be passed to the view
         $data = [
             'reference_number' => $expense->reference_number,

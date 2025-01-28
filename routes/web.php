@@ -20,10 +20,11 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/', function () {
-    return view('dashboard.index');
-})->middleware('auth');
+// Route::get('/', function () {
+//     return view('dashboard.index');
+// })->middleware('auth');
 
+Route::get('/', [DashboardController::class, 'index'])->name('Dashboard')->middleware('auth');
 
 
 //This are all the routes for expense;
@@ -58,6 +59,11 @@ Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('c
 
 
 Route::get('/recurring', [RecurringController::class, 'index'])->name('Recurring');
+
+
+
+
+
 Route::get('/report', [ReportController::class, 'index'])->name('Report');
 
 
@@ -83,7 +89,7 @@ Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit'
 Route::put('/user', [UserController::class, 'update']);
 Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 
-//This are all the routes for rolw;
+//This are all the routes for role;
 Route::get('/role', [RoleController::class, 'index'])->name('Role');
 Route::get('/role_add', [RoleController::class, 'add'])->name('role.add');
 Route::post('/role_add', [RoleController::class, 'submit_add'])->name('role.submit_add');
@@ -100,6 +106,7 @@ Route::post('/permission_add', [PermissionController::class, 'submit_add'])->nam
 Route::get('/permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
 Route::put('/permission', [PermissionController::class, 'update']);
 Route::delete('/permission/{id}', [PermissionController::class, 'destroy'])->name('permission.destroy');
+
 
 
 
