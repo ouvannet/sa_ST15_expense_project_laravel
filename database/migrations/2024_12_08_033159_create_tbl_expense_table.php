@@ -23,6 +23,7 @@ return new class extends Migration
                 $table->string('status', 100)->charset('utf8mb4')->collation('utf8mb4_general_ci'); // Status field
                 $table->unsignedInteger('assign')->nullable(); // Integer field for assignment
                 $table->timestamp('date', 6)->useCurrent(); 
+                $table->string('reference_number')->unique()->after('id');
             });
         }
     }

@@ -15,11 +15,11 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Expense ID</th>
-                           
-                            <th scope="col">Type</th>
-                            <th scope="col">Interval</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Frequency</th>
+                            <th scope="col">Start Date</th>
+                            <th scope="col">End Date</th>
+                            <th scope="col">Next Date</th>
                     
                         </tr>
                     </thead>
@@ -28,9 +28,11 @@
                             <tr id="recurring-row-{{ $recurring->id }}">
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $recurring->expense_id ?? 'N/A' }}</td>
-                                <td>{{ $recurring->type ?? 'N/A' }}</td> 
-                                <td>{{ $recurring->interval_time ?? 'N/A' }}</td>
-                                <td>{{ $recurring->date ?? 'N/A' }}</td> 
+                                <td>{{ $recurring->amount ?? 'N/A' }}</td> 
+                                <td>{{ $recurring->frequency ?? 'N/A' }}</td>
+                                <td>{{ $recurring->start_date ?? 'N/A' }}</td> 
+                                <td>{{ $recurring->end_date ?? 'N/A' }}</td> 
+                                <td>{{ $recurring->next_run_date ?? 'N/A' }}</td> 
                              
                             </tr>
                         @empty
