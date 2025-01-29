@@ -16,16 +16,20 @@ class DashboardController extends Controller
 
     public function index(){
 
-        $total_expense = DashboardModel::all();
-        $totalBudget = DB::table('tbl_expense')->sum('budget');
+        //$expenses = DashboardModel::all();
+        //$expenses = DashBoardModel::table('tbl_categories')->get();
 
+        $expenses = DashBoardModel::with(['category'])->get();
+
+
+        $totalBudget = DB::table('tbl_expense')->sum('budget');
         $totalExpense = DB::table('tbl_expense_usage')->sum('amount');
         $totalPayment = DB::table('tbl_expense_payment')->sum('amount');
         $totalRecurring = DB::table('tbl_recurring_expense')->sum('amount');
     
         //dd($total_expense);
 
-        return view('dashboard.index',compact('totalBudget','totalExpense', 'totalPayment', 'totalRecurring'));
+        return view('dashboard.index',compact('expenses','totalBudget','totalExpense', 'totalPayment', 'totalRecurring'));
     }
    
 

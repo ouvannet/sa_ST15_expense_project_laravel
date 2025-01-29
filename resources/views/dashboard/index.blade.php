@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('title', 'Dashboard')
 
 @push('js')
@@ -35,14 +34,14 @@
 
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <h3 class="mb-1">${{number_format($totalBudget,2)}}</h3>
+                                    <h3 class="mb-1">${{ number_format($totalBudget, 2) }}</h3>
                                     <div class="text-success fw-600 fs-13px">
                                         <i class="fa fa-caret-up"></i> +3.59%
                                     </div>
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-user fa-lg text-primary"></i>
+                                    <i class="fa-solid fa-coins fa-lg text-primary"></i>
                                 </div>
                             </div>
                         </div>
@@ -63,14 +62,14 @@
 
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <h3 class="mb-1">${{number_format($totalExpense,2)}}</h3>
+                                    <h3 class="mb-1">${{ number_format($totalExpense, 2) }}</h3>
                                     <div class="text-success fw-600 fs-13px">
                                         <i class="fa fa-caret-up"></i> +3.59%
                                     </div>
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-user fa-lg text-primary"></i>
+                                    <i class="fa-solid fa-money-bill-wave text-primary"></i>
                                 </div>
                             </div>
                         </div>
@@ -96,14 +95,14 @@
 
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <h3 class="mb-1">${{number_format($totalPayment,2)}}</h3>
+                                    <h3 class="mb-1">${{ number_format($totalPayment, 2) }}</h3>
                                     <div class="text-success fw-600 fs-13px">
                                         <i class="fa fa-caret-up"></i> +3.59%
                                     </div>
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-user fa-lg text-primary"></i>
+                                    <i class="fa-regular fa-credit-card fa-lg text-primary"></i>
                                 </div>
                             </div>
                         </div>
@@ -117,21 +116,21 @@
                             <div class="d-flex mb-3">
                                 <div class="flex-grow-1">
                                     <h5 class="mb-1">Total Recurring</h5>
-                                    <div>Show the amount of recurring expense.</div>
+                                    <div>Amount of recurring expense.</div>
                                 </div>
                                 <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
                             </div>
 
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    <h3 class="mb-1">${{number_format($totalRecurring,2)}}</h3>
+                                    <h3 class="mb-1">${{ number_format($totalRecurring, 2) }}</h3>
                                     <div class="text-success fw-600 fs-13px">
                                         <i class="fa fa-caret-up"></i> +3.59%
                                     </div>
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-user fa-lg text-primary"></i>
+                                    <i class="fa-solid fa-rotate-left text-primary"></i>
                                 </div>
                             </div>
                         </div>
@@ -154,8 +153,8 @@
                 <div class="card-body">
                     <div class="d-flex mb-3">
                         <div class="flex-grow-1">
-                            <h5 class="mb-1">Sales Analytics</h5>
-                            <div class="fs-13px">Weekly sales performance chart</div>
+                            <h5 class="mb-1">Expense Analytics</h5>
+                            <div class="fs-13px">Weekly expense performance chart</div>
                         </div>
                         <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
                     </div>
@@ -174,128 +173,68 @@
     <!-- BEGIN row -->
     <div class="row">
         <!-- BEGIN col-6 -->
-        <div class="col-xl-6 mb-3">
+        {{-- <div class="col-xl-6 mb-3">
             <!-- BEGIN card -->
             <div class="card h-100">
                 <!-- BEGIN card-body -->
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-4">
                         <div class="flex-grow-1">
-                            <h5 class="mb-1">Bestseller</h5>
-                            <div class="fs-13px">Top 3 product sales this week</div>
+                            <h5 class="mb-1">Latest Expenses</h5>
+                            <div class="fs-13px">5 of the latest expenses.</div>
                         </div>
                         <a href="#" class="text-decoration-none">See All</a>
                     </div>
 
-                    <!-- product-1 -->
-                    <div class="d-flex align-items-center mb-3">
-                        <div
-                            class="d-flex align-items-center justify-content-center me-3 w-50px h-50px bg-white p-3px rounded">
-                            <img src="/assets/img/product/product-1.jpg" alt="" class="ms-100 mh-100">
-                        </div>
-                        <div class="flex-grow-1">
-                            <div>
-                                <div class="text-primary fs-10px fw-600">TOP SALES</div>
-                                <div class="text-body fw-600">iPhone 11 Pro Max (256GB)</div>
-                                <div class="fs-13px">$1,099</div>
+                    <!-- expense -->
+                    @forelse ($expenses as $expense)
+                        <div class="d-flex align-items-center bg-red-100 mb-3">
+                            <div
+                                class="d-flex align-items-center justify-content-center me-3 w-50px h-50px bg-white p-3px rounded">
+                                <img src="/assets/img/product/product-1.jpg" alt="" class="ms-100 mh-100">
+                            </div>
+                            <div class="flex-grow-1">
+                                <div>
+                                    <div class="text-primary fs-10px fw-600">Latest</div>
+                                    <div class="text-body fw-600">{{ $expense->description }}</div>
+                                    <div class="fs-13px">{{ $expense->category->name }}</div>
+                                </div>
+                            </div>
+                            <div class="ps-3 text-center">
+                                <div class="text-body fw-600">382</div>
+                                <div class="fs-13px">sales</div>
+                            </div>
+                            <div class="ps-3 text-center">
+                                <div class="text-body fw-600">382</div>
+                                <div class="fs-13px">sales</div>
                             </div>
                         </div>
-                        <div class="ps-3 text-center">
-                            <div class="text-body fw-600">382</div>
-                            <div class="fs-13px">sales</div>
-                        </div>
-                    </div>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="11" class="text-center">No Recurring Expense</td>
+                        </tr>
+                    @endforelse
 
-                    <!-- product-2 -->
-                    <div class="d-flex align-items-center mb-3">
-                        <div
-                            class="d-flex align-items-center justify-content-center me-3 w-50px h-50px bg-white p-3px rounded">
-                            <img src="/assets/img/product/product-2.jpg" alt="" class="ms-100 mh-100">
-                        </div>
-                        <div class="flex-grow-1">
-                            <div>
-                                <div class="text-body fw-600">Macbook Pro 13 inch (2021)</div>
-                                <div class="fs-13px">$1,120</div>
-                            </div>
-                        </div>
-                        <div class="ps-3 text-center">
-                            <div class="text-body fw-600">102</div>
-                            <div class="fs-13px">sales</div>
-                        </div>
-                    </div>
 
-                    <!-- product-3 -->
-                    <div class="d-flex align-items-center mb-3">
-                        <div
-                            class="d-flex align-items-center justify-content-center me-3 w-50px h-50px bg-white p-3px rounded">
-                            <img src="/assets/img/product/product-3.jpg" alt="" class="ms-100 mh-100">
-                        </div>
-                        <div class="flex-grow-1">
-                            <div>
-                                <div class="text-body fw-600">Apple Watch Series 4(2021)</div>
-                                <div class="fs-13px">$349</div>
-                            </div>
-                        </div>
-                        <div class="ps-3 text-center">
-                            <div class="text-body fw-600">75</div>
-                            <div class="fs-13px">sales</div>
-                        </div>
-                    </div>
-
-                    <!-- product-4 -->
-                    <div class="d-flex align-items-center mb-3">
-                        <div
-                            class="d-flex align-items-center justify-content-center me-3 w-50px h-50px bg-white p-3px rounded">
-                            <img src="/assets/img/product/product-4.jpg" alt="" class="ms-100 mh-100">
-                        </div>
-                        <div class="flex-grow-1">
-                            <div>
-                                <div class="text-body fw-600">12.9-inch iPad Pro (256GB)</div>
-                                <div class="fs-13px">$1,099</div>
-                            </div>
-                        </div>
-                        <div class="ps-3 text-center">
-                            <div class="text-body fw-600">62</div>
-                            <div class="fs-13px">sales</div>
-                        </div>
-                    </div>
-
-                    <!-- product-5 -->
-                    <div class="d-flex align-items-center">
-                        <div
-                            class="d-flex align-items-center justify-content-center me-3 w-50px h-50px bg-white p-3px rounded">
-                            <img src="/assets/img/product/product-5.jpg" alt="" class="ms-100 mh-100">
-                        </div>
-                        <div class="flex-grow-1">
-                            <div>
-                                <div class="text-body fw-600">iPhone 11 (128gb)</div>
-                                <div class="fs-13px">$799</div>
-                            </div>
-                        </div>
-                        <div class="ps-3 text-center">
-                            <div class="text-body fw-600">59</div>
-                            <div class="fs-13px">sales</div>
-                        </div>
-                    </div>
                 </div>
                 <!-- END card-body -->
             </div>
             <!-- END card -->
-        </div>
+        </div> --}}
         <!-- END col-6 -->
 
-        <!-- BEGIN col-6 -->
-        <div class="col-xl-6 mb-3">
+		<div class="col-xl-6 mb-3">
             <!-- BEGIN card -->
             <div class="card h-100">
                 <!-- BEGIN card-body -->
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-2">
                         <div class="flex-grow-1">
-                            <h5 class="mb-1">Transaction</h5>
-                            <div class="fs-13px">Latest transaction history</div>
+                            <h5 class="mb-1">Recurring Expense</h5>
+                            <div class="fs-13px">Latest recurring expense history</div>
                         </div>
-                        <a href="#" class="text-decoration-none">See All</a>
+                        <a href="{{ route('Expense') }}" class="text-decoration-none">See All</a>
                     </div>
 
                     <!-- BEGIN table-responsive -->
@@ -306,101 +245,105 @@
                                     <th class="ps-0">No</th>
                                     <th>Order Details</th>
                                     <th class="text-center">Status</th>
-                                    <th class="text-end pe-0">Amount</th>
+                                    <th class="text-end pe-0">Budget</th>
+                                    <th class="text-end pe-0">Balance</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="ps-0">1.</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-40px h-40px">
-                                                <img src="/assets/img/icon/paypal2.svg" alt=""
-                                                    class="ms-100 mh-100">
+                                @forelse ($expenses as $expense)
+                                    <tr>
+                                        <td class="">{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div
+                                                    class="w-45px h-45px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="fa-solid fa-money-bill text-primary"></i>
+                                                </div>
+                                                <div class="ms-3 flex-grow-1">
+                                                    <div class="fw-600 text-body">{{ $expense->description }}</div>
+                                                    <div class="fs-13px">Category: {{ $expense->category->name }}</div>
+                                                </div>
                                             </div>
-                                            <div class="ms-3 flex-grow-1">
-                                                <div class="fw-600 text-body">Macbook Pro 15 inch</div>
-                                                <div class="fs-13px">5 minutes ago</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center"><span class="badge bg-success bg-opacity-20 text-success"
-                                            style="min-width: 60px;">Success</span></td>
-                                    <td class="text-end pe-0">$1,699.00</td>
+                                        </td>
+                                        <td class="text-center"><span
+                                                class="badge bg-opacity-20 {{ $expense->status == 'Approved' ? 'text-success bg-success' : ($expense->status == 'Rejected' ? 'text-danger bg-danger' : 'text-warning bg-warning') }}"
+                                                style="min-width: 60px;">{{ $expense->status }}</span></td>
+                                        <td class="text-end pe-0">{{ $expense->budget }}</td>
+                                        <td class="text-end pe-0">{{ $expense->budget_balance }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="11" class="text-center">No Recurring Expense</td>
+                                    </tr>
+                                @endforelse
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END table-responsive -->
+                </div>
+                <!-- END card-body -->
+            </div>
+            <!-- END card -->
+        </div>
+
+
+        <!-- BEGIN col-6 -->
+        <div class="col-xl-6 mb-3">
+            <!-- BEGIN card -->
+            <div class="card h-100">
+                <!-- BEGIN card-body -->
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-grow-1">
+                            <h5 class="mb-1">Expense</h5>
+                            <div class="fs-13px">Latest expense history</div>
+                        </div>
+                        <a href="{{ route('Expense') }}" class="text-decoration-none">See All</a>
+                    </div>
+
+                    <!-- BEGIN table-responsive -->
+                    <div class="table-responsive mb-n2">
+                        <table class="table table-borderless mb-0">
+                            <thead>
+                                <tr class="text-body">
+                                    <th class="ps-0">No</th>
+                                    <th>Expense</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-end pe-0">Budget</th>
+                                    <th class="text-end pe-0">Balance</th>
                                 </tr>
-                                <tr>
-                                    <td class="ps-0">2.</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-40px h-40px rounded">
-                                                <img src="/assets/img/icon/mastercard.svg" alt=""
-                                                    class="ms-100 mh-100">
+                            </thead>
+                            <tbody>
+                                @forelse ($expenses as $expense)
+                                    <tr>
+                                        <td class="">{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div
+                                                    class="w-45px h-45px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
+                                                    <i class="fa-solid fa-money-bill text-primary"></i>
+                                                </div>
+                                                <div class="ms-3 flex-grow-1">
+                                                    <div class="fw-600 text-body">{{ $expense->description }}</div>
+                                                    <div class="fs-13px">Category: {{ $expense->category->name }}</div>
+                                                </div>
                                             </div>
-                                            <div class="ms-3 flex-grow-1">
-                                                <div class="fw-600 text-body">Apple Watch 5 Series</div>
-                                                <div class="fs-13px">5 minutes ago</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center"><span class="badge bg-success bg-opacity-20 text-success"
-                                            style="min-width: 60px;">Success</span></td>
-                                    <td class="text-end pe-0">$699.00</td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-0">3.</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-40px h-40px rounded">
-                                                <img src="/assets/img/icon/visa.svg" alt=""
-                                                    class="ms-100 mh-100">
-                                            </div>
-                                            <div class="ms-3 flex-grow-1">
-                                                <div class="fw-600 text-body">iPhone 11 Pro Max</div>
-                                                <div class="fs-13px">12 minutes ago</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center"><span class="badge bg-warning bg-opacity-20 text-warning"
-                                            style="min-width: 60px;">Pending</span></td>
-                                    <td class="text-end pe-0">$1,299.00</td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-0">4.</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-40px h-40px rounded">
-                                                <img src="/assets/img/icon/paypal2.svg" alt=""
-                                                    class="ms-100 mh-100">
-                                            </div>
-                                            <div class="ms-3 flex-grow-1">
-                                                <div class="fw-600 text-body">Apple Magic Keyboard</div>
-                                                <div class="fs-13px">15 minutes ago</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center"><span
-                                            class="badge text-body text-opacity-50 bg-dark bg-opacity-10"
-                                            style="min-width: 60px;">Cancelled</span></td>
-                                    <td class="text-end pe-0">$199.00</td>
-                                </tr>
-                                <tr>
-                                    <td class="ps-0">5.</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-40px h-40px rounded">
-                                                <img src="/assets/img/icon/mastercard.svg" alt=""
-                                                    class="ms-100 mh-100">
-                                            </div>
-                                            <div class="ms-3 flex-grow-1">
-                                                <div class="fw-600 text-body">iPad Pro 15 inch</div>
-                                                <div class="fs-13px">15 minutes ago</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center"><span class="badge bg-success bg-opacity-20 text-success"
-                                            style="min-width: 60px;">Cancelled</span></td>
-                                    <td class="text-end pe-0">$1,099.00</td>
-                                </tr>
+                                        </td>
+                                        <td class="text-center"><span
+                                                class="badge bg-opacity-20 {{ $expense->status == 'Approved' ? 'text-success bg-success' : ($expense->status == 'Rejected' ? 'text-danger bg-danger' : 'text-warning bg-warning') }}"
+                                                style="min-width: 60px;">{{ $expense->status }}</span></td>
+                                        <td class="text-end pe-0">{{ $expense->budget }}</td>
+                                        <td class="text-end pe-0">{{ $expense->budget_balance }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="11" class="text-center">No Recurring Expense</td>
+                                    </tr>
+                                @endforelse
+
+
                             </tbody>
                         </table>
                     </div>

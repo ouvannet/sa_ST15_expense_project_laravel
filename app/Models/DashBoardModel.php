@@ -12,6 +12,11 @@ class DashBoardModel extends Model
     
     protected $table = 'tbl_expense'; 
 
+    public function category()
+    {
+        return $this->belongsTo(CategoryModel::class, 'categories_id', 'id');
+    }
+   
 
 
 
