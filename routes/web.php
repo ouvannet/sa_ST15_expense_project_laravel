@@ -57,10 +57,9 @@ Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('c
 
 
 
-
 Route::get('/recurring', [RecurringController::class, 'index'])->name('Recurring');
-
-
+Route::get('/recurring_add', [RecurringController::class, 'add'])->name('Recurring.add');
+Route::post('/recurring_submit_add', [RecurringController::class, 'submit_add'])->name('recurring.submit_add');
 
 
 

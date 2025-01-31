@@ -134,7 +134,6 @@
             let deleteId = null;
 
 
-
             $(document).ready(function() {
                 // Handle the "Preview" button click
                 $('.preview-btn').on('click', function() {

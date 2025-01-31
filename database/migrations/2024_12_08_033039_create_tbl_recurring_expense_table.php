@@ -28,9 +28,9 @@ return new class extends Migration
 
             Schema::create('tbl_recurring_expense', function (Blueprint $table) {
                 $table->id();
-                $table->foreignId('expense_id')->constrained('tbl_expense')->onDelete('cascade');
-                $table->foreignId('user_id')->constrained('tbl_user')->onDelete('cascade');
-                $table->foreignId('category_id')->constrained('tbl_category')->onDelete('cascade');
+                // $table->foreignId('expense_id')->constrained('tbl_expense')->onDelete('cascade');
+                // $table->foreignId('user_id')->constrained('tbl_user')->onDelete('cascade');
+                $table->foreignId('category_id')->constrained('tbl_categories')->onDelete('cascade');
                 $table->decimal('amount', 10, 2);
                 $table->enum('frequency', ['daily', 'weekly', 'monthly', 'yearly']);
                 $table->date('next_run_date');

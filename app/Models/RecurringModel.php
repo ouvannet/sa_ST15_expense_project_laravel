@@ -12,6 +12,9 @@ class RecurringModel extends Model
     
     protected $table = 'tbl_recurring_expense'; // Make sure the table name matches
 
+   
+
+    protected $guarded = [];
     public function expense()
     {
         return $this->belongsTo(ExpenseModel::class, 'expense_id', 'id');
