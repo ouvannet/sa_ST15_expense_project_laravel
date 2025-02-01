@@ -1,5 +1,5 @@
-<div class="modal " id="addRecurringModal" tabindex="-1" >
-    <div class="modal-dialog">
+{{-- < class="modal " id="addRecurringModal" tabindex="-1" > --}}
+    <div class="modal-dialog model-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addRecurringLabel">Create Recurring</h5>
@@ -63,4 +63,4 @@
             </div>
         </div>
     </div>
-</div>
+

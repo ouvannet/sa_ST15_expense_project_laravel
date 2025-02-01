@@ -19,6 +19,10 @@ class RecurringModel extends Model
     {
         return $this->belongsTo(ExpenseModel::class, 'expense_id', 'id');
     }
+    public function category()
+    {
+        return $this->belongsTo(CategoryModel::class, 'category_id', 'id');
+    }
 
 
 
