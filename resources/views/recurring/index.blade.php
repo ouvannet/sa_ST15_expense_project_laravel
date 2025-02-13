@@ -54,7 +54,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="11" class="text-center">No Recurring Expense</td>
+                                <td colspan="11" class="text-center">No Recurring Expense is there</td>
                             </tr>
                         @endforelse
 
