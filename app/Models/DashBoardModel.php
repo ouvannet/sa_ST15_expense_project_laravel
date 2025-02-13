@@ -17,6 +17,8 @@ class DashBoardModel extends Model
         return $this->belongsTo(CategoryModel::class, 'categories_id', 'id');
     }
    
+  
+   
 
 
 

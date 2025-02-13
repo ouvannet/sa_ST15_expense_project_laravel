@@ -135,11 +135,11 @@
 
 
             $(document).ready(function() {
-                // Handle the "Preview" button click
+          
                 $('.preview-btn').on('click', function() {
                     const id = $(this).data('id');
                 
-                    // Fetch the invoice HTML from the server
+              
                     $.ajax({
                         url: `/expense/preview/${id}`,
                         method: 'GET',
@@ -151,7 +151,7 @@
                         },
                         success: function(response) {
                             if (response.html) {
-                                // Load the invoice content into the modal
+                             
                                 $('#invoiceContent').html(response.html);
                             } else if (response.error) {
                                 $('#invoiceContent').html(
@@ -285,7 +285,7 @@
                     document.getElementById('edit-category').value = data.category;
                     document.getElementById('edit-user').value = data.user;
                     document.getElementById('edit-budget').value = data.budget;
-                    document.getElementById('edit-balance').value = data.balance;
+                    //document.getElementById('edit-balance').value = data.balance;
                     document.getElementById('edit-description').value = data.description;
                     document.getElementById('edit-attachment').value = data.attachment;
                     document.getElementById('edit-status').value = data.status;
@@ -312,7 +312,7 @@
                             categories_id: document.getElementById('edit-category').value,
                             user_id: document.getElementById('edit-user').value,
                             budget: document.getElementById('edit-budget').value,
-                            budget_balance: document.getElementById('edit-balance').value,
+                            budget_balance: document.getElementById('edit-budget').value,
                             description: document.getElementById('edit-description').value,
                             attachment: document.getElementById('edit-attachment').value,
                             status: document.getElementById('edit-status').value,
@@ -322,7 +322,7 @@
                     }).then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        location.reload();
+                        //location.reload();
                     })
                     .catch(error => console.error('Error:', error));
 

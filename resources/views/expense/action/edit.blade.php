@@ -36,10 +36,11 @@
                             <label for="edit-budget" class="form-label">Budget</label>
                             <input type="number" class="form-control" id="edit-budget" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        {{-- <div class="col-md-6 mb-3">
                             <label for="edit-balance" class="form-label">Budget Balance</label>
                             <input type="number" class="form-control" id="edit-balance" required>
-                        </div>
+                        </div> --}}
+                        <input type="hidden" class="form-control" id="edit-budget" required>
                         <div class="col-md-6 mb-3">
                             <label for="edit-description" class="form-label">Description</label>
                             <input type="text" class="form-control" id="edit-description" required>

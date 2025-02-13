@@ -7,24 +7,24 @@
 @endpush
 
 @section('content')
-    <h1 class="page-header ">
-        <small>Welcome Back. How the fuck are you doing?</small>
+    <h1 class="page-header">
+        <small>Welcome Back. How are you doing?</small>
     </h1>
 
 
     <!-- BEGIN row -->
-    <div class="row">
+    <div class="row ">
         <!-- BEGIN col-6 -->
-        <div class="col-xl-6">
+        <div class="col-xl-6 mb-3">
             <!-- BEGIN row -->
-            <div class="row">
+            <div class="row h-100">
                 <!-- BEGIN col-6 -->
-                <div class="col-sm-6 mb-3">
+                <div class="col-sm-6 d-flex flex-column justify-content-between">
                     <!-- BEGIN card -->
-                    <div class="card mb-3 ">
+                    <div class="card ">
                         <!-- BEGIN card-body -->
                         <div class="card-body">
-                            <div class="d-flex mb-3">
+                            <div class="d-flex mb-50px">
                                 <div class="flex-grow-1">
                                     <h5 class="mb-1">Total Budget</h5>
                                     <div>Store the amount of all budget.</div>
@@ -49,12 +49,12 @@
 
                     </div>
                     <!-- END card -->
-                    <div class="card mb-3 ">
+                    <div class="card ">
                         <!-- BEGIN card-body -->
                         <div class="card-body">
-                            <div class="d-flex mb-3">
+                            <div class="d-flex mb-4">
                                 <div class="flex-grow-1">
-                                    <h5 class="mb-1">Total Expense</h5>
+                                    <h5 class="mb-1">Total Expenses</h5>
                                     <div>Show the total amount of expense.</div>
                                 </div>
                                 <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
@@ -77,17 +77,16 @@
 
                     </div>
 
-
                 </div>
                 <!-- END col-6 -->
-                <div class="col-sm-6 mb-3 d-flex flex-column ">
+                <div class="col-sm-6 d-flex flex-column justify-content-between">
                     <!-- BEGIN card -->
-                    <div class="card mb-3 flex-1">
+                    <div class="card">
                         <!-- BEGIN card-body -->
                         <div class="card-body">
-                            <div class="d-flex mb-3">
+                            <div class="d-flex mb-50px">
                                 <div class="flex-grow-1">
-                                    <h5 class="mb-1">Total Payment</h5>
+                                    <h5 class="mb-1">Total Payments</h5>
                                     <div>Display the sum amount of payment.</div>
                                 </div>
                                 <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
@@ -110,10 +109,10 @@
 
                     </div>
                     <!-- END card -->
-                    <div class="card mb-3 flex-1">
+                    <div class="card ">
                         <!-- BEGIN card-body -->
                         <div class="card-body">
-                            <div class="d-flex mb-3">
+                            <div class="d-flex mb-4">
                                 <div class="flex-grow-1">
                                     <h5 class="mb-1">Total Recurring</h5>
                                     <div>Amount of recurring expense.</div>
@@ -144,11 +143,10 @@
 
 
 
-
         <!-- BEGIN col-6 -->
         <div class="col-xl-6 mb-3">
             <!-- BEGIN card -->
-            <div class="card h-100">
+            <div class="card">
                 <!-- BEGIN card-body -->
                 <div class="card-body">
                     <div class="d-flex mb-3">
@@ -167,6 +165,9 @@
         <!-- END col-6 -->
     </div>
     <!-- END row -->
+
+
+
 
 
 
@@ -224,7 +225,7 @@
         </div> --}}
         <!-- END col-6 -->
 
-		<div class="col-xl-6 mb-3">
+        <div class="col-xl-6 mb-3">
             <!-- BEGIN card -->
             <div class="card h-100">
                 <!-- BEGIN card-body -->
@@ -243,14 +244,14 @@
                             <thead>
                                 <tr class="text-body">
                                     <th class="ps-0">No</th>
-                                    <th>Order Details</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-end pe-0">Budget</th>
-                                    <th class="text-end pe-0">Balance</th>
+                                    <th>Amount</th>
+                                    <th class="text-center">Frequency</th>
+                                    <th class="text-end pe-0">Next Date</th>
+
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($expenses as $expense)
+                                @forelse ($recurrings as $recurring)
                                     <tr>
                                         <td class="">{{ $loop->iteration }}</td>
                                         <td>
@@ -260,16 +261,20 @@
                                                     <i class="fa-solid fa-money-bill text-primary"></i>
                                                 </div>
                                                 <div class="ms-3 flex-grow-1">
-                                                    <div class="fw-600 text-body">{{ $expense->description }}</div>
-                                                    <div class="fs-13px">Category: {{ $expense->category->name }}</div>
+                                                    <div class="fw-600 text-body">{{ $recurring->amount }}</div>
+                                                    <div class="fs-13px">Category: {{ $recurring->amount }}</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="text-center"><span
-                                                class="badge bg-opacity-20 {{ $expense->status == 'Approved' ? 'text-success bg-success' : ($expense->status == 'Rejected' ? 'text-danger bg-danger' : 'text-warning bg-warning') }}"
-                                                style="min-width: 60px;">{{ $expense->status }}</span></td>
-                                        <td class="text-end pe-0">{{ $expense->budget }}</td>
-                                        <td class="text-end pe-0">{{ $expense->budget_balance }}</td>
+
+                                        <td class="text-center pe-0">{{ $recurring->frequency }}</td>
+                                        <td class="text-end pe-0">{{ $recurring->next_run_date ?? 'N/A' }}</td>
+                                        {{-- <td class="  {{$recurring->status == 'active' ? 'text-success' : 'text-danger'}} " >{{ $recurring->status ?? 'N/A' }}</td> --}}
+                                        {{-- 
+										<td class="text-center"><span
+											class="badge bg-opacity-20 {{ $expense->status == 'Approved' ? 'text-success bg-success' : ($expense->status == 'Rejected' ? 'text-danger bg-danger' : 'text-warning bg-warning') }}"
+											style="min-width: 60px;">{{ $expense->status }}</span></td> --}}
+
                                     </tr>
                                 @empty
                                     <tr>

@@ -97,7 +97,7 @@
                 <div class="menu-img online">
                     <img src="/assets/img/ytp.png" alt="" class="ms-100 mh-100 rounded-circle" />
                 </div>
-                <div class="menu-text">TeamST15@Gmail.com</div>
+                <div class="p-3 menu-text">{{ Auth::user()->email }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-end me-lg-3">
                 <a class="dropdown-item d-flex align-items-center" href="/profile">Edit Profile <i class="fa fa-user-circle fa-fw ms-auto text-body text-opacity-50"></i></a>

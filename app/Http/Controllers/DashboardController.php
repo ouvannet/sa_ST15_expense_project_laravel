@@ -21,7 +21,7 @@ class DashboardController extends Controller
 
         $expenses = DashBoardModel::with(['category'])->get();
 
-
+        $recurrings = DB::table('tbl_recurring_expense')->get();
         $totalBudget = DB::table('tbl_expense')->sum('budget');
         $totalExpense = DB::table('tbl_expense_usage')->sum('amount');
         $totalPayment = DB::table('tbl_expense_payment')->sum('amount');
@@ -29,7 +29,7 @@ class DashboardController extends Controller
     
         //dd($total_expense);
 
-        return view('dashboard.index',compact('expenses','totalBudget','totalExpense', 'totalPayment', 'totalRecurring'));
+        return view('dashboard.index',compact('expenses','totalBudget','totalExpense', 'totalPayment', 'totalRecurring','recurrings'));
     }
    
 
