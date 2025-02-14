@@ -155,7 +155,7 @@
                             data-id="{{ $expense->id }}"
                             data-amount="{{ $expense->budget }}"
                             data-category-id="{{ $expense->categories_id }}">
-                            {{ $expense->reference_number }} | Amount: {{ $expense->budget }} | Status: {{ $expense->status }}
+                            <span class="bg-primary text-white p-1 rounded-full">{{ $expense->reference_number }}</span> | Amount: {{ $expense->budget }} | Status: {{ $expense->status }}
                         </button>
                     @endforeach
                 </div>

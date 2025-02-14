@@ -36,7 +36,7 @@ class ExpenseController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:Pending,Approved,Rejected',
+            'status' => 'required|in:Pending,Approved,Canceled',
         ]);
 
         $expense = ExpenseModel::findOrFail($id);
@@ -113,11 +113,7 @@ class ExpenseController extends Controller
 
     public function destroy($expense_id)
     {
-        // $expense = ExpenseModel::findOrFail($id);
-        // $expense->delete();
-
-        // return response()->json(['success' => true, 'message' => 'Expense deleted successfully!']);
-
+    
         $expense = ExpenseModel::find($expense_id);
         if ($expense) {
             $expense->delete();
@@ -141,7 +137,7 @@ class ExpenseController extends Controller
         $request->validate([
             'amount' => 'required|numeric|min:1|max:' . $expense->budget_balance,
         ]);
-
+        
 
         try {
             // Begin a transaction
@@ -149,6 +145,9 @@ class ExpenseController extends Controller
 
             // Deduct the amount from the budget balance
             $expense->budget_balance -= $request->amount;
+            if($expense->budget_balance == 0){ 
+                $expense->status = 'Completed';
+            }
             $expense->save();
 
             // Log the usage in a new table

@@ -49,16 +49,25 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <select
-                                        class="form-select update-status-select {{ $expense->status == 'Approved' ? 'text-success' : ($expense->status == 'Rejected' ? 'text-danger' : 'text-warning') }}"
-                                        data-expense-id="{{ $expense->id }}">
-                                        <option value="Pending" {{ $expense->status == 'Pending' ? 'selected' : '' }}>
-                                            Pending</option>
-                                        <option value="Approved" {{ $expense->status == 'Approved' ? 'selected' : '' }}>
-                                            Approved</option>
-                                        <option value="Rejected" {{ $expense->status == 'Rejected' ? 'selected' : '' }}>
-                                            Rejected</option>
-                                    </select>
+                                    @if ($expense->status == 'Completed')
+                                        <span class="text-primary ">Completed</span>
+                                    @else
+                                        <select
+                                            class="form-select update-status-select {{ $expense->status == 'Approved' ? 'text-success' : ($expense->status == 'Canceled' ? 'text-danger' : 'text-warning') }}"
+                                            data-expense-id="{{ $expense->id }}">
+                                            <option value="Pending" {{ $expense->status == 'Pending' ? 'selected' : '' }}>
+                                                Pending
+                                            </option>
+                                            <option value="Approved"
+                                                {{ $expense->status == 'Approved' ? 'selected' : '' }}>
+                                                Approved
+                                            </option>
+                                            <option value="Canceled"
+                                                {{ $expense->status == 'Canceled' ? 'selected' : '' }}>
+                                                Canceled
+                                            </option>
+                                        </select>
+                                    @endif
                                 </td>
                                 <td>{{ $expense->approver->name ?? 'N/A' }}</td> <!-- User who approves -->
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
@@ -135,15 +144,15 @@
 
 
             $(document).ready(function() {
-          
+
                 $('.preview-btn').on('click', function() {
                     const id = $(this).data('id');
-                
-              
+
+
                     $.ajax({
                         url: `/expense/preview/${id}`,
                         method: 'GET',
-                       
+
                         beforeSend: function() {
                             $('#invoiceContent').html(
                                 '<p class="text-center text-muted">Loading...</p>'
@@ -151,7 +160,7 @@
                         },
                         success: function(response) {
                             if (response.html) {
-                             
+
                                 $('#invoiceContent').html(response.html);
                             } else if (response.error) {
                                 $('#invoiceContent').html(

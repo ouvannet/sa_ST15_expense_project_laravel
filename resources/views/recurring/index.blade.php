@@ -65,11 +65,6 @@
         </div>
     </div>
 
-    {{-- 
-    @include('recurring.action.add') 
-    @include('recurring.action.edit') --}}
-
-
 @endsection
 
 

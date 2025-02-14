@@ -55,7 +55,7 @@
                                 <option value="" disabled selected>Select Status</option>
                                 <option value="Pending">Pending</option>
                                 <option value="Approved">Approved</option>
-                                <option value="Rejected">Rejected</option>
+                                <option value="Canceled">Canceled</option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">

@@ -8,8 +8,7 @@
 @endpush
 
 @section('content')
-    <h1>This is report</h1>
-
+    <h1>Recurring Report</h1>
 
 
 

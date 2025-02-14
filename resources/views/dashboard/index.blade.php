@@ -13,7 +13,7 @@
 
 
     <!-- BEGIN row -->
-    <div class="row ">
+    <div class="row">
         <!-- BEGIN col-6 -->
         <div class="col-xl-6 mb-3">
             <!-- BEGIN row -->

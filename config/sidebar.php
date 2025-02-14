@@ -56,17 +56,17 @@ return [
       'text' => 'Report',
       'children' => [
         [
-          'url' => '/report',
+          'url' => '/expense_report',
           'action' => 'Bootstrap',
-          'text' => 'test 1'
+          'text' => 'Expense Report'
         ],
         [
-          'url' => '/report',
-          'text' => 'test 2'
+          'url' => '/recurring_report',
+          'text' => 'Recurring Report'
         ],
         [
-          'url' => '/report',
-          'text' => 'test 3'
+          'url' => '/payment_report',
+          'text' => 'Payment Report'
         ],
       
       ]
@@ -80,7 +80,7 @@ return [
     [
       'url' => '/analytics',
       'icon' => 'fa fa-chart-pie',
-      'text' => 'testing'
+      'text' => 'Testing'
     ],
     
   //   [

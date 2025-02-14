@@ -8,15 +8,24 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ExpenseModel;
 
 
-class ReportController extends Controller
+class PaymentReportController extends Controller
 {
 
     public function index(){
 
         $users = ExpenseModel::all();
-        //var_dump($users);
-        return view('report.index', compact('users')); 
+    
+        return view('reports.payment_report.index', compact('users')); 
     }
+
+
+
+
+
+
+
+
+    
    
 
 

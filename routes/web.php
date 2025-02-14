@@ -1,16 +1,22 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\DashboardController;
+
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RecurringController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+
+use App\Http\Controllers\ExpenseReportController;
+use App\Http\Controllers\RecurringReportController;
+use App\Http\Controllers\PaymentReportController;
+
 
 
 use App\Http\Controllers\Auth\LoginController;
@@ -66,7 +72,13 @@ Route::delete('/recurring/{id}', [RecurringController::class, 'destroy'])->name(
 
 
 
-Route::get('/report', [ReportController::class, 'index'])->name('Report');
+Route::get('/expense_report', [ExpenseReportController::class, 'index'])->name('Expense_report');
+Route::get('/recurring_report', [RecurringReportController::class, 'index'])->name('Recurring_report');
+Route::get('/payment_report', [PaymentReportController::class, 'index'])->name('Payment_report');
+
+
+
+
 
 
 //This are all the routes for department;
