@@ -29,7 +29,7 @@ class RecurringController extends Controller
     public function add()
     {
         $categories = CategoryModel::all();
-        //$expenses = DB::table(  'tbl_expense')->get(); 
+
         $expenses = DB::table('tbl_expense')->select('id', 'reference_number', 'budget', 'status', 'categories_id')->get();
         return view('recurring.action.add', compact('categories','expenses'));
     }

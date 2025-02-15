@@ -56,6 +56,7 @@
                             <option value="" disabled>Select Status</option>
                             <option value="active" {{ $recurring->status == 'active' ? 'selected' : '' }}>Active</option>
                             <option value="inactive" {{ $recurring->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            <option value="canceled" {{ $recurring->status == 'canceled' ? 'selected' : '' }}>Canceled</option>
                         </select>
                         
                     </div>

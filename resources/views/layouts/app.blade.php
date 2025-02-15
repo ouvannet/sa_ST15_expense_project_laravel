@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}"{{ !empty($htmlAttribute) ? $htmlAttribute : '' }}>
-	{{var_dump(user_permission('create_expense'))}}
+	{{-- {{var_dump(user_permission('create_expense'))}} --}}
 <head>
     @include('partial.head')
    

@@ -193,6 +193,7 @@
                             <option value="" disabled selected>Select Status</option>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
+                            <option value="canceled">Canceled</option>
                         </select>
                     </div>
                 </div>

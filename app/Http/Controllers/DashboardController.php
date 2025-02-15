@@ -23,7 +23,11 @@ class DashboardController extends Controller
 
         $recurrings = DB::table('tbl_recurring_expense')->get();
         $totalBudget = DB::table('tbl_expense')->sum('budget');
-        $totalExpense = DB::table('tbl_expense_usage')->sum('amount');
+     
+        $totalExpense = DB::table('tbl_expense')
+        ->where('status', 'Approved')
+        ->sum('budget');
+
         $totalPayment = DB::table('tbl_expense_payment')->sum('amount');
         $totalRecurring = DB::table('tbl_recurring_expense')->sum('amount');
     

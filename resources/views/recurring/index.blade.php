@@ -37,7 +37,7 @@
                                 <td>{{ $recurring->start_date ?? 'N/A' }}</td>
                                 <td>{{ $recurring->end_date ?? 'N/A' }}</td>
                                 <td>{{ $recurring->next_run_date ?? 'N/A' }}</td>
-                                <td class=" {{ $recurring->status == 'active' ? 'text-success' : 'text-danger' }} ">
+                                <td class=" {{ $recurring->status == 'active' ? 'text-success' : ($recurring->status =='inactive' ? 'text-warning' : 'text-danger') }} ">
                                     {{ $recurring->status ?? 'N/A' }}</td>
 
                                 <td class="d-flex justify-content-end gap-2">

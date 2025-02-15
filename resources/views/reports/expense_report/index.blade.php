@@ -82,7 +82,7 @@
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="fa-solid fa-money-bill-wave text-primary"></i>
+                                    <i class="fa fa-thumbs-up text-primary"></i>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +126,7 @@
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="fa-solid fa-money-bill-wave text-primary"></i>
+                                    <i class="fa fa-circle-check text-primary"></i>
                                 </div>
                             </div>
                         </div>
@@ -170,7 +170,7 @@
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="fa-solid fa-money-bill-wave text-primary"></i>
+                                    <i class="fa fa-circle-xmark text-primary"></i>
                                 </div>
                             </div>
                         </div>
@@ -233,11 +233,10 @@
                                         <img src="/images/icon/attachment.png" width="15px">
                                     </a>
                                 </td>
-                                
+                       
                                 <td>
                                     <span class="{{$expense->status == 'Approved' ? 'text-success' : ($expense->status == 'Canceled' ? 'text-danger' : ($expense->status == 'Pending' ? 'text-warning' : 'text-primary')) }}">{{$expense->status}}</span>
-                                </td>
-                             
+                                </td>     
                                 <td>{{ $expense->approver->name ?? 'N/A' }}</td> <!-- User who approves -->
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
 
