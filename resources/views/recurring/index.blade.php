@@ -244,14 +244,16 @@
             var expenseId = $(this).data("id");
             var expenseAmount = $(this).data("amount");
             var categoryId = $(this).data("category-id");
+            var userId = $(this).data("user-id");
 
             // Populate hidden fields
             $("#expense_id").val(expenseId);
-            $("#selectedExpenseText").text(`Expense ID: ${expenseId} | Amount: $${expenseAmount}`);
+            $("#selectedExpenseText").text(`Expense ID: ${expenseId} | Category: $${userId} | Amount: $${expenseAmount}`);
 
             // Insert values into respective form fields
             $("#category_id").val(categoryId); // Ensure this field is in the form
             $("#amount").val(expenseAmount);   // Ensure this field is in the form
+            $("#user_id").val(userId);
         });
 
         // Load add recurring expense modal
@@ -271,6 +273,7 @@
                 }
             });
         });
+
 
         // Submit Add Recurring form
         $(document).on('click', "#btn_submit_recurring", function() {

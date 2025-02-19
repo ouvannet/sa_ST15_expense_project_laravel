@@ -34,26 +34,6 @@ class RecurringController extends Controller
         return view('recurring.action.add', compact('categories','expenses'));
     }
 
-    // public function submit_add(Request $req)
-    // {
-    //     $all=$req->all();
-    //     $ins = RecurringModel::create([
-    //         "category_id" => $all['category_id'],
-    //         "amount" => $all['amount'],
-    //         "frequency" => $all['frequency'], 
-    //         "start_date" => $all['start_date'],
-    //         "end_date" => $all['end_date'],
-
-    //     ]);
-
-    //     if($ins){
-    //         $message=['status'=>1,'message'=>'Category Inserted Successfully.'];
-    //     }else{
-    //         $message=['status'=>0,'message'=>'Category Inserted Fail'];
-    //     }
-    //     return ($message);
-    // }
-
 
     public function submit_add(Request $req)
     {
@@ -66,10 +46,9 @@ class RecurringController extends Controller
 
         // dd($expense);
 
-        // Convert start_date to a Carbon instance
+    
         $startDate = Carbon::parse($all['start_date']);
 
-        // Calculate next_run_date based on frequency
         switch ($all['frequency']) {
             case 'daily':
                 $nextRunDate = $startDate->addDay();
@@ -84,12 +63,11 @@ class RecurringController extends Controller
                 $nextRunDate = $startDate->addYear();
                 break;
             default:
-                $nextRunDate = $startDate; // Default to start date if frequency is invalid
+                $nextRunDate = $startDate; 
                 break;
         }
 
 
-        // Insert into the database
         $ins = RecurringModel::create([
             "category_id" => $all['category_id'],
             "amount" => $all['amount'],
@@ -149,7 +127,9 @@ class RecurringController extends Controller
 
     public function destroy($recurring_id)
     {
+        
         $recurring = RecurringModel::find($recurring_id);
+        
         if ($recurring) {
             $recurring->delete();
             $message = ['status' => 1, 'message' => 'Delete Permission Success'];
@@ -158,8 +138,6 @@ class RecurringController extends Controller
         }
         return ($message);
     }
-
-
 
 
 
