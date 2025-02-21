@@ -16,6 +16,7 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Category</th>
+                            <th scope="col">User</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Frequency</th>
                             <th scope="col">Start Date</th>
@@ -31,7 +32,7 @@
                             <tr id="recurring-row-{{ $recurring->id }}">
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $recurring->category->name ?? 'N/A' }}</td>
-
+                                <td>{{ $recurring->user->name ?? 'N/A' }}</td>
                                 <td>{{ $recurring->amount ?? 'N/A' }}</td>
                                 <td>{{ $recurring->frequency ?? 'N/A' }}</td>
                                 <td>{{ $recurring->start_date ?? 'N/A' }}</td>
@@ -240,21 +241,22 @@
         });
 
        // Dynamically handle expense selection
-       $(document).on("click", ".expense-item", function() {
-            var expenseId = $(this).data("id");
-            var expenseAmount = $(this).data("amount");
-            var categoryId = $(this).data("category-id");
-            var userId = $(this).data("user-id");
+    //    $(document).on("click", ".expense-item", function() {
+    //         var expenseId = $(this).data("id");
+    //         var expenseAmount = $(this).data("amount");
+    //         var categoryId = $(this).data("category-id");
+    //         var userId = $(this).data("user-id");
+            
 
-            // Populate hidden fields
-            $("#expense_id").val(expenseId);
-            $("#selectedExpenseText").text(`Expense ID: ${expenseId} | Category: $${userId} | Amount: $${expenseAmount}`);
+    //         // Populate hidden fields
+    //         $("#expense_id").val(expenseId);
+    //         $("#selectedExpenseText").text(`Expense ID: ${expenseId} | Category: ${categoryID} | Amount: $${expenseAmount} | User: ${userId}`);
 
-            // Insert values into respective form fields
-            $("#category_id").val(categoryId); // Ensure this field is in the form
-            $("#amount").val(expenseAmount);   // Ensure this field is in the form
-            $("#user_id").val(userId);
-        });
+    //         // Insert values into respective form fields
+    //         $("#category_id").val(categoryId); 
+    //         $("#amount").val(expenseAmount);   
+    //         $("#user_id").val(userId);
+    //     });
 
         // Load add recurring expense modal
         $("#btn_add_recurring").click(function() {

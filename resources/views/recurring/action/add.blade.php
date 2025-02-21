@@ -171,11 +171,13 @@
             const expenseId = this.getAttribute('data-id');
             const amount = this.getAttribute('data-amount');
             const categoryId = this.getAttribute('data-category-id');
+            const userId = this.getAttribute('data-user-id');
 
             // Update hidden fields
             document.getElementById('expense_id').value = expenseId;
             document.getElementById('amount').value = amount;
             document.getElementById('category_id').value = categoryId;
+            document.getElementById('user_id').value = userId;
 
             // Update selected text
             document.getElementById('selectedExpenseText').innerText = `Reference: ${this.textContent.trim()}`;

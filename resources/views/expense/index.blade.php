@@ -2,12 +2,14 @@
 @section('title', 'Expenses')
 @section('content')
 
+    
     <!-- Expenses Table -->
     <div id="expensesTable" class="mb-5">
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Expenses List</h5>
-                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
+                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                    data-bs-target="#addExpenseModal">
                     Add Expense
                 </button>
 
@@ -124,11 +126,10 @@
         </div>
 
 
-
         @include('expense.action.add')
-        @include('expense.action.edit')
+        @include('expense.action.edit') 
 
-    @endsection
+    @endsection 
 
 
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ExpenseModel;
 use App\Models\CategoryModel;
 use App\Models\UserModel;
+use App\Models\RecurringModel;
 use App\Models\ReferenceModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -16,20 +17,12 @@ class ExpenseController extends Controller
 {
     public function index()
     {
-        // $expenses = ExpenseModel::with(['category', 'user', 'assign'])->get();
-
-        // //dd($expenses);
-        // $categories = CategoryModel::all();
-        // $users = UserModel::all();
-
-
-        // return view('expense.index', compact('expenses', 'categories', 'users'));
-
         $expenses = ExpenseModel::with(['category', 'requester', 'approver'])->get();
         $categories = CategoryModel::all();
         $users = UserModel::all();
+        $recurring_expenses = RecurringModel::all();
 
-        return view('expense.index', compact('expenses', 'categories', 'users'));
+        return view('expense.index', compact('expenses', 'categories', 'users','recurring_expenses'));
 
     }
 

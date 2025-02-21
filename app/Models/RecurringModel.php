@@ -12,7 +12,15 @@ class RecurringModel extends Model
     
     protected $table = 'tbl_recurring_expense'; // Make sure the table name matches
 
-   
+    // protected $fillable = [
+    //     'category_id',
+    //     'user_id',
+    //     'amount',
+    //     'frequency',
+    //     'start_date',
+    //     'next_run_date',
+    //     'status'
+    // ];
 
     protected $guarded = [];
     public function expense()
@@ -23,7 +31,10 @@ class RecurringModel extends Model
     {
         return $this->belongsTo(CategoryModel::class, 'category_id', 'id');
     }
-
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class, 'user_id', 'id');
+    }
 
 
 

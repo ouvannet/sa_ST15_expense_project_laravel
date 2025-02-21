@@ -18,7 +18,7 @@ class RecurringController extends Controller
     public function index()
     {
 
-        $recurring_expense = RecurringModel::with(['expense', 'category'])->get();
+        $recurring_expense = RecurringModel::with(['expense', 'category','user'])->get();
         //dd($recurring_expense);
 
         $categories = CategoryModel::all();
@@ -30,7 +30,7 @@ class RecurringController extends Controller
     {
         $categories = CategoryModel::all();
 
-        $expenses = DB::table('tbl_expense')->select('id', 'reference_number', 'budget', 'status', 'categories_id')->get();
+        $expenses = DB::table('tbl_expense')->select('id', 'reference_number', 'budget', 'status', 'categories_id','user_id')->get();
         return view('recurring.action.add', compact('categories','expenses'));
     }
 
@@ -70,6 +70,7 @@ class RecurringController extends Controller
 
         $ins = RecurringModel::create([
             "category_id" => $all['category_id'],
+            "user_id" => $all['user_id'],
             "amount" => $all['amount'],
             "frequency" => $all['frequency'],
             "start_date" => $all['start_date'],
@@ -78,6 +79,7 @@ class RecurringController extends Controller
             "next_run_date" => $nextRunDate->toDateString(), // Format as YYYY-MM-DD
         ]);
 
+       
         if ($ins) {
             $message = ['status' => 1, 'message' => 'Recurring Expense Inserted Successfully.'];
         } else {
