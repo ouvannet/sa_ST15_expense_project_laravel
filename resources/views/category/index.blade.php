@@ -84,7 +84,6 @@
             });
         })
 
-
         
         $(document).on('click',"#btn_submit_category",function(){
             const formData = $("#addCategoryForm").serializeArray();

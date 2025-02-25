@@ -22,7 +22,7 @@ class ExpenseController extends Controller
         $users = UserModel::all();
         $recurring_expenses = RecurringModel::all();
 
-        return view('expense.index', compact('expenses', 'categories', 'users','recurring_expenses'));
+        return view('expense.index', compact('expenses', 'categories', 'users', 'recurring_expenses'));
 
     }
 
@@ -39,8 +39,59 @@ class ExpenseController extends Controller
         return response()->json(['success' => true, 'message' => 'Status updated successfully']);
     }
 
-    public function add(Request $request)
+    // public function add(Request $request)
+    // {
+    //     $request->validate([
+    //         'categories_id' => 'required|integer',
+    //         'user_id' => 'required|integer',
+    //         'budget' => 'required|numeric',
+    //         'budget_balance' => 'required|numeric',
+    //         'description' => 'nullable|string|max:255',
+    //         'attachment' => 'nullable|string',
+    //         'status' => 'required|string|max:50',
+    //         'assign' => 'required|string|max:100',
+    //         'date' => 'required|date',
+    //     ]);
+
+    //     // Fetch the current value from tbl_reference where type = 'expense'
+    //     $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
+
+    //     if (!$reference) {
+    //         return response()->json(['success' => false, 'message' => 'Reference type not found!'], 400);
+    //     }
+
+    //     // Format the reference number as EXP0001, EXP0002, etc.
+    //     $formattedReference = sprintf('EXP%04d', $reference->value);
+
+    //     // Insert the new expense into tbl_expense
+    //     $expense = ExpenseModel::create(array_merge($request->all(), [
+    //         'reference_number' => $formattedReference,
+    //     ]));
+
+    //     // Increment the value in tbl_reference
+    //     DB::table('tbl_reference')->where('type', 'expense')->increment('value');
+
+    //     return response()->json(['success' => true, 'message' => 'Expense added successfully!', 'data' => $expense]);
+    // }
+
+
+    public function add()
     {
+
+        $expenses = ExpenseModel::with(['category', 'requester', 'approver'])->get();
+        $categories = CategoryModel::all();
+        $users = UserModel::all();
+        $recurring_expenses = RecurringModel::all();
+
+
+        return view('expense.action.add', compact('expenses', 'categories', 'users', 'recurring_expenses'));
+    }
+
+
+    public function submit_add(Request $request)
+    {
+
+
         $request->validate([
             'categories_id' => 'required|integer',
             'user_id' => 'required|integer',
@@ -52,6 +103,7 @@ class ExpenseController extends Controller
             'assign' => 'required|string|max:100',
             'date' => 'required|date',
         ]);
+
 
         // Fetch the current value from tbl_reference where type = 'expense'
         $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
@@ -71,42 +123,94 @@ class ExpenseController extends Controller
         // Increment the value in tbl_reference
         DB::table('tbl_reference')->where('type', 'expense')->increment('value');
 
-        return response()->json(['success' => true, 'message' => 'Expense added successfully!', 'data' => $expense]);
+        //return response()->json(['success' => true, 'message' => 'Expense added successfully!', 'data' => $expense]);
+
+        if ($expense) {
+            $message = ['status' => 1, 'message' => 'Expense Inserted Successfully.'];
+        } else {
+            $message = ['status' => 0, 'message' => 'Expense Inserted Fail'];
+        }
+        return ($message);
     }
 
-    public function edit($id)
+
+    public function edit($expense_id)
     {
-        $expenses = ExpenseModel::findOrFail($id);
+        $expense = ExpenseModel::find($expense_id);
         $categories = CategoryModel::all();
-        return view('expense.edit', compact('expenses', 'categories'));
+        $users = UserModel::all();
+        $recurring_expenses = RecurringModel::all();
+
+        return view('expense.action.edit', compact('expense', 'categories', 'users', 'recurring_expenses'));
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $req)
     {
-        $validated = $request->validate([
-            'categories_id' => 'required|integer',
-            'user_id' => 'required|integer',
-            'budget' => 'required|numeric',
-            'budget_balance' => 'required|numeric',
-            'description' => 'nullable|string|max:255',
-            'attachment' => 'nullable|string',
-            'status' => 'required|string|max:50',
-            'assign' => 'required|string|max:100',
-            'date' => 'required|date',
-        ]);
+        $all= $req->all();
+        $expense=ExpenseModel::find($all['expense_id']);
+
+        $expense->categories_id=$all['category_id'];
+        $expense->user_id=$all['user_id'];
+        $expense->budget=$all['budget'];
+        $expense->description=$all['description'];
+        $expense->attachment=$all['attachment'];
+        $expense->status=$all['status'];
+        $expense->assign=$all['assigned_to'];
+        $expense->date=$all['date'];
 
 
-        $expense = ExpenseModel::findOrFail($id);
-        $expense->update($validated);
 
-        return response()->json(['message' => 'Expense updated successfully.']);
+        $upd=$expense->save();
+
+        if ($upd) {
+            $message = ['status' => 1, 'message' => 'Edit Permission Success'];
+        } else {
+            $message = ['status' => 0, 'message' => 'Edit Permission Failed'];
+        }
+        return ($message);
+
+       
+
     }
+
+
+
+
+
+    // public function edit($id)
+    // {
+    //     $expenses = ExpenseModel::findOrFail($id);
+    //     $categories = CategoryModel::all();
+    //     return view('expense.edit', compact('expenses', 'categories'));
+    // }
+
+
+    // public function update(Request $request, $id)
+    // {
+    //     $validated = $request->validate([
+    //         'categories_id' => 'required|integer',
+    //         'user_id' => 'required|integer',
+    //         'budget' => 'required|numeric',
+    //         'budget_balance' => 'required|numeric',
+    //         'description' => 'nullable|string|max:255',
+    //         'attachment' => 'nullable|string',
+    //         'status' => 'required|string|max:50',
+    //         'assign' => 'required|string|max:100',
+    //         'date' => 'required|date',
+    //     ]);
+
+
+    //     $expense = ExpenseModel::findOrFail($id);
+    //     $expense->update($validated);
+
+    //     return response()->json(['message' => 'Expense updated successfully.']);
+    // }
 
 
     public function destroy($expense_id)
     {
-    
+
         $expense = ExpenseModel::find($expense_id);
         if ($expense) {
             $expense->delete();
@@ -130,7 +234,7 @@ class ExpenseController extends Controller
         $request->validate([
             'amount' => 'required|numeric|min:1|max:' . $expense->budget_balance,
         ]);
-        
+
 
         try {
             // Begin a transaction
@@ -138,7 +242,7 @@ class ExpenseController extends Controller
 
             // Deduct the amount from the budget balance
             $expense->budget_balance -= $request->amount;
-            if($expense->budget_balance == 0){ 
+            if ($expense->budget_balance == 0) {
                 $expense->status = 'Completed';
             }
             $expense->save();
@@ -165,8 +269,8 @@ class ExpenseController extends Controller
     public function preview($id)
     {
         // Retrieve the expense and related data
-        $expense = ExpenseModel::with('category', 'requester', 'approver','usages')->findOrFail($id);
-        
+        $expense = ExpenseModel::with('category', 'requester', 'approver', 'usages')->findOrFail($id);
+
         if (!$expense) {
             return response()->json(['error' => 'Expense not found'], 404);
         }
@@ -179,7 +283,7 @@ class ExpenseController extends Controller
             'user_name' => $expense->requester->name ?? 'N/A',
             'assign_name' => $expense->approver->name ?? 'N/A',
             'budget' => $expense->budget,
-            
+
             'budget_balance' => $expense->budget_balance,
             'usages' => $expense->usages, // Pass the related usages
             'description' => $expense->description,
@@ -190,10 +294,6 @@ class ExpenseController extends Controller
 
 
         ];
-
-
-        // Return the rendered HTML view
-       
         return response()->json(['html' => view('expense.invoice', $data)->render()]);
 
     }

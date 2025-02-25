@@ -8,8 +8,7 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Expenses List</h5>
-                <button type="button" class="btn btn-primary mb-3" id="btn_add_exp" data-bs-toggle="modal"
-                    data-bs-target="#addExpenseModal">
+                <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addExpenseModal">
                     Add Expense
                 </button>
 
@@ -74,8 +73,7 @@
                                 <td>{{ $expense->approver->name ?? 'N/A' }}</td> <!-- User who approves -->
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
                                 <td class="d-flex justify-content-end gap-2">
-                                    <button onclick="edit_expense({{ $expense->id }})"
-                                        class="btn btn-sm btn-warning edit-btn py-2" data-id="{{ $expense->id }}"
+                                    <button class="btn btn-sm btn-warning edit-btn py-2" data-id="{{ $expense->id }}"
                                         data-reference_number="{{ $expense->reference_number }}"
                                         data-category="{{ $expense->categories_id }}" data-user="{{ $expense->user_id }}"
                                         data-budget="{{ $expense->budget }}" data-balance="{{ $expense->budget_balance }}"
@@ -127,8 +125,8 @@
         </div>
 
 
-        {{-- @include('expense.action.add') --}}
-        {{-- @include('expense.action.edit') --}}
+        @include('expense.action.add')
+        @include('expense.action.edit')
 
     @endsection
 
@@ -142,12 +140,12 @@
                     location.reload();
                 }, 1000);
             }
-            //let deleteId = null;
+            let deleteId = null;
 
 
-            $("#btn_add_exp").click(function() {
+            $("#btn_add_category").click(function() {
                 $.ajax({
-                    url: "{{ route('Expense.add') }}",
+                    url: "{{ route('category.add') }}",
                     type: 'GET',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -165,25 +163,11 @@
 
 
 
-            $(document).on('click', "#btn_submit_expense", function() {
-                //const formData = $("#addExpenseForm").serializeArray();
-                const formData = {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    categories_id: document.getElementById('category').value,
-                    user_id: document.getElementById('user').value,
-                    budget: document.getElementById('budget').value,
-                    budget_balance: document.getElementById('budget').value,
-                    description: document.getElementById('description').value,
-                    attachment: document.getElementById('attachment').value,
-                    status: document.getElementById('status').value,
-                    assign: document.getElementById('assign').value,
-                    date: document.getElementById('date').value
-                };
-
-
+            $(document).on('click', "#btn_submit_category", function() {
+                const formData = $("#addCategoryForm").serializeArray();
                 console.table(formData);
                 $.ajax({
-                    url: "{{ route('Expense.submit_add') }}",
+                    url: "{{ route('category.submit_add') }}",
                     type: 'POST',
                     data: formData,
                     success: function(response) {
@@ -217,12 +201,17 @@
 
 
 
+
+
             $(document).ready(function() {
                 $('.preview-btn').on('click', function() {
                     const id = $(this).data('id');
+
+
                     $.ajax({
                         url: `/expense/preview/${id}`,
                         method: 'GET',
+
                         beforeSend: function() {
                             $('#invoiceContent').html(
                                 '<p class="text-center text-muted">Loading...</p>'
@@ -269,49 +258,47 @@
             });
 
 
+            
 
+            document.getElementById('btn_submit_create_exp').addEventListener('click', function(e) {
+                e.preventDefault();
 
-            // document.getElementById('btn_submit_create_exp').addEventListener('click', function(e) {
-            //     e.preventDefault();
+                // Collect form data
+                const formData = {
+                    categories_id: document.getElementById('category').value,
+                    user_id: document.getElementById('user').value,
+                    budget: document.getElementById('budget').value,
+                    budget_balance: document.getElementById('budget').value,
+                    description: document.getElementById('description').value,
+                    attachment: document.getElementById('attachment').value,
+                    status: document.getElementById('status').value,
+                    assign: document.getElementById('assign').value,
+                    date: document.getElementById('date').value
+                };
 
-            //     // Collect form data
-            //     const formData = {
-            //         categories_id: document.getElementById('category').value,
-            //         user_id: document.getElementById('user').value,
-            //         budget: document.getElementById('budget').value,
-            //         budget_balance: document.getElementById('budget').value,
-            //         description: document.getElementById('description').value,
-            //         attachment: document.getElementById('attachment').value,
-            //         status: document.getElementById('status').value,
-            //         assign: document.getElementById('assign').value,
-            //         date: document.getElementById('date').value
-            //     };
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            //     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            //     // Send data to backend using Fetch API
-            //     fetch('/expense', {
-            //             method: 'POST',
-            //             headers: {
-            //                 'X-CSRF-TOKEN': csrfToken,
-            //                 'Content-Type': 'application/json',
-            //             },
-            //             body: JSON.stringify(formData)
-            //         })
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             if (data.success) {
-            //                 location.reload(); // Reload page to update table
-            //             } else {
-            //                 alert('Error: ' + data.message);
-            //             }
-            //         })
-            //         .catch(error => {
-            //             console.error('Error:', error);
-            //         });
-            // });
-
-
+                // Send data to backend using Fetch API
+                fetch('/expense', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload(); // Reload page to update table
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
 
 
             document.querySelectorAll('.update-status-select').forEach(select => {
@@ -358,113 +345,58 @@
 
 
 
-            function edit_expense(expense_id) {
-                console.log(expense_id);
-                $.ajax({
-                    url: `/expense/${expense_id}/edit`,
-                    type: 'GET',
-                    success: function(response) {
-                        console.log(response);
-                        $("#globalModalView").html(response);
-                        $("#globalModalView").modal('toggle');
-                    },
-                    error: function(xhr) {
-                        console.log(xhr);
-                    }
-                });
-            }
-
-
-            $(document).on('click', "#btn_submit_edit_expense", function() {
-                const formData = $("#editExpenseForm").serializeArray();
-
-                console.table(formData);
-                $.ajax({
-                    url: "/expense",
-                    type: 'PUT',
-                    data: formData,
-                    success: function(response) {
-                        console.log(response);
-                        if (response.status == 1) {
-                            $("#globalModalView").modal('toggle');
-                            Swal.fire({
-                                title: response.message,
-                                icon: "success",
-                                draggable: true
-                            });
-                            reloadPage();
-                           
-                        }
-                    },
-                    error: function(xhr) {
-                        console.log(xhr);
-
-                    }
-                });
-            })
-
-
-
-
-
-
-
-
             // Edit Expense
-            // document.querySelectorAll('.edit-btn').forEach(button => {
-            //     button.addEventListener('click', function() {
-            //         const data = this.dataset;
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const data = this.dataset;
 
-            //         // Populate form fields
-            //         document.getElementById('edit-expense-id').value = data.id;
-            //         document.getElementById('edit-category').value = data.category;
-            //         document.getElementById('edit-user').value = data.user;
-            //         document.getElementById('edit-budget').value = data.budget;
-            //         //document.getElementById('edit-balance').value = data.balance;
-            //         document.getElementById('edit-description').value = data.description;
-            //         document.getElementById('edit-attachment').value = data.attachment;
-            //         document.getElementById('edit-status').value = data.status;
-            //         document.getElementById('edit-assign').value = data.assign;
-            //         document.getElementById('edit-date').value = data
-            //             .date;
+                    // Populate form fields
+                    document.getElementById('edit-expense-id').value = data.id;
+                    document.getElementById('edit-category').value = data.category;
+                    document.getElementById('edit-user').value = data.user;
+                    document.getElementById('edit-budget').value = data.budget;
+                    //document.getElementById('edit-balance').value = data.balance;
+                    document.getElementById('edit-description').value = data.description;
+                    document.getElementById('edit-attachment').value = data.attachment;
+                    document.getElementById('edit-status').value = data.status;
+                    document.getElementById('edit-assign').value = data.assign;
+                    document.getElementById('edit-date').value = data
+                        .date;
 
-            //         // Open the modal
-            //         new bootstrap.Modal(document.getElementById('editExpenseModal')).show();
-            //     });
-            // });
-
-
-            // document.getElementById('editExpenseForm').addEventListener('submit', function(e) {
-            //     const id = document.getElementById('edit-expense-id').value;
-
-            //     fetch(`/expense/${id}`, {
-            //             method: 'PUT', // Correct method
-            //             headers: {
-            //                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            //                 'Content-Type': 'application/json'
-            //             },
-            //             body: JSON.stringify({
-            //                 categories_id: document.getElementById('edit-category').value,
-            //                 user_id: document.getElementById('edit-user').value,
-            //                 budget: document.getElementById('edit-budget').value,
-            //                 budget_balance: document.getElementById('edit-budget').value,
-            //                 description: document.getElementById('edit-description').value,
-            //                 attachment: document.getElementById('edit-attachment').value,
-            //                 status: document.getElementById('edit-status').value,
-            //                 assign: document.getElementById('edit-assign').value,
-            //                 date: document.getElementById('edit-date').value
-            //             })
-            //         }).then(response => response.json())
-            //         .then(data => {
-            //             console.log(data);
-            //             //location.reload();
-            //         })
-            //         .catch(error => console.error('Error:', error));
-
-            // });
+                    // Open the modal
+                    new bootstrap.Modal(document.getElementById('editExpenseModal')).show();
+                });
+            });
 
 
+            document.getElementById('editExpenseForm').addEventListener('submit', function(e) {
+                const id = document.getElementById('edit-expense-id').value;
 
+                fetch(`/expense/${id}`, {
+                        method: 'PUT', // Correct method
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            categories_id: document.getElementById('edit-category').value,
+                            user_id: document.getElementById('edit-user').value,
+                            budget: document.getElementById('edit-budget').value,
+                            budget_balance: document.getElementById('edit-budget').value,
+                            description: document.getElementById('edit-description').value,
+                            attachment: document.getElementById('edit-attachment').value,
+                            status: document.getElementById('edit-status').value,
+                            assign: document.getElementById('edit-assign').value,
+                            date: document.getElementById('edit-date').value
+                        })
+                    }).then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        //location.reload();
+                    })
+                    .catch(error => console.error('Error:', error));
+
+            });
 
 
 

@@ -34,23 +34,39 @@ Route::get('/', [DashboardController::class, 'index'])->name('Dashboard')->middl
 
 
 //This are all the routes for expense;
+// Route::get('/expense', [ExpenseController::class, 'index'])->name('Expense');
+// Route::post('/expense', [ExpenseController::class, 'add'])->name('Expense.add');
+// Route::get('/expense/{id}/edit', [ExpenseController::class, 'edit'])->name('Expense.edit');
+// Route::put('/expense/{id}', [ExpenseController::class, 'update'])->name('Expense.update');
+// Route::delete('/expense/{id}', [ExpenseController::class, 'destroy'])->name('Expense.destroy');
+// Route::put('/expense/{id}/status', [ExpenseController::class, 'updateStatus']);
+
+
+// Route::get('/expense/{id}', [ExpenseController::class, 'showUseBalance'])->name('expense.show');
+// Route::post('/expense/{id}/use', [ExpenseController::class, 'useBalance'])->name('expense.use');
+// Route::get('expense/preview/{id}',[ExpenseController::class, 'preview'])->name('expense.previewHtml');
+
+
 Route::get('/expense', [ExpenseController::class, 'index'])->name('Expense');
-Route::post('/expense', [ExpenseController::class, 'add'])->name('Expense.add');
+Route::get('/expense_add', [ExpenseController::class, 'add'])->name('Expense.add');
+Route::post('/expense_add', [ExpenseController::class, 'submit_add'])->name('Expense.submit_add');
+
 Route::get('/expense/{id}/edit', [ExpenseController::class, 'edit'])->name('Expense.edit');
-Route::put('/expense/{id}', [ExpenseController::class, 'update'])->name('Expense.update');
+Route::put('/expense', [ExpenseController::class, 'update'])->name('Expense.update');
+
+
+
 Route::delete('/expense/{id}', [ExpenseController::class, 'destroy'])->name('Expense.destroy');
 Route::put('/expense/{id}/status', [ExpenseController::class, 'updateStatus']);
 
 
 Route::get('/expense/{id}', [ExpenseController::class, 'showUseBalance'])->name('expense.show');
 Route::post('/expense/{id}/use', [ExpenseController::class, 'useBalance'])->name('expense.use');
-
 Route::get('expense/preview/{id}',[ExpenseController::class, 'preview'])->name('expense.previewHtml');
 
 
 
 
-//This are all the routes for category;
 
 
 Route::get('/category', [CategoryController::class, 'index'])->name('Category');

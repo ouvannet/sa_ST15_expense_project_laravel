@@ -13,10 +13,8 @@ class CategoryController extends Controller
 
     public function index()
     {
-        // Fetch categories from the database
-        $categories = CategoryModel::all();
         
-        // Return the view with the data
+        $categories = CategoryModel::all();    
         return view('category.index', compact('categories'));
     }
     // public function edit($id)
@@ -58,6 +56,8 @@ class CategoryController extends Controller
         $category=CategoryModel::find($all['category_id']);
         $category->name=$all['name'];
         $category->description=$all['description'];
+
+
         $upd=$category->save();
         
         if($upd){
@@ -123,10 +123,6 @@ class CategoryController extends Controller
 
     public function destroy($category_id)
     {
-        // $category = CategoryModel::findOrFail($id);
-        // $category->delete();
-
-        // return response()->json(['success' => true]);
 
         $category = CategoryModel::find($category_id);
         if ($category) {
