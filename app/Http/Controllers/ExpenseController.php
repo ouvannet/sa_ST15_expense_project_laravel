@@ -44,13 +44,10 @@ class ExpenseController extends Controller
 
     public function add()
     {
-
         $expenses = ExpenseModel::with(['category', 'requester', 'approver'])->get();
         $categories = CategoryModel::all();
         $users = UserModel::all();
         $recurring_expenses = RecurringModel::all();
-
-
         return view('expense.action.add', compact('expenses', 'categories', 'users', 'recurring_expenses'));
     }
 
@@ -79,21 +76,18 @@ class ExpenseController extends Controller
             return response()->json(['success' => false, 'message' => 'Reference type not found!'], 400);
         }
 
-        // Format the reference number as EXP0001, EXP0002, etc.
         $formattedReference = sprintf('EXP%04d', $reference->value);
-
-        // Insert the new expense into tbl_expense
         $expense = ExpenseModel::create(array_merge($request->all(), [
             'reference_number' => $formattedReference,
         ]));
 
-        // Increment the value in tbl_reference
         DB::table('tbl_reference')->where('type', 'expense')->increment('value');
 
         $message = "🚀 New Expense Created!\n\n"
             . "💰 Budget: {$expense->budget}\n"
             . "📅 Date: {$expense->date}\n"
-            . "📌 Status: {$expense->status}";
+            . "📌 Status: {$expense->status}\n";
+            
 
         TelegramHelper::sendMessage($message);
 
