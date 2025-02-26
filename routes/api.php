@@ -3,6 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,4 +21,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+
+
+Route::post('/telegram/webhook', function (Request $request) {
+    Log::info('Received Telegram Webhook:', $request->all());
+
+    return response()->json(['status' => 'ok'], 200);
 });

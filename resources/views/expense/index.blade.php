@@ -35,10 +35,14 @@
                             <tr id="expense-row-{{ $expense->id }}">
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    <a class="text-decoration-none btn btn-sm btn-primary"
-                                        href="{{ route('expense.show', ['id' => $expense->id]) }}">
-                                        {{ $expense->reference_number }}
-                                    </a>
+                                    @if ($expense->status == 'Approved' || $expense->status == 'Completed')
+                                        <a class="text-decoration-none btn btn-sm btn-primary"
+                                            href="{{ route('expense.show', ['id' => $expense->id]) }}">
+                                            {{ $expense->reference_number }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted">{{ $expense->reference_number }}</span>
+                                    @endif
                                 </td>
                                 <td>{{ $expense->category->name ?? 'N/A' }}</td>
                                 <td>{{ $expense->requester->name ?? 'N/A' }}</td> <!-- User who requested -->
@@ -75,14 +79,7 @@
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
                                 <td class="d-flex justify-content-end gap-2">
                                     <button onclick="edit_expense({{ $expense->id }})"
-                                        class="btn btn-sm btn-warning edit-btn py-2" data-id="{{ $expense->id }}"
-                                        data-reference_number="{{ $expense->reference_number }}"
-                                        data-category="{{ $expense->categories_id }}" data-user="{{ $expense->user_id }}"
-                                        data-budget="{{ $expense->budget }}" data-balance="{{ $expense->budget_balance }}"
-                                        data-description="{{ $expense->description }}"
-                                        data-attachment="{{ $expense->attachment }}" data-status="{{ $expense->status }}"
-                                        data-assign="{{ $expense->assign }}"
-                                        data-date="{{ \Illuminate\Support\Str::before($expense->date, ' ') }}">
+                                        class="btn btn-sm btn-warning edit-btn py-2">
                                         Edit
                                     </button>
                                     <button onclick="delete_expense({{ $expense->id }})" class="btn btn-sm btn-danger"
@@ -248,8 +245,6 @@
             // Handle the "Print" button click
             $('.print-btn').on('click', function() {
                 const content = $('#invoiceContent').html();
-
-                // Open a new print window
                 const printWindow = window.open('', '_blank');
                 printWindow.document.write(`
                 <html>
@@ -264,11 +259,6 @@
             `);
                 printWindow.document.close();
             });
-
-
-
-
-
 
 
             document.querySelectorAll('.update-status-select').forEach(select => {
@@ -300,8 +290,13 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                alert('Status updated successfully!');
-
+                                $("#globalModalView").modal('toggle');
+                                Swal.fire({
+                                    title: data.message,
+                                    icon: "success",
+                                    draggable: true
+                                });
+                                reloadPage();
                             } else {
                                 alert('Failed to update status. Please try again.');
                             }
@@ -350,7 +345,7 @@
                                 draggable: true
                             });
                             reloadPage();
-                           
+
                         }
                     },
                     error: function(xhr) {

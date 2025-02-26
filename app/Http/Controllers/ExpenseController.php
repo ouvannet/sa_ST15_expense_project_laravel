@@ -54,8 +54,6 @@ class ExpenseController extends Controller
 
     public function submit_add(Request $request)
     {
-
-
         $request->validate([
             'categories_id' => 'required|integer',
             'user_id' => 'required|integer',
@@ -80,16 +78,22 @@ class ExpenseController extends Controller
         $expense = ExpenseModel::create(array_merge($request->all(), [
             'reference_number' => $formattedReference,
         ]));
+       
 
         DB::table('tbl_reference')->where('type', 'expense')->increment('value');
-
-        $message = "🚀 New Expense Created!\n\n"
-            . "💰 Budget: {$expense->budget}\n"
-            . "📅 Date: {$expense->date}\n"
-            . "📌 Status: {$expense->status}\n";
-            
+        $message = "🔔 *New Expense Alert!*\n"
+            . "━━━━━━━━━━━━━━━━━━━━━\n"
+            . "💰 *Budget:* `{$expense->budget} USD`\n"
+            . "📂 *Category:* `{$expense->category->name}`\n"
+            . "📝 *Description:* `{$expense->description}`\n"
+            . "📅 *Date:* `{$expense->date}`\n"
+            . "📌 *Status:* `{$expense->status}`\n"
+            . "━━━━━━━━━━━━━━━━━━━━━\n"
+            . "🔗 [View Expense Details](Open Website){$expense->id})";
 
         TelegramHelper::sendMessage($message);
+
+
 
 
         if ($expense) {
@@ -120,6 +124,8 @@ class ExpenseController extends Controller
         $expense->categories_id = $all['category_id'];
         $expense->user_id = $all['user_id'];
         $expense->budget = $all['budget'];
+        $expense->budget_balance = $all['budget'];
+        
         $expense->description = $all['description'];
         $expense->attachment = $all['attachment'];
         $expense->status = $all['status'];
@@ -168,7 +174,6 @@ class ExpenseController extends Controller
         $request->validate([
             'amount' => 'required|numeric|min:1|max:' . $expense->budget_balance,
         ]);
-
 
         try {
             // Begin a transaction

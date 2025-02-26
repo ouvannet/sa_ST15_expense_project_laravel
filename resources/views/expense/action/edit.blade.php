@@ -205,6 +205,13 @@
                         <input type="number" class="form-control" id="edit-budget" name="budget" value="{{ $expense->budget }}" required>
                     </div>
 
+                    
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="edit-balance" class="form-label">Balance</label>
+                        <input type="number" class="form-control" id="edit-balance" name="budget_balance" value="{{ $expense->budget_balance }}" readonly>
+                    </div>
+
                     <div class="col-md-6 mb-3">
                         <label for="edit-description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="edit-description" name="description" value="{{ $expense->description }}" required>

@@ -251,7 +251,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($recurrings as $recurring)
+                                @forelse ($recurrings->take(5) as $recurring)
                                     <tr>
                                         <td class="">{{ $loop->iteration }}</td>
                                         <td>
@@ -321,7 +321,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($expenses as $expense)
+                                @forelse ($expenses->take(5) as $expense)
                                     <tr>
                                         <td class="">{{ $loop->iteration }}</td>
                                         <td>
@@ -342,6 +342,8 @@
                                         <td class="text-end pe-0">{{ $expense->budget }}</td>
                                         <td class="text-end pe-0">{{ $expense->budget_balance }}</td>
                                     </tr>
+
+
                                 @empty
                                     <tr>
                                         <td colspan="11" class="text-center">No Recurring Expense</td>

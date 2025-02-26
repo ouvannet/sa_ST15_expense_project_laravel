@@ -62,7 +62,7 @@ Route::put('/expense/{id}/status', [ExpenseController::class, 'updateStatus']);
 
 Route::get('/expense/{id}', [ExpenseController::class, 'showUseBalance'])->name('expense.show');
 Route::post('/expense/{id}/use', [ExpenseController::class, 'useBalance'])->name('expense.use');
-Route::get('expense/preview/{id}',[ExpenseController::class, 'preview'])->name('expense.previewHtml');
+Route::get('expense/preview/{id}', [ExpenseController::class, 'preview'])->name('expense.previewHtml');
 
 
 
@@ -139,6 +139,109 @@ Route::delete('/permission/{id}', [PermissionController::class, 'destroy'])->nam
 
 
 
+
+
+// use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Http;
+
+// Route::post('/telegram-webhook', function (Request $request) {
+//     $data = $request->all();
+
+//     if (isset($data['message'])) {
+//         $chat_id = $data['message']['chat']['id'];
+//         $text = $data['message']['text'];
+
+//         // Handle Commands
+//         if ($text == "/start") {
+//             $reply = "Hello! I'm your bitch. Use /hello to greet me!";
+//         } elseif ($text == "/hello") {
+//             $reply = "Hello there! How the fuck are you doing?";
+//         } elseif ($text == "/stop") {
+//             $reply = "Goodbye bitch! You can restart with /start anytime.";
+//         } else {
+//             $reply = "I don't understand your fucking that command. Try /hello.";
+//         }
+
+
+
+
+//         // Send Response
+//         $telegram_api = "https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage";
+//         Http::post($telegram_api, [
+//             'chat_id' => $chat_id,
+//             'text' => $reply
+//         ]);
+
+//         $telegram_api_group = "https://api.telegram.org/bot" . env('TELEGRAM_TEAM1
+//         ') . "/sendMessage";
+//         Http::post($telegram_api_group, [
+//             'chat_id' => $chat_id,
+//             'text' => $reply
+//         ]);
+
+//         Http::post($telegram_api, [
+//             'chat_id' => $chat_id,
+//             'text' => $reply
+//         ]);
+//     }
+
+//     return response()->json(['status' => 'ok']);
+// });
+
+
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
+Route::post('/telegram-webhook', function (Request $request) {
+    $data = $request->all();
+
+    Log::info('Telegram Webhook Received:', $data); // Log incoming data for debugging
+
+    if (isset($data['message'])) {
+        $chat_id = $data['message']['chat']['id'];
+        $text = trim($data['message']['text']); // Trim spaces to avoid unexpected errors
+
+        // Handle Commands
+        switch ($text) {
+            case "/start":
+                $reply = "Hello! I'm your bot. Use /hello to greet me!";
+                break;
+            case "/hello":
+                $reply = "Hello there! How are you doing?";
+                break;
+            case "/stop":
+                $reply = "Goodbye! You can restart with /start anytime.";
+                break;
+            default:
+                $reply = "I don't understand that command. Try /hello.";
+                break;
+        }
+
+        // Send response to user
+        $telegram_api = "https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage";
+        Http::post($telegram_api, [
+            'chat_id' => $chat_id,
+            'text' => $reply
+        ]);
+
+        // Send response to group (if needed)
+        if (env('TELEGRAM_TEAM1')) {
+            $telegram_api_group = "https://api.telegram.org/bot" . env('TELEGRAM_TEAM1') . "/sendMessage";
+            Http::post($telegram_api_group, [
+                'chat_id' => $chat_id,
+                'text' => $reply
+            ]);
+        }
+    } else {
+        Log::warning('Invalid Telegram Webhook Data:', $data);
+    }
+
+
+
+    return response()->json(['status' => 'ok'], 200);
+});
 
 
 
