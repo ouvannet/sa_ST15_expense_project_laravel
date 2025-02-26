@@ -127,9 +127,6 @@
         </div>
 
 
-        {{-- @include('expense.action.add') --}}
-        {{-- @include('expense.action.edit') --}}
-
     @endsection
 
 
@@ -271,46 +268,6 @@
 
 
 
-            // document.getElementById('btn_submit_create_exp').addEventListener('click', function(e) {
-            //     e.preventDefault();
-
-            //     // Collect form data
-            //     const formData = {
-            //         categories_id: document.getElementById('category').value,
-            //         user_id: document.getElementById('user').value,
-            //         budget: document.getElementById('budget').value,
-            //         budget_balance: document.getElementById('budget').value,
-            //         description: document.getElementById('description').value,
-            //         attachment: document.getElementById('attachment').value,
-            //         status: document.getElementById('status').value,
-            //         assign: document.getElementById('assign').value,
-            //         date: document.getElementById('date').value
-            //     };
-
-            //     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            //     // Send data to backend using Fetch API
-            //     fetch('/expense', {
-            //             method: 'POST',
-            //             headers: {
-            //                 'X-CSRF-TOKEN': csrfToken,
-            //                 'Content-Type': 'application/json',
-            //             },
-            //             body: JSON.stringify(formData)
-            //         })
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             if (data.success) {
-            //                 location.reload(); // Reload page to update table
-            //             } else {
-            //                 alert('Error: ' + data.message);
-            //             }
-            //         })
-            //         .catch(error => {
-            //             console.error('Error:', error);
-            //         });
-            // });
-
 
 
 
@@ -402,71 +359,6 @@
                     }
                 });
             })
-
-
-
-
-
-
-
-
-            // Edit Expense
-            // document.querySelectorAll('.edit-btn').forEach(button => {
-            //     button.addEventListener('click', function() {
-            //         const data = this.dataset;
-
-            //         // Populate form fields
-            //         document.getElementById('edit-expense-id').value = data.id;
-            //         document.getElementById('edit-category').value = data.category;
-            //         document.getElementById('edit-user').value = data.user;
-            //         document.getElementById('edit-budget').value = data.budget;
-            //         //document.getElementById('edit-balance').value = data.balance;
-            //         document.getElementById('edit-description').value = data.description;
-            //         document.getElementById('edit-attachment').value = data.attachment;
-            //         document.getElementById('edit-status').value = data.status;
-            //         document.getElementById('edit-assign').value = data.assign;
-            //         document.getElementById('edit-date').value = data
-            //             .date;
-
-            //         // Open the modal
-            //         new bootstrap.Modal(document.getElementById('editExpenseModal')).show();
-            //     });
-            // });
-
-
-            // document.getElementById('editExpenseForm').addEventListener('submit', function(e) {
-            //     const id = document.getElementById('edit-expense-id').value;
-
-            //     fetch(`/expense/${id}`, {
-            //             method: 'PUT', // Correct method
-            //             headers: {
-            //                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            //                 'Content-Type': 'application/json'
-            //             },
-            //             body: JSON.stringify({
-            //                 categories_id: document.getElementById('edit-category').value,
-            //                 user_id: document.getElementById('edit-user').value,
-            //                 budget: document.getElementById('edit-budget').value,
-            //                 budget_balance: document.getElementById('edit-budget').value,
-            //                 description: document.getElementById('edit-description').value,
-            //                 attachment: document.getElementById('edit-attachment').value,
-            //                 status: document.getElementById('edit-status').value,
-            //                 assign: document.getElementById('edit-assign').value,
-            //                 date: document.getElementById('edit-date').value
-            //             })
-            //         }).then(response => response.json())
-            //         .then(data => {
-            //             console.log(data);
-            //             //location.reload();
-            //         })
-            //         .catch(error => console.error('Error:', error));
-
-            // });
-
-
-
-
-
 
 
             function delete_expense(expense_id) {

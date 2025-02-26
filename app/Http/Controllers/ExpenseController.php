@@ -12,6 +12,7 @@ use App\Models\RecurringModel;
 use App\Models\ReferenceModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use App\Helpers\TelegramHelper;
 
 class ExpenseController extends Controller
 {
@@ -39,40 +40,6 @@ class ExpenseController extends Controller
         return response()->json(['success' => true, 'message' => 'Status updated successfully']);
     }
 
-    // public function add(Request $request)
-    // {
-    //     $request->validate([
-    //         'categories_id' => 'required|integer',
-    //         'user_id' => 'required|integer',
-    //         'budget' => 'required|numeric',
-    //         'budget_balance' => 'required|numeric',
-    //         'description' => 'nullable|string|max:255',
-    //         'attachment' => 'nullable|string',
-    //         'status' => 'required|string|max:50',
-    //         'assign' => 'required|string|max:100',
-    //         'date' => 'required|date',
-    //     ]);
-
-    //     // Fetch the current value from tbl_reference where type = 'expense'
-    //     $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
-
-    //     if (!$reference) {
-    //         return response()->json(['success' => false, 'message' => 'Reference type not found!'], 400);
-    //     }
-
-    //     // Format the reference number as EXP0001, EXP0002, etc.
-    //     $formattedReference = sprintf('EXP%04d', $reference->value);
-
-    //     // Insert the new expense into tbl_expense
-    //     $expense = ExpenseModel::create(array_merge($request->all(), [
-    //         'reference_number' => $formattedReference,
-    //     ]));
-
-    //     // Increment the value in tbl_reference
-    //     DB::table('tbl_reference')->where('type', 'expense')->increment('value');
-
-    //     return response()->json(['success' => true, 'message' => 'Expense added successfully!', 'data' => $expense]);
-    // }
 
 
     public function add()
@@ -123,7 +90,13 @@ class ExpenseController extends Controller
         // Increment the value in tbl_reference
         DB::table('tbl_reference')->where('type', 'expense')->increment('value');
 
-        //return response()->json(['success' => true, 'message' => 'Expense added successfully!', 'data' => $expense]);
+        $message = "🚀 New Expense Created!\n\n"
+            . "💰 Budget: {$expense->budget}\n"
+            . "📅 Date: {$expense->date}\n"
+            . "📌 Status: {$expense->status}";
+
+        TelegramHelper::sendMessage($message);
+
 
         if ($expense) {
             $message = ['status' => 1, 'message' => 'Expense Inserted Successfully.'];
@@ -147,21 +120,21 @@ class ExpenseController extends Controller
 
     public function update(Request $req)
     {
-        $all= $req->all();
-        $expense=ExpenseModel::find($all['expense_id']);
+        $all = $req->all();
+        $expense = ExpenseModel::find($all['expense_id']);
 
-        $expense->categories_id=$all['category_id'];
-        $expense->user_id=$all['user_id'];
-        $expense->budget=$all['budget'];
-        $expense->description=$all['description'];
-        $expense->attachment=$all['attachment'];
-        $expense->status=$all['status'];
-        $expense->assign=$all['assigned_to'];
-        $expense->date=$all['date'];
+        $expense->categories_id = $all['category_id'];
+        $expense->user_id = $all['user_id'];
+        $expense->budget = $all['budget'];
+        $expense->description = $all['description'];
+        $expense->attachment = $all['attachment'];
+        $expense->status = $all['status'];
+        $expense->assign = $all['assigned_to'];
+        $expense->date = $all['date'];
 
 
 
-        $upd=$expense->save();
+        $upd = $expense->save();
 
         if ($upd) {
             $message = ['status' => 1, 'message' => 'Edit Permission Success'];
@@ -170,42 +143,9 @@ class ExpenseController extends Controller
         }
         return ($message);
 
-       
+
 
     }
-
-
-
-
-
-    // public function edit($id)
-    // {
-    //     $expenses = ExpenseModel::findOrFail($id);
-    //     $categories = CategoryModel::all();
-    //     return view('expense.edit', compact('expenses', 'categories'));
-    // }
-
-
-    // public function update(Request $request, $id)
-    // {
-    //     $validated = $request->validate([
-    //         'categories_id' => 'required|integer',
-    //         'user_id' => 'required|integer',
-    //         'budget' => 'required|numeric',
-    //         'budget_balance' => 'required|numeric',
-    //         'description' => 'nullable|string|max:255',
-    //         'attachment' => 'nullable|string',
-    //         'status' => 'required|string|max:50',
-    //         'assign' => 'required|string|max:100',
-    //         'date' => 'required|date',
-    //     ]);
-
-
-    //     $expense = ExpenseModel::findOrFail($id);
-    //     $expense->update($validated);
-
-    //     return response()->json(['message' => 'Expense updated successfully.']);
-    // }
 
 
     public function destroy($expense_id)
