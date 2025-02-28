@@ -1,5 +1,3 @@
-
-
 @extends('layouts.app')
 @section('title', 'Expenses')
 @section('content')
@@ -15,7 +13,7 @@
                         <p><strong>Reference Number: </strong> {{ $expense->reference_number }}</p>
                         <p>Category: {{ $expense->category->name ?? 'N/A' }}</p>
                         <p>User: {{ $expense->user->name ?? 'N/A' }}</p>
-                        <p>Department: {{ $expense->us->name ?? 'N/A' }}</p>
+                        <p>Department: {{ $expense->user->department_id ?? 'N/A' }}</p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Budget:</strong> {{ number_format($expense->budget, 2) }} USD</p>
@@ -45,7 +43,21 @@
                                 Please enter a valid amount within the available balance.
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Use Balance</button>
+
+                        <div class="mb-3">
+                            <label for="payment_method" class="form-label"><strong>Payment Method:</strong></label>
+                            <select class="form-select" id="payment_method" name="payment_method" required>
+                                <option value="" disabled selected>Select Payment Method</option>
+                                <option value="Cash">Cash</option>
+                                <option value="ABA">ABA</option>
+                                <option value="KHQR">KHQR</option>
+                                <option value="Paypal">PayPal</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a valid payment method.
+                            </div>
+                        </div>
+                        <button type="submit" id="btn_submit_use_expense" class="btn btn-primary">Use Balance</button>
                     </form>
                 @else
                     <p class="text-danger"><strong>Note:</strong> The budget for this expense has been fully utilized.</p>
@@ -53,37 +65,43 @@
             </div>
         </div>
 
-        
-            <div class="card mt-4">
-                <div class="card-header bg-white">
-                    <h4>Usage History</h4>
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Amount Used</th>
-                                <th>Used At</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($expense->usages as $usage)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ number_format($usage->amount, 2) }} USD</td>
-                                    <td>{{ $usage->used_at }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="text-center">No usage history found.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+
+        <div class="card mt-4">
+            <div class="card-header bg-white">
+                <h4>Usage History</h4>
             </div>
-        
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Amount Used</th>
+                            <th>Used At</th>
+                            <th>Expense Reference</th>
+                            <th>Payment Reference</th>
+                            <th>Payment Method</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($expense->usages as $usage)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ number_format($usage->amount, 2) }} USD</td>
+                                <td>{{ $usage->used_at }}</td>
+                                <td>{{ $usage->expense_reference_number }}</td>
+                                <td>{{ $usage->reference_number }}</td>
+                                <td>{{ $usage->payment_method }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-center">No usage history found.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <script>

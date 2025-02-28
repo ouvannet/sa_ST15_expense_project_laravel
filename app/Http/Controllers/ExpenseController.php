@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\ExpenseUsageModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\ExpenseModel;
@@ -78,7 +79,7 @@ class ExpenseController extends Controller
         $expense = ExpenseModel::create(array_merge($request->all(), [
             'reference_number' => $formattedReference,
         ]));
-       
+
 
         DB::table('tbl_reference')->where('type', 'expense')->increment('value');
         $message = "🔔 *New Expense Alert!*\n"
@@ -93,16 +94,129 @@ class ExpenseController extends Controller
 
         TelegramHelper::sendMessage($message);
 
-
-
-
         if ($expense) {
             $message = ['status' => 1, 'message' => 'Expense Inserted Successfully.'];
         } else {
             $message = ['status' => 0, 'message' => 'Expense Inserted Fail'];
         }
         return ($message);
+
+
     }
+
+
+
+    // public function useBalance(Request $request, $id)
+    // {
+    //     $expense = ExpenseModel::findOrFail($id);
+
+    //     $request->validate([
+    //         'amount' => 'required|numeric|min:1|max:' . $expense->budget_balance,
+    //         'payment_method' => 'required|string|max:50', // Ensure payment method is required
+    //     ]);
+
+    //     // Fetch the current value from tbl_reference where type = 'expense'
+    //     $reference = DB::table('tbl_reference')->where('type', 'payment')->first();
+
+    //     if (!$reference) {
+    //         return response()->json(['success' => false, 'message' => 'Reference type not found!'], 400);
+    //     }
+
+    //     $formattedReference = sprintf('PAY%04d', $reference->value);
+
+    //     //dd($request,$formattedReference,$expense->reference_number);
+
+    //     try {
+    //         // Begin a transaction
+    //         DB::beginTransaction();
+    //         // Deduct the amount from the budget balance
+    //         $expense->budget_balance -= $request->amount;
+    //         if ($expense->budget_balance == 0) {
+    //             $expense->status = 'Completed';
+    //         }
+    //         $expense->save();
+
+
+
+    //         DB::table('tbl_expense_usage')->insert([
+    //             'expense_id' => $expense->id,
+    //             'amount' => $request->amount,
+    //             'used_at' => now(),
+    //             'expense_reference_number' => $expense->reference_number,
+    //             'reference_number' => $formattedReference,
+    //             'payment_method' => $request->payment_method,
+
+    //         ]);
+
+
+    //         DB::table('tbl_reference')->where('type', 'payment')->increment('value');
+
+    //         // Commit the transaction
+    //         DB::commit();
+
+    //         return redirect()->route('expense.show', ['id' => $id])->with('success', 'Balance used successfully!');
+    //     } catch (\Exception $e) {
+
+    //         DB::rollBack();
+    //         return redirect()->route('expense.show', ['id' => $id])->withErrors(['error' => $e->getMessage()]);
+    //     }
+    // }
+
+    public function useBalance(Request $request, $id)
+    {
+        $expense = ExpenseModel::findOrFail($id);
+
+        $request->validate([
+            'amount' => 'required|numeric|min:1|max:' . $expense->budget_balance,
+            'payment_method' => 'required|string|max:50',
+        ]);
+
+        // Fetch reference value
+        $reference = DB::table('tbl_reference')->where('type', 'payment')->first();
+
+        if (!$reference) {
+            return response()->json(['success' => false, 'message' => 'Reference type not found!'], 400);
+        }
+
+        $formattedReference = sprintf('PAY%04d', $reference->value);
+
+
+        // Deduct the amount
+        $expense->budget_balance -= $request->amount;
+        if ($expense->budget_balance == 0) {
+            $expense->status = 'Completed';
+        }
+        $expense->save();
+
+        // Insert into tbl_expense_usage
+        $inserted = DB::table('tbl_expense_usage')->insert([
+            'expense_id' => $expense->id,
+            'amount' => $request->amount,
+            'used_at' => now(),
+            'expense_reference_number' => $expense->reference_number,
+            'reference_number' => $formattedReference,
+            'payment_method' => $request->payment_method,
+        ]);
+
+        //dd($request->all(), $expense, $formattedReference);
+
+        // Increment reference value
+        DB::table('tbl_reference')->where('type', 'payment')->increment('value');
+
+        if ($inserted) {
+            return redirect()->route('expense.show', ['id' => $id])->with('success', 'Balance used successfully!');
+        } else {
+            return redirect()->route('expense.show', ['id' => $id])->withErrors(['error' => 'Failed to insert into expense usage.']);
+        }
+
+    }
+
+
+
+
+
+
+
 
 
     public function edit($expense_id)
@@ -125,7 +239,7 @@ class ExpenseController extends Controller
         $expense->user_id = $all['user_id'];
         $expense->budget = $all['budget'];
         $expense->budget_balance = $all['budget'];
-        
+
         $expense->description = $all['description'];
         $expense->attachment = $all['attachment'];
         $expense->status = $all['status'];
@@ -137,9 +251,9 @@ class ExpenseController extends Controller
         $upd = $expense->save();
 
         if ($upd) {
-            $message = ['status' => 1, 'message' => 'Edit Permission Success'];
+            $message = ['status' => 1, 'message' => 'Expense Update Successfully'];
         } else {
-            $message = ['status' => 0, 'message' => 'Edit Permission Failed'];
+            $message = ['status' => 0, 'message' => 'Exepse Update Failed'];
         }
         return ($message);
 
@@ -154,9 +268,9 @@ class ExpenseController extends Controller
         $expense = ExpenseModel::find($expense_id);
         if ($expense) {
             $expense->delete();
-            $message = ['status' => 1, 'message' => 'Delete Permission Success'];
+            $message = ['status' => 1, 'message' => 'Expense Deleted Successfully'];
         } else {
-            $message = ['status' => 0, 'message' => 'Delete Permission Failed'];
+            $message = ['status' => 0, 'message' => 'Expense Deleted Failed'];
         }
         return ($message);
     }
@@ -165,43 +279,6 @@ class ExpenseController extends Controller
     {
         $expense = ExpenseModel::with(['category', 'user', 'usages'])->findOrFail($id);
         return view('expense.showUseBalance', compact('expense'));
-    }
-
-    public function useBalance(Request $request, $id)
-    {
-        $expense = ExpenseModel::findOrFail($id);
-
-        $request->validate([
-            'amount' => 'required|numeric|min:1|max:' . $expense->budget_balance,
-        ]);
-
-        try {
-            // Begin a transaction
-            DB::beginTransaction();
-
-            // Deduct the amount from the budget balance
-            $expense->budget_balance -= $request->amount;
-            if ($expense->budget_balance == 0) {
-                $expense->status = 'Completed';
-            }
-            $expense->save();
-
-            // Log the usage in a new table
-            DB::table('tbl_expense_usage')->insert([
-                'expense_id' => $expense->id,
-                'amount' => $request->amount,
-                'used_at' => now(),
-            ]);
-
-            // Commit the transaction
-            DB::commit();
-
-            return redirect()->route('expense.show', ['id' => $id])->with('success', 'Balance used successfully!');
-        } catch (\Exception $e) {
-            // Rollback on error
-            DB::rollBack();
-            return redirect()->route('expense.show', ['id' => $id])->withErrors(['error' => $e->getMessage()]);
-        }
     }
 
 
@@ -213,8 +290,6 @@ class ExpenseController extends Controller
         if (!$expense) {
             return response()->json(['error' => 'Expense not found'], 404);
         }
-
-
         // Data to be passed to the view
         $data = [
             'reference_number' => $expense->reference_number,
@@ -222,7 +297,6 @@ class ExpenseController extends Controller
             'user_name' => $expense->requester->name ?? 'N/A',
             'assign_name' => $expense->approver->name ?? 'N/A',
             'budget' => $expense->budget,
-
             'budget_balance' => $expense->budget_balance,
             'usages' => $expense->usages, // Pass the related usages
             'description' => $expense->description,
@@ -230,9 +304,8 @@ class ExpenseController extends Controller
             'date' => \Carbon\Carbon::parse($expense->date)->format('Y-m-d'),
             'attachment' => $expense->attachment,
 
-
-
         ];
+
         return response()->json(['html' => view('expense.invoice', $data)->render()]);
 
     }

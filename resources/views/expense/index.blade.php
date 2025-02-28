@@ -104,7 +104,7 @@
         </div>
     </div>
 
-    < <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+    <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -121,132 +121,120 @@
                 </div>
             </div>
         </div>
-        </div>
+    </div>
 
 
-    @endsection
+@endsection
 
 
 
 
-    @push('js')
-        <script>
-            function reloadPage() {
-                setTimeout(function() {
-                    location.reload();
-                }, 1000);
-            }
-            //let deleteId = null;
+@push('js')
+    <script>
+        function reloadPage() {
+            setTimeout(function() {
+                location.reload();
+            }, 1000);
+        }
+        //let deleteId = null;
 
 
-            $("#btn_add_exp").click(function() {
-                $.ajax({
-                    url: "{{ route('Expense.add') }}",
-                    type: 'GET',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        $("#globalModalView").html(response);
+        $("#btn_add_exp").click(function() {
+            $.ajax({
+                url: "{{ route('Expense.add') }}",
+                type: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    console.log(response);
+                    $("#globalModalView").html(response);
+                    $("#globalModalView").modal('toggle');
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+                }
+            });
+        })
+
+
+
+        $(document).on('click', "#btn_submit_expense", function() {
+            //const formData = $("#addExpenseForm").serializeArray();
+            const formData = {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                categories_id: document.getElementById('category').value,
+                user_id: document.getElementById('user').value,
+                budget: document.getElementById('budget').value,
+                budget_balance: document.getElementById('budget').value,
+                description: document.getElementById('description').value,
+                attachment: document.getElementById('attachment').value,
+                status: document.getElementById('status').value,
+                assign: document.getElementById('assign').value,
+                date: document.getElementById('date').value
+            };
+
+
+            console.table(formData);
+            $.ajax({
+                url: "{{ route('Expense.submit_add') }}",
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                    if (response.status == 1) {
                         $("#globalModalView").modal('toggle');
-                    },
-                    error: function(xhr) {
-                        console.log(xhr);
+                        Swal.fire({
+                            title: response.message,
+                            icon: "success",
+                            draggable: true
+                        });
+                        reloadPage();
                     }
-                });
-            })
+                },
+                error: function(xhr) {
+                    console.log(xhr);
 
+                }
+            });
+        })
 
-
-            $(document).on('click', "#btn_submit_expense", function() {
-                //const formData = $("#addExpenseForm").serializeArray();
-                const formData = {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    categories_id: document.getElementById('category').value,
-                    user_id: document.getElementById('user').value,
-                    budget: document.getElementById('budget').value,
-                    budget_balance: document.getElementById('budget').value,
-                    description: document.getElementById('description').value,
-                    attachment: document.getElementById('attachment').value,
-                    status: document.getElementById('status').value,
-                    assign: document.getElementById('assign').value,
-                    date: document.getElementById('date').value
-                };
-
-
-                console.table(formData);
+        $(document).ready(function() {
+            $('.preview-btn').on('click', function() {
+                const id = $(this).data('id');
                 $.ajax({
-                    url: "{{ route('Expense.submit_add') }}",
-                    type: 'POST',
-                    data: formData,
+                    url: `/expense/preview/${id}`,
+                    method: 'GET',
+                    beforeSend: function() {
+                        $('#invoiceContent').html(
+                            '<p class="text-center text-muted">Loading...</p>'
+                        );
+                    },
                     success: function(response) {
-                        console.log(response);
-                        if (response.status == 1) {
-                            $("#globalModalView").modal('toggle');
-                            Swal.fire({
-                                title: response.message,
-                                icon: "success",
-                                draggable: true
-                            });
-                            reloadPage();
+                        if (response.html) {
+
+                            $('#invoiceContent').html(response.html);
+                        } else if (response.error) {
+                            $('#invoiceContent').html(
+                                `<p class="text-center text-danger">${response.error}</p>`
+                            );
                         }
                     },
-                    error: function(xhr) {
-                        console.log(xhr);
-
-                    }
-                });
-            })
-
-
-
-
-
-
-
-
-
-
-
-
-
-            $(document).ready(function() {
-                $('.preview-btn').on('click', function() {
-                    const id = $(this).data('id');
-                    $.ajax({
-                        url: `/expense/preview/${id}`,
-                        method: 'GET',
-                        beforeSend: function() {
-                            $('#invoiceContent').html(
-                                '<p class="text-center text-muted">Loading...</p>'
-                            );
-                        },
-                        success: function(response) {
-                            if (response.html) {
-
-                                $('#invoiceContent').html(response.html);
-                            } else if (response.error) {
-                                $('#invoiceContent').html(
-                                    `<p class="text-center text-danger">${response.error}</p>`
-                                );
-                            }
-                        },
-                        error: function() {
-                            $('#invoiceContent').html(
-                                '<p class="text-center text-danger">Failed to load the invoice. Please try again later.</p>'
-                            );
-                        },
-                    });
+                    error: function() {
+                        $('#invoiceContent').html(
+                            '<p class="text-center text-danger">Failed to load the invoice. Please try again later.</p>'
+                        );
+                    },
                 });
             });
+        });
 
 
-            // Handle the "Print" button click
-            $('.print-btn').on('click', function() {
-                const content = $('#invoiceContent').html();
-                const printWindow = window.open('', '_blank');
-                printWindow.document.write(`
+        // Handle the "Print" button click
+        $('.print-btn').on('click', function() {
+            const content = $('#invoiceContent').html();
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
                 <html>
                     <head>
                         <title>Invoice</title>
@@ -257,139 +245,139 @@
                     </body>
                 </html>
             `);
-                printWindow.document.close();
-            });
+            printWindow.document.close();
+        });
 
 
-            document.querySelectorAll('.update-status-select').forEach(select => {
-                select.addEventListener('change', function() {
-                    const expenseId = this.dataset.expenseId; // Assuming you have a `data-expense-id` attribute
-                    const newStatus = this.value;
+        document.querySelectorAll('.update-status-select').forEach(select => {
+            select.addEventListener('change', function() {
+                const expenseId = this.dataset.expenseId; // Assuming you have a `data-expense-id` attribute
+                const newStatus = this.value;
 
-                    this.classList.remove('text-success', 'text-danger', 'text-warning');
-                    if (newStatus === 'Approved') {
-                        this.classList.add('text-success');
-                    } else if (newStatus === 'Rejected') {
-                        this.classList.add('text-danger');
-                    } else if (newStatus === 'Pending') {
-                        this.classList.add('text-warning');
-                    }
+                this.classList.remove('text-success', 'text-danger', 'text-warning');
+                if (newStatus === 'Approved') {
+                    this.classList.add('text-success');
+                } else if (newStatus === 'Rejected') {
+                    this.classList.add('text-danger');
+                } else if (newStatus === 'Pending') {
+                    this.classList.add('text-warning');
+                }
 
-                    // Send the status update request to the server
-                    fetch(`/expense/${expenseId}/status`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content')
-                            },
-                            body: JSON.stringify({
-                                status: newStatus
-                            })
+                // Send the status update request to the server
+                fetch(`/expense/${expenseId}/status`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            status: newStatus
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                $("#globalModalView").modal('toggle');
-                                Swal.fire({
-                                    title: data.message,
-                                    icon: "success",
-                                    draggable: true
-                                });
-                                reloadPage();
-                            } else {
-                                alert('Failed to update status. Please try again.');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('An error occurred. Please try again.');
-                        });
-                });
-            });
-
-
-
-            function edit_expense(expense_id) {
-                console.log(expense_id);
-                $.ajax({
-                    url: `/expense/${expense_id}/edit`,
-                    type: 'GET',
-                    success: function(response) {
-                        console.log(response);
-                        $("#globalModalView").html(response);
-                        $("#globalModalView").modal('toggle');
-                    },
-                    error: function(xhr) {
-                        console.log(xhr);
-                    }
-                });
-            }
-
-
-            $(document).on('click', "#btn_submit_edit_expense", function() {
-                const formData = $("#editExpenseForm").serializeArray();
-
-                console.table(formData);
-                $.ajax({
-                    url: "/expense",
-                    type: 'PUT',
-                    data: formData,
-                    success: function(response) {
-                        console.log(response);
-                        if (response.status == 1) {
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
                             $("#globalModalView").modal('toggle');
                             Swal.fire({
-                                title: response.message,
+                                title: data.message,
                                 icon: "success",
                                 draggable: true
                             });
                             reloadPage();
+                        } else {
+                            alert('Failed to update status. Please try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+            });
+        });
+
+
+
+        function edit_expense(expense_id) {
+            console.log(expense_id);
+            $.ajax({
+                url: `/expense/${expense_id}/edit`,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    $("#globalModalView").html(response);
+                    $("#globalModalView").modal('toggle');
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+                }
+            });
+        }
+
+
+        $(document).on('click', "#btn_submit_edit_expense", function() {
+            const formData = $("#editExpenseForm").serializeArray();
+
+            console.table(formData);
+            $.ajax({
+                url: "/expense",
+                type: 'PUT',
+                data: formData,
+                success: function(response) {
+                    console.log(response);
+                    if (response.status == 1) {
+                        $("#globalModalView").modal('toggle');
+                        Swal.fire({
+                            title: response.message,
+                            icon: "success",
+                            draggable: true
+                        });
+                        reloadPage();
+
+                    }
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+
+                }
+            });
+        })
+
+
+        function delete_expense(expense_id) {
+            Swal.fire({
+                title: "Are you sure?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/expense/" + expense_id,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status == 1) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: response.message,
+                                    icon: "success"
+                                });
+                                reloadPage();
+                            }
+                        },
+                        error: function(xhr) {
+                            console.log(xhr);
 
                         }
-                    },
-                    error: function(xhr) {
-                        console.log(xhr);
-
-                    }
-                });
-            })
-
-
-            function delete_expense(expense_id) {
-                Swal.fire({
-                    title: "Are you sure?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: "/expense/" + expense_id,
-                            type: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function(response) {
-                                console.log(response);
-                                if (response.status == 1) {
-                                    Swal.fire({
-                                        title: "Deleted!",
-                                        text: response.message,
-                                        icon: "success"
-                                    });
-                                    reloadPage();
-                                }
-                            },
-                            error: function(xhr) {
-                                console.log(xhr);
-
-                            }
-                        });
-                    }
-                });
-            }
-        </script>
-    @endpush
+                    });
+                }
+            });
+        }
+    </script>
+@endpush

@@ -110,29 +110,32 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Date</th>
+                            <th scope="col">Expense ID</th>
                             <th scope="col">Reference</th>
-                            <th scope="col">Expense</th>
+                            <th scope="col">Expense Reference</th>
+                            <th scope="col">Paid By</th>
                             <th scope="col">Amount</th>
-                            <th scope="col">Paid by</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Action</th>
+                            <th scope="col">Used At</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 10; $i++)
-                          
-                                <td>{{ 'test' }}</td>
-                                <td>{{ 'test' }}</td>
-                                <td>{{ 'test' }}</td>
-                                <td>{{ 'test' }}</td>
-                                <td>{{ 'test' }}</td>
-                                <td>{{ 'test' }}</td>
-                                <td>{{ 'test' }}</td>
-
+                        @forelse ($expense_usages as $usage)
+                            <tr id="expense-row-{{ $usage->id }}">
+                                <td>{{$loop->iteration }}</td>
+                                <td>{{$usage->expense_id}}</td>
+                                <td>{{$usage->reference_number ?? 'N/A'}}</td>
+                                <td>{{$usage->expense_reference_number ?? 'N/A'}}</td>
+                                <td>{{$usage->payment_method ?? 'N/A'}}</td>
+                                <td>{{$usage->amount}}</td>
+                                <td>{{ \Carbon\Carbon::parse($usage->used_at)->format('Y-m-d') }}</td>
                             </tr>
-                        @endfor
-                        
+                        @empty
+                            <tr>
+                                <td colspan="11" class="text-center">No Payments available.</td>
+                            </tr>
+                        @endforelse
+
                     </tbody>
                 </table>
             </div>

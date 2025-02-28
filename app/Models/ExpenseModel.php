@@ -34,6 +34,8 @@ class ExpenseModel extends Model
         return $this->belongsTo(CategoryModel::class, 'categories_id', 'id');
     }
 
+
+
     public function user()
     {
         return $this->belongsTo(UserModel::class, 'user_id', 'id');
@@ -57,7 +59,7 @@ class ExpenseModel extends Model
 
     public function usages()
     {
-        return $this->hasMany(ExpenseUsage::class, 'expense_id');
+        return $this->hasMany(ExpenseUsageModel::class, 'expense_id');
     }
 
 

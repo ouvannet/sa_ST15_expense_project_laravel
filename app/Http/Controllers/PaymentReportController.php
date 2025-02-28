@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\ExpenseModel;
+use App\Models\ExpenseUsageModel;
+
+
 
 
 class PaymentReportController extends Controller
@@ -14,19 +17,11 @@ class PaymentReportController extends Controller
     public function index(){
 
         $users = ExpenseModel::all();
+        $expense_usages = ExpenseUsageModel::all();
     
-        return view('reports.payment_report.index', compact('users')); 
+        return view('reports.payment_report.index', compact('expense_usages')); 
     }
 
-
-
-
-
-
-
-
-    
-   
 
 
     
