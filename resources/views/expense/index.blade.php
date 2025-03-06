@@ -49,11 +49,43 @@
                                 <td>{{ $expense->budget }}</td>
                                 <td>{{ $expense->budget_balance }}</td>
                                 <td>{{ $expense->description }}</td>
-                                <td>
+                                {{-- <td>
                                     <a href="{{ $expense->attachment }}" class="btn btn-sm btn-light">
                                         <img src="/images/icon/attachment.png" width="15px">
                                     </a>
+                                </td> --}}
+
+                                <td>
+                                    @if ($expense->attachment)
+                                        @php
+                                            $fileExtension = pathinfo($expense->attachment, PATHINFO_EXTENSION);
+                                        @endphp
+
+                                        @if (in_array($fileExtension, ['png', 'jpg', 'jpeg', 'gif', 'webp']))
+                                            <!-- Show Image Preview -->
+                                            <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank">
+                                                <img src="{{ asset('storage/' . $expense->attachment) }}" width="50"
+                                                    height="50" class="rounded shadow">
+                                            </a>
+                                        @elseif ($fileExtension === 'pdf')
+                                            <!-- Show PDF Icon -->
+                                            <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank">
+                                                <i class="fas fa-file-pdf text-danger" style="font-size: 24px;"></i>
+                                            </a>
+                                        @else
+                                            <!-- Show Download Icon for Other Files -->
+                                            <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank"
+                                                class="btn btn-sm btn-light">
+                                                <i class="fas fa-download"></i> Download
+                                            </a>
+                                        @endif
+                                    @else
+                                        <span class="text-muted">No attachment</span>
+                                    @endif
                                 </td>
+
+
+
                                 <td>
                                     @if ($expense->status == 'Completed')
                                         <span class="text-primary ">Completed</span>
@@ -159,27 +191,63 @@
 
 
 
+        // $(document).on('click', "#btn_submit_expense", function() {
+        //     //const formData = $("#addExpenseForm").serializeArray();
+        //     const formData = {
+        //         _token: $('meta[name="csrf-token"]').attr('content'),
+        //         categories_id: document.getElementById('category').value,
+        //         user_id: document.getElementById('user').value,
+        //         budget: document.getElementById('budget').value,
+        //         budget_balance: document.getElementById('budget').value,
+        //         description: document.getElementById('description').value,
+        //         attachment: document.getElementById('attachment').value, // Problem here
+        //         status: document.getElementById('status').value,
+        //         assign: document.getElementById('assign').value,
+        //         date: document.getElementById('date').value
+        //     };
+
+
+        //     console.table(formData);
+        //     $.ajax({
+        //         url: "{{ route('Expense.submit_add') }}",
+        //         type: 'POST',
+        //         data: formData,
+        //         success: function(response) {
+        //             console.log(response);
+        //             if (response.status == 1) {
+        //                 $("#globalModalView").modal('toggle');
+        //                 Swal.fire({
+        //                     title: response.message,
+        //                     icon: "success",
+        //                     draggable: true
+        //                 });
+        //                 reloadPage();
+        //             }
+        //         },
+        //         error: function(xhr) {
+        //             console.log(xhr);
+
+        //         }
+        //     });
+        // })
+
+
+
         $(document).on('click', "#btn_submit_expense", function() {
-            //const formData = $("#addExpenseForm").serializeArray();
-            const formData = {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                categories_id: document.getElementById('category').value,
-                user_id: document.getElementById('user').value,
-                budget: document.getElementById('budget').value,
-                budget_balance: document.getElementById('budget').value,
-                description: document.getElementById('description').value,
-                attachment: document.getElementById('attachment').value,
-                status: document.getElementById('status').value,
-                assign: document.getElementById('assign').value,
-                date: document.getElementById('date').value
-            };
+            // Use FormData to handle file uploads
+            const formData = new FormData(document.getElementById('addExpenseForm'));
 
+            // Log form data for debugging (optional)
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
 
-            console.table(formData);
             $.ajax({
                 url: "{{ route('Expense.submit_add') }}",
                 type: 'POST',
                 data: formData,
+                processData: false, // Prevent jQuery from processing the data
+                contentType: false, // Let the browser set the content type (multipart/form-data)
                 success: function(response) {
                     console.log(response);
                     if (response.status == 1) {
@@ -193,11 +261,21 @@
                     }
                 },
                 error: function(xhr) {
-                    console.log(xhr);
-
+                    console.log(xhr.responseJSON); // Log the full error response
+                    Swal.fire({
+                        title: 'Error',
+                        text: xhr.responseJSON.message || 'Something went wrong!',
+                        icon: 'error'
+                    });
                 }
             });
-        })
+        });
+
+
+
+
+
+
 
         $(document).ready(function() {
             $('.preview-btn').on('click', function() {
@@ -247,6 +325,7 @@
             `);
             printWindow.document.close();
         });
+
 
 
         document.querySelectorAll('.update-status-select').forEach(select => {

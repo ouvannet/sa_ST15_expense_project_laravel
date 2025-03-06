@@ -30,7 +30,7 @@
 
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-
+                                    
 
                                     <div class="text-success fw-600 fs-13px">
                                         <i class="fa fa-caret-up"></i> +3.59%
@@ -116,18 +116,31 @@
                             <th scope="col">Paid By</th>
                             <th scope="col">Amount</th>
                             <th scope="col">Used At</th>
-                            
+
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($expense_usages as $usage)
                             <tr id="expense-row-{{ $usage->id }}">
-                                <td>{{$loop->iteration }}</td>
-                                <td>{{$usage->expense_id}}</td>
-                                <td>{{$usage->reference_number ?? 'N/A'}}</td>
-                                <td>{{$usage->expense_reference_number ?? 'N/A'}}</td>
-                                <td>{{$usage->payment_method ?? 'N/A'}}</td>
-                                <td>{{$usage->amount}}</td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $usage->expense_id }}</td>
+
+
+                                <td>
+                                    <a class="text-decoration-none btn btn-sm btn-primary"
+                                        href="{{ route('expense.show', ['id' => $usage->expense_id]) }}">
+                                        {{ $usage->reference_number ?? 'N/A' }}
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <a class="text-decoration-none btn btn-sm btn-primary"
+                                        href="{{ route('expense.show', ['id' => $usage->expense_id]) }}">
+                                        {{ $usage->expense_reference_number ?? 'N/A' }}
+                                    </a>
+                                </td>
+                                <td>{{ $usage->payment_method ?? 'N/A' }}</td>
+                                <td>{{ $usage->amount }}</td>
                                 <td>{{ \Carbon\Carbon::parse($usage->used_at)->format('Y-m-d') }}</td>
                             </tr>
                         @empty

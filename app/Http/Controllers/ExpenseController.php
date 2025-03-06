@@ -10,6 +10,7 @@ use App\Models\ExpenseModel;
 use App\Models\CategoryModel;
 use App\Models\UserModel;
 use App\Models\RecurringModel;
+use Illuminate\Support\Facades\Storage;
 use App\Models\ReferenceModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -53,114 +54,136 @@ class ExpenseController extends Controller
     }
 
 
-    public function submit_add(Request $request)
-    {
-        $request->validate([
-            'categories_id' => 'required|integer',
-            'user_id' => 'required|integer',
-            'budget' => 'required|numeric',
-            'budget_balance' => 'required|numeric',
-            'description' => 'nullable|string|max:255',
-            'attachment' => 'nullable|string',
-            'status' => 'required|string|max:50',
-            'assign' => 'required|string|max:100',
-            'date' => 'required|date',
-        ]);
-
-
-        // Fetch the current value from tbl_reference where type = 'expense'
-        $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
-
-        if (!$reference) {
-            return response()->json(['success' => false, 'message' => 'Reference type not found!'], 400);
-        }
-
-        $formattedReference = sprintf('EXP%04d', $reference->value);
-        $expense = ExpenseModel::create(array_merge($request->all(), [
-            'reference_number' => $formattedReference,
-        ]));
-
-
-        DB::table('tbl_reference')->where('type', 'expense')->increment('value');
-        $message = "🔔 *New Expense Alert!*\n"
-            . "━━━━━━━━━━━━━━━━━━━━━\n"
-            . "💰 *Budget:* `{$expense->budget} USD`\n"
-            . "📂 *Category:* `{$expense->category->name}`\n"
-            . "📝 *Description:* `{$expense->description}`\n"
-            . "📅 *Date:* `{$expense->date}`\n"
-            . "📌 *Status:* `{$expense->status}`\n"
-            . "━━━━━━━━━━━━━━━━━━━━━\n"
-            . "🔗 [View Expense Details](Open Website){$expense->id})";
-
-        TelegramHelper::sendMessage($message);
-
-        if ($expense) {
-            $message = ['status' => 1, 'message' => 'Expense Inserted Successfully.'];
-        } else {
-            $message = ['status' => 0, 'message' => 'Expense Inserted Fail'];
-        }
-        return ($message);
-
-
-    }
-
-
-
-    // public function useBalance(Request $request, $id)
+    // public function submit_add(Request $request)
     // {
-    //     $expense = ExpenseModel::findOrFail($id);
 
+
+    //     //dd($request);
     //     $request->validate([
-    //         'amount' => 'required|numeric|min:1|max:' . $expense->budget_balance,
-    //         'payment_method' => 'required|string|max:50', // Ensure payment method is required
+    //         'categories_id' => 'required|integer',
+    //         'user_id' => 'required|integer',
+    //         'budget' => 'required|numeric',
+    //         'budget_balance' => 'required|numeric',
+    //         'description' => 'nullable|string|max:255',
+    //         //'attachment' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx,txt|max:10240',
+    //         'attachment' => 'required|file|max:10240',
+    //         'status' => 'required|string|max:50',
+    //         'assign' => 'required|string|max:100',
+    //         'date' => 'required|date',
     //     ]);
 
+
     //     // Fetch the current value from tbl_reference where type = 'expense'
-    //     $reference = DB::table('tbl_reference')->where('type', 'payment')->first();
+    //     $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
 
     //     if (!$reference) {
     //         return response()->json(['success' => false, 'message' => 'Reference type not found!'], 400);
     //     }
 
-    //     $formattedReference = sprintf('PAY%04d', $reference->value);
+    //     // if ($request->hasFile('file')) {
+    //     //     // Get original filename with extension
+    //     //     $originalName = $request->file('file')->getClientOriginalName();
 
-    //     //dd($request,$formattedReference,$expense->reference_number);
+    //     //     // Generate unique filename with timestamp
+    //     //     $fileName = time() . '_' . $originalName;
 
-    //     try {
-    //         // Begin a transaction
-    //         DB::beginTransaction();
-    //         // Deduct the amount from the budget balance
-    //         $expense->budget_balance -= $request->amount;
-    //         if ($expense->budget_balance == 0) {
-    //             $expense->status = 'Completed';
-    //         }
-    //         $expense->save();
-
+    //     //     // Store file and get the path
+    //     //     $path = $request->file('file')->storeAs(
+    //     //         'public/uploads',
+    //     //         $fileName
+    //     //     );
 
 
-    //         DB::table('tbl_expense_usage')->insert([
-    //             'expense_id' => $expense->id,
-    //             'amount' => $request->amount,
-    //             'used_at' => now(),
-    //             'expense_reference_number' => $expense->reference_number,
-    //             'reference_number' => $formattedReference,
-    //             'payment_method' => $request->payment_method,
-
-    //         ]);
-
-
-    //         DB::table('tbl_reference')->where('type', 'payment')->increment('value');
-
-    //         // Commit the transaction
-    //         DB::commit();
-
-    //         return redirect()->route('expense.show', ['id' => $id])->with('success', 'Balance used successfully!');
-    //     } catch (\Exception $e) {
-
-    //         DB::rollBack();
-    //         return redirect()->route('expense.show', ['id' => $id])->withErrors(['error' => $e->getMessage()]);
+    //     //     // Save only the path to database
+    //     //     ExpenseModel::create([
+    //     //         'attachment' => $path
+    //     //     ]);
+    //     // }
+    //     if ($request->hasFile('attachment') && $request->file('attachment')->isValid()) {
+    //         $file = $request->file('attachment');
+    //         $path = $file->store('uploads', 'public'); // Save the file
+    //         return "File uploaded successfully: " . $path;
     //     }
+
+
+
+    //     $formattedReference = sprintf('EXP%04d', $reference->value);
+    //     $expense = ExpenseModel::create(array_merge($request->all(), [
+    //         'reference_number' => $formattedReference,
+    //     ]));
+
+
+    //     DB::table('tbl_reference')->where('type', 'expense')->increment('value');
+
+    //     // $message = "🔔 *New Expense Alert!*\n"
+    //     //     . "━━━━━━━━━━━━━━━━━━━━━\n"
+    //     //     . "💰 *Budget:* `{$expense->budget} USD`\n"
+    //     //     . "📂 *Category:* `{$expense->category->name}`\n"
+    //     //     . "📝 *Description:* `{$expense->description}`\n"
+    //     //     . "📅 *Date:* `{$expense->date}`\n"
+    //     //     . "📌 *Status:* `{$expense->status}`\n"
+    //     //     . "━━━━━━━━━━━━━━━━━━━━━\n"
+    //     //     . "🔗 [View Expense Details](Open Website){$expense->id})";
+
+    //     // TelegramHelper::sendMessage($message);
+
+
+    //     if ($expense) {
+    //         $message = ['status' => 1, 'message' => 'Expense Inserted Successfully.'];
+    //     } else {
+    //         $message = ['status' => 0, 'message' => 'Expense Inserted Fail'];
+    //     }
+    //     return ($message);
+
     // }
+
+
+    public function submit_add(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'categories_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'budget' => 'required|numeric',
+            'description' => 'nullable|string|max:255',
+            'attachment' => 'required|file|max:10240',
+            'status' => 'required|string|max:50',
+            'assign' => 'required|string|max:100',
+            'date' => 'required|date',
+        ]);
+
+        // Fetch the reference number
+        $reference = DB::table('tbl_reference')->where('type', 'expense')->first();
+        if (!$reference) {
+            return response()->json(['success' => false, 'message' => 'Reference type not found!'], 400);
+        }
+
+        // Handle file upload
+        $path = $request->file('attachment')->store('uploads', 'public');
+
+        // Set budget_balance to be the same as budget
+        $data = $request->all();
+        $data['budget_balance'] = $request->input('budget'); // Set budget_balance = budget
+
+        // Create the expense record
+        $formattedReference = sprintf('EXP%04d', $reference->value);
+        $expense = ExpenseModel::create(array_merge($data, [
+            'reference_number' => $formattedReference,
+            'attachment' => $path,
+        ]));
+
+        // Increment the reference value
+        DB::table('tbl_reference')->where('type', 'expense')->increment('value');
+
+        // Return response
+        return response()->json([
+            'status' => $expense ? 1 : 0,
+            'message' => $expense ? 'Expense Inserted Successfully' : 'Expense Inserted Failed'
+        ]);
+    }
+
+
+
 
     public function useBalance(Request $request, $id)
     {
@@ -210,11 +233,6 @@ class ExpenseController extends Controller
         }
 
     }
-
-
-
-
-
 
 
 

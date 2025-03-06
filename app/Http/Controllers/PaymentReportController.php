@@ -16,11 +16,14 @@ class PaymentReportController extends Controller
 
     public function index(){
 
-        $users = ExpenseModel::all();
+        
         $expense_usages = ExpenseUsageModel::all();
     
         return view('reports.payment_report.index', compact('expense_usages')); 
     }
+
+
+
 
 
 
