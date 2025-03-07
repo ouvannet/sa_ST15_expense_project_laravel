@@ -32,12 +32,10 @@
                                 <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
                             </div>
 
-                            <div class="d-flex">
+                            <div class="d-flex align-items-end">
                                 <div class="flex-grow-1">
                                     <h3 class="mb-1">${{ number_format($totalBudget, 2) }}</h3>
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
-                                    </div>
+                                   
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
@@ -60,12 +58,10 @@
                                 <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
                             </div>
 
-                            <div class="d-flex">
+                            <div class="d-flex  align-items-end">
                                 <div class="flex-grow-1">
                                     <h3 class="mb-1">${{ number_format($totalExpense, 2) }}</h3>
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
-                                    </div>
+                                    
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
@@ -92,12 +88,10 @@
                                 <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
                             </div>
 
-                            <div class="d-flex">
+                            <div class="d-flex  align-items-end">
                                 <div class="flex-grow-1">
                                     <h3 class="mb-1">${{ number_format($totalPayment, 2) }}</h3>
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
-                                    </div>
+                                   
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
@@ -120,12 +114,10 @@
                                 <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
                             </div>
 
-                            <div class="d-flex">
+                            <div class="d-flex  align-items-end">
                                 <div class="flex-grow-1">
                                     <h3 class="mb-1">${{ number_format($totalRecurring, 2) }}</h3>
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
-                                    </div>
+                                   
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
@@ -235,7 +227,7 @@
                             <h5 class="mb-1">Recurring Expense</h5>
                             <div class="fs-13px">Latest recurring expense history</div>
                         </div>
-                        <a href="{{ route('Expense') }}" class="text-decoration-none">See All</a>
+                        <a href="{{ route('Recurring') }}" class="text-decoration-none">See All</a>
                     </div>
 
                     <!-- BEGIN table-responsive -->

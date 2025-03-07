@@ -25,7 +25,7 @@
                             <th scope="col">Description</th>
                             <th scope="col">Attachment</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Assign</th>
+                            <th scope="col">Assign To</th>
                             <th scope="col">Date</th>
                             <th scope="col" class="text-end">Actions</th>
                         </tr>
@@ -49,11 +49,7 @@
                                 <td>{{ $expense->budget }}</td>
                                 <td>{{ $expense->budget_balance }}</td>
                                 <td>{{ $expense->description }}</td>
-                                {{-- <td>
-                                    <a href="{{ $expense->attachment }}" class="btn btn-sm btn-light">
-                                        <img src="/images/icon/attachment.png" width="15px">
-                                    </a>
-                                </td> --}}
+
 
                                 <td>
                                     @if ($expense->attachment)
@@ -109,9 +105,10 @@
                                 </td>
                                 <td>{{ $expense->approver->name ?? 'N/A' }}</td> <!-- User who approves -->
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
-                                <td class="d-flex justify-content-end gap-2">
+
+                                <td class=" gap-2  m-auto">
                                     <button onclick="edit_expense({{ $expense->id }})"
-                                        class="btn btn-sm btn-warning edit-btn py-2">
+                                        class="btn btn-sm btn-warning edit-btn">
                                         Edit
                                     </button>
                                     <button onclick="delete_expense({{ $expense->id }})" class="btn btn-sm btn-danger"
@@ -123,6 +120,8 @@
                                         Preview
                                     </button>
                                 </td>
+
+
                             </tr>
                         @empty
                             <tr>
@@ -190,68 +189,40 @@
         })
 
 
-
-        // $(document).on('click', "#btn_submit_expense", function() {
-        //     //const formData = $("#addExpenseForm").serializeArray();
-        //     const formData = {
-        //         _token: $('meta[name="csrf-token"]').attr('content'),
-        //         categories_id: document.getElementById('category').value,
-        //         user_id: document.getElementById('user').value,
-        //         budget: document.getElementById('budget').value,
-        //         budget_balance: document.getElementById('budget').value,
-        //         description: document.getElementById('description').value,
-        //         attachment: document.getElementById('attachment').value, // Problem here
-        //         status: document.getElementById('status').value,
-        //         assign: document.getElementById('assign').value,
-        //         date: document.getElementById('date').value
-        //     };
-
-
-        //     console.table(formData);
-        //     $.ajax({
-        //         url: "{{ route('Expense.submit_add') }}",
-        //         type: 'POST',
-        //         data: formData,
-        //         success: function(response) {
-        //             console.log(response);
-        //             if (response.status == 1) {
-        //                 $("#globalModalView").modal('toggle');
-        //                 Swal.fire({
-        //                     title: response.message,
-        //                     icon: "success",
-        //                     draggable: true
-        //                 });
-        //                 reloadPage();
-        //             }
-        //         },
-        //         error: function(xhr) {
-        //             console.log(xhr);
-
-        //         }
-        //     });
-        // })
-
-
-
         $(document).on('click', "#btn_submit_expense", function() {
-            // Use FormData to handle file uploads
-            const formData = new FormData(document.getElementById('addExpenseForm'));
+            const form = document.getElementById('addExpenseForm');
+            const formData = new FormData(form);
 
-            // Log form data for debugging (optional)
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
+            // Reset any previous validation states
+            $('#form-errors').addClass('d-none').text('');
+            form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+            // Client-side validation
+            let isValid = true;
+            form.querySelectorAll('[required]').forEach(field => {
+                if (!field.value.trim()) { // Check if field is empty
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                $('#form-errors').removeClass('d-none').text('Please fill out all required fields.');
+                return; // Stop submission if validation fails
             }
 
             $.ajax({
                 url: "{{ route('Expense.submit_add') }}",
                 type: 'POST',
                 data: formData,
-                processData: false, // Prevent jQuery from processing the data
-                contentType: false, // Let the browser set the content type (multipart/form-data)
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 success: function(response) {
-                    console.log(response);
                     if (response.status == 1) {
-                        $("#globalModalView").modal('toggle');
+                        $("#globalModalView").modal('toggle'); // Adjust modal ID if different
                         Swal.fire({
                             title: response.message,
                             icon: "success",
@@ -261,15 +232,28 @@
                     }
                 },
                 error: function(xhr) {
-                    console.log(xhr.responseJSON); // Log the full error response
-                    Swal.fire({
-                        title: 'Error',
-                        text: xhr.responseJSON.message || 'Something went wrong!',
-                        icon: 'error'
-                    });
+                    console.log(xhr.responseJSON);
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        let errorMsg = 'Please fix the following errors:\n';
+                        for (let field in xhr.responseJSON.errors) {
+                            errorMsg += `- ${xhr.responseJSON.errors[field][0]}\n`;
+                            $(`#${field}`).addClass('is-invalid'); // Highlight invalid fields
+                        }
+                        $('#form-errors').removeClass('d-none').text(errorMsg);
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Something went wrong!',
+                            icon: 'error'
+                        });
+                    }
                 }
             });
         });
+
+        function reloadPage() {
+            location.reload(); // Or update table dynamically
+        }
 
 
 
@@ -328,6 +312,8 @@
 
 
 
+
+
         document.querySelectorAll('.update-status-select').forEach(select => {
             select.addEventListener('change', function() {
                 const expenseId = this.dataset.expenseId; // Assuming you have a `data-expense-id` attribute
@@ -375,8 +361,6 @@
             });
         });
 
-
-
         function edit_expense(expense_id) {
             console.log(expense_id);
             $.ajax({
@@ -393,15 +377,25 @@
             });
         }
 
-
         $(document).on('click', "#btn_submit_edit_expense", function() {
-            const formData = $("#editExpenseForm").serializeArray();
+            const formData = new FormData(document.getElementById('editExpenseForm'));
+            // Add _method=PUT since Laravel expects this for updates via POST
+            formData.append('_method', 'PUT');
 
-            console.table(formData);
+            // Log form data for debugging (optional)
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
             $.ajax({
-                url: "/expense",
-                type: 'PUT',
+                url: "/expense", // Matches your controller route
+                type: 'POST', // Use POST with _method=PUT for Laravel file uploads
                 data: formData,
+                processData: false, // Prevent jQuery from processing the data
+                contentType: false, // Let browser set multipart/form-data
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 success: function(response) {
                     console.log(response);
                     if (response.status == 1) {
@@ -412,15 +406,20 @@
                             draggable: true
                         });
                         reloadPage();
-
                     }
                 },
                 error: function(xhr) {
-                    console.log(xhr);
-
+                    console.log(xhr.responseJSON); // Log full error response
                 }
             });
-        })
+        });
+
+
+
+
+
+
+
 
 
         function delete_expense(expense_id) {
