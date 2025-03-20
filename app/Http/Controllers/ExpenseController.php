@@ -243,36 +243,73 @@ class ExpenseController extends Controller
     }
 
 
+    // public function update(Request $req)
+    // {
+    //     $all = $req->all();
+    //     $expense = ExpenseModel::find($all['expense_id']);
+
+    //     $expense->categories_id = $all['category_id'];
+    //     $expense->user_id = $all['user_id'];
+    //     $expense->budget = $all['budget'];
+    //     $expense->budget_balance = $all['budget'];
+    //     $expense->description = $all['description'];
+    //     $expense->attachment = $all['attachment'];
+    //     $expense->status = $all['status'];
+    //     $expense->assign = $all['assigned_to'];
+    //     $expense->date = $all['date'];
+
+
+
+    //     $upd = $expense->save();
+
+    //     if ($upd) {
+    //         $message = ['status' => 1, 'message' => 'Expense Update Successfully'];
+    //     } else {
+    //         $message = ['status' => 0, 'message' => 'Exepse Update Failed'];
+    //     }
+    //     return ($message);
+
+    // }
     public function update(Request $req)
     {
         $all = $req->all();
         $expense = ExpenseModel::find($all['expense_id']);
 
+        if (!$expense) {
+            return response()->json(['status' => 0, 'message' => 'Expense not found'], 404);
+        }
+
         $expense->categories_id = $all['category_id'];
         $expense->user_id = $all['user_id'];
         $expense->budget = $all['budget'];
         $expense->budget_balance = $all['budget'];
-
         $expense->description = $all['description'];
-        $expense->attachment = $all['attachment'];
         $expense->status = $all['status'];
         $expense->assign = $all['assigned_to'];
         $expense->date = $all['date'];
 
+        // Check if an attachment is provided
+        if ($req->hasFile('attachment')) {
+            $file = $req->file('attachment');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('attachments', $filename, 'public');
 
+            $expense->attachment = $filePath;
+        }
 
         $upd = $expense->save();
 
         if ($upd) {
-            $message = ['status' => 1, 'message' => 'Expense Update Successfully'];
+            return response()->json(['status' => 1, 'message' => 'Expense updated successfully']);
         } else {
-            $message = ['status' => 0, 'message' => 'Exepse Update Failed'];
+            return response()->json(['status' => 0, 'message' => 'Expense update failed']);
         }
-        return ($message);
-
-
-
     }
+
+
+
+
+
 
     public function destroy($expense_id)
     {

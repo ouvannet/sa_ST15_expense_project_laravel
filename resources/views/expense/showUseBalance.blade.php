@@ -260,9 +260,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ number_format($usage->amount, 2) }} USD</td>
                                 <td>{{ $usage->used_at }}</td>
-
                                 <td>{{ $usage->expense_reference_number }}</td>
-
                                 <td>{{ $usage->reference_number }}</td>
                                 <td>{{ $usage->payment_method }}</td>
                             </tr>

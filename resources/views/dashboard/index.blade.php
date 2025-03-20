@@ -324,7 +324,7 @@
                                                 </div>
                                                 <div class="ms-3 flex-grow-1">
                                                     <div class="fw-600 text-body">{{ $expense->description }}</div>
-                                                    <div class="fs-13px">Category: {{ $expense->category->name }}</div>
+                                                    <div class="fs-13px">Category: {{ $expense->category->name ?? 'None' }}</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -347,7 +347,7 @@
                         </table>
                     </div>
                     <!-- END table-responsive -->
-                </div>
+                </div>	
                 <!-- END card-body -->
             </div>
             <!-- END card -->

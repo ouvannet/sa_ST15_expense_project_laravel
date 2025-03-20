@@ -9,7 +9,8 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Categories List</h5>
-                <button type="button" class="btn btn-primary mb-3" id="btn_add_category" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                <button type="button" class="btn btn-primary mb-3" id="btn_add_category" data-bs-toggle="modal"
+                    data-bs-target="#addCategoryModal">
                     Add Category
                 </button>
 
@@ -30,13 +31,15 @@
                                 <td>{{ $category->description }}</td>
                                 <td class="d-flex justify-content-end gap-2">
                                     <!-- Edit Button -->
-                                    <button onclick="edit_category({{$category->id}})" class="btn btn-sm btn-warning edit-btn px-3" data-id="{{ $category->id }}"
+                                    <button onclick="edit_category({{ $category->id }})"
+                                        class="btn btn-sm btn-warning edit-btn px-3" data-id="{{ $category->id }}"
                                         data-name="{{ $category->name }}" data-description="{{ $category->description }}">
                                         Edit
                                     </button>
 
                                     <!-- Delete Button -->
-                                    <button onclick="delete_category({{$category->id}})" class="btn btn-sm btn-danger delete-btn px-3" data-id="{{ $category->id }}">
+                                    <button onclick="delete_category({{ $category->id }})"
+                                        class="btn btn-sm btn-danger delete-btn px-3" data-id="{{ $category->id }}">
                                         Delete
                                     </button>
                                 </td>
@@ -52,7 +55,7 @@
         </div>
     </div>
 
-  
+
 
 
 @endsection
@@ -68,11 +71,11 @@
 
         $("#btn_add_category").click(function() {
             $.ajax({
-                url: "{{route('category.add') }}",
+                url: "{{ route('category.add') }}",
                 type: 'GET',
                 headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 success: function(response) {
                     console.log(response);
                     $("#globalModalView").html(response);
@@ -84,17 +87,74 @@
             });
         })
 
-        
-        $(document).on('click',"#btn_submit_category",function(){
-            const formData = $("#addCategoryForm").serializeArray();
-            console.table(formData);
+
+
+
+
+        // $(document).on('click', "#btn_submit_category", function() {
+        //     const formData = $("#addCategoryForm").serializeArray();
+        //     console.table(formData);
+        //     $.ajax({
+        //         url: "{{ route('category.submit_add') }}",
+        //         type: 'POST',
+        //         data: formData,
+        //         success: function(response) {
+        //             console.log(response);
+        //             if (response.status == 1) {
+        //                 $("#globalModalView").modal('toggle');
+        //                 Swal.fire({
+        //                     title: response.message,
+        //                     icon: "success",
+        //                     draggable: true
+        //                 });
+        //                 reloadPage();
+        //             }
+        //         },
+        //         error: function(xhr) {
+        //             console.log(xhr);
+
+        //         }
+        //     });
+        // })
+
+
+        $(document).on('click', "#btn_submit_category", function(e) {
+            e.preventDefault();
+
+            const $form = $("#addCategoryForm");
+            const formData = $form.serializeArray();
+            const data = Object.fromEntries(formData.map(field => [field.name, field.value]));
+
+            // Reset validation
+            $('.form-control').removeClass('is-invalid');
+            $('.invalid-feedback').hide();
+
+            // Validate
+            let isValid = true;
+            if (!data.name || data.name.length > 255) {
+                $("#add-name").addClass('is-invalid').next('.invalid-feedback')
+                    .text(!data.name ? 'Name is required.' : 'Max 255 characters.').show();
+                isValid = false;
+            }
+            if (data.description && data.description.length > 255) {
+                $("#add-description").addClass('is-invalid').next('.invalid-feedback')
+                    .text('Max 255 characters.').show();
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Submit
             $.ajax({
-                url: "{{route('category.submit_add') }}",
+                url: "{{ route('category.submit_add') }}",
                 type: 'POST',
                 data: formData,
-                success: function (response) {
-                    console.log(response);
-                    if(response.status==1){
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: () => $("#btn_submit_category").prop('disabled', true).text('Adding...'),
+                success: (response) => {
+                    if (response.status == 1) {
                         $("#globalModalView").modal('toggle');
                         Swal.fire({
                             title: response.message,
@@ -104,42 +164,50 @@
                         reloadPage();
                     }
                 },
-                error: function (xhr) {
-                    console.log(xhr);
-                    
-                }
+                error: (xhr) => {
+                    const errors = xhr.responseJSON?.errors || {};
+                    if (errors.name) $("#add-name").addClass('is-invalid').next('.invalid-feedback')
+                        .text(errors.name[0]).show();
+                    if (errors.description) $("#add-description").addClass('is-invalid').next(
+                        '.invalid-feedback').text(errors.description[0]).show();
+                },
+                complete: () => $("#btn_submit_category").prop('disabled', false).text('Add Category')
             });
-        })
+        });
 
 
-        function edit_category(category_id){
+
+
+
+
+
+        function edit_category(category_id) {
             console.log(category_id);
             $.ajax({
                 url: `/category/${category_id}/edit`,
                 type: 'GET',
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     $("#globalModalView").html(response);
                     $("#globalModalView").modal('toggle');
                 },
-                error: function (xhr) {
-                    console.log(xhr);  
+                error: function(xhr) {
+                    console.log(xhr);
                 }
             });
         }
 
 
-        $(document).on('click',"#btn_submit_edit_category",function(){
+        $(document).on('click', "#btn_submit_edit_category", function() {
             const formData = $("#addCategoryForm").serializeArray();
-            
             console.table(formData);
             $.ajax({
                 url: "/category",
                 type: 'PUT',
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
-                    if(response.status==1){
+                    if (response.status == 1) {
                         $("#globalModalView").modal('toggle');
                         Swal.fire({
                             title: response.message,
@@ -149,14 +217,14 @@
                         reloadPage();
                     }
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         })
 
-        function delete_category(category_id){
+        function delete_category(category_id) {
             Swal.fire({
                 title: "Are you sure?",
                 icon: "warning",
@@ -167,14 +235,14 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/category/"+category_id,
+                        url: "/category/" + category_id,
                         type: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (response) {
+                        success: function(response) {
                             console.log(response);
-                            if(response.status==1){
+                            if (response.status == 1) {
                                 Swal.fire({
                                     title: "Deleted!",
                                     text: response.message,
@@ -183,19 +251,13 @@
                                 reloadPage();
                             }
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             console.log(xhr);
-                            
+
                         }
                     });
                 }
             });
         }
-
-
-
-
-
-
     </script>
 @endpush

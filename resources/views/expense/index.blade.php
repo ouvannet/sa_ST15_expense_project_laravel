@@ -13,7 +13,7 @@
                     Add Expense
                 </button>
 
-                <table class="table table-striped mb-0">
+                <table id="expensesDataTable" class="table table-striped mb-0">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -22,7 +22,7 @@
                             <th scope="col">User</th>
                             <th scope="col">Budget</th>
                             <th scope="col">Balance</th>
-                            <th scope="col">Description</th>
+
                             <th scope="col">Attachment</th>
                             <th scope="col">Status</th>
                             <th scope="col">Assign To</th>
@@ -45,31 +45,25 @@
                                     @endif
                                 </td>
                                 <td>{{ $expense->category->name ?? 'N/A' }}</td>
-                                <td>{{ $expense->requester->name ?? 'N/A' }}</td> <!-- User who requested -->
+                                <td>{{ $expense->requester->name ?? 'N/A' }}</td>
                                 <td>{{ $expense->budget }}</td>
                                 <td>{{ $expense->budget_balance }}</td>
-                                <td>{{ $expense->description }}</td>
-
 
                                 <td>
                                     @if ($expense->attachment)
                                         @php
                                             $fileExtension = pathinfo($expense->attachment, PATHINFO_EXTENSION);
                                         @endphp
-
                                         @if (in_array($fileExtension, ['png', 'jpg', 'jpeg', 'gif', 'webp']))
-                                            <!-- Show Image Preview -->
                                             <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank">
                                                 <img src="{{ asset('storage/' . $expense->attachment) }}" width="50"
                                                     height="50" class="rounded shadow">
                                             </a>
                                         @elseif ($fileExtension === 'pdf')
-                                            <!-- Show PDF Icon -->
                                             <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank">
                                                 <i class="fas fa-file-pdf text-danger" style="font-size: 24px;"></i>
                                             </a>
                                         @else
-                                            <!-- Show Download Icon for Other Files -->
                                             <a href="{{ asset('storage/' . $expense->attachment) }}" target="_blank"
                                                 class="btn btn-sm btn-light">
                                                 <i class="fas fa-download"></i> Download
@@ -79,12 +73,9 @@
                                         <span class="text-muted">No attachment</span>
                                     @endif
                                 </td>
-
-
-
                                 <td>
                                     @if ($expense->status == 'Completed')
-                                        <span class="text-primary ">Completed</span>
+                                        <span class="text-primary">Completed</span>
                                     @else
                                         <select
                                             class="form-select update-status-select {{ $expense->status == 'Approved' ? 'text-success' : ($expense->status == 'Canceled' ? 'text-danger' : 'text-warning') }}"
@@ -103,37 +94,54 @@
                                         </select>
                                     @endif
                                 </td>
-                                <td>{{ $expense->approver->name ?? 'N/A' }}</td> <!-- User who approves -->
+                                <td>{{ $expense->approver->name ?? 'N/A' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
 
-                                <td class=" gap-2  m-auto">
-                                    <button onclick="edit_expense({{ $expense->id }})"
-                                        class="btn btn-sm btn-warning edit-btn">
-                                        Edit
-                                    </button>
-                                    <button onclick="delete_expense({{ $expense->id }})" class="btn btn-sm btn-danger"
-                                        data-id="{{ $expense->id }}">
-                                        Delete
-                                    </button>
-                                    <button class="btn btn-sm btn-info preview-btn" data-id="{{ $expense->id }}"
-                                        data-bs-toggle="modal" data-bs-target="#invoiceModal">
-                                        Preview
-                                    </button>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item text-warning" href="#"
+                                                    onclick="edit_expense({{ $expense->id }})">
+                                                    ✏️ Edit
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="#"
+                                                    onclick="delete_expense({{ $expense->id }})">
+                                                    🗑️ Delete
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#invoiceModal">
+                                                    🖨️ Preview
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
 
 
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="11" class="text-center">No expenses available.</td>
+                                <td colspan="12" class="text-center">No expenses available.</td>
                             </tr>
                         @endforelse
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+
+   
+
 
     <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -170,6 +178,68 @@
         //let deleteId = null;
 
 
+
+
+        // $(document).ready(function() {
+        //     $('#expensesDataTable').DataTable({
+        //         "lengthMenu": [
+        //             [10, 25, 50, 100, -1],
+        //             [10, 25, 50, 100, "All"]
+        //         ],
+        //         "pageLength": 10,
+        //         "pagingType": "full_numbers",
+        //         "ordering": true, // Enables column sorting
+        //         "responsive": true, // Responsive for mobile devices
+        //         "columnDefs": [{
+        //                 "orderable": false,
+        //                 "targets": [-1]
+        //             } // Disable sorting on last column (Actions)
+        //         ],
+        //         "dom": '<"d-flex justify-content-between"<"flex-grow-1"l><"flex-grow-1"f>>rt<"d-flex justify-content-between"<"flex-grow-1"i><"flex-grow-1"p>>',
+        //         "language": {
+        //             "lengthMenu": "Show _MENU_ entries",
+        //             "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+        //             "infoEmpty": "No entries available",
+        //             "infoFiltered": "(filtered from _MAX_ total entries)",
+        //             "search": "Search:",
+        //             "paginate": {
+        //                 "first": "First",
+        //                 "last": "Last",
+        //                 "next": "›",
+        //                 "previous": "‹"
+        //             }
+        //         }
+        //     });
+        // });
+
+        $(document).ready(function() {
+            $('#expensesDataTable').DataTable({
+                responsive: true, // Makes table responsive
+                lengthMenu: [
+                    [10, 20, 50, 100, -1],
+                    [10, 20, 50, 100, "All"]
+                ],
+                pageLength: 10,
+                pagingType: "full_numbers",
+                dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
+                language: {
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "No records available",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    search: "Search:",
+                    paginate: {
+                        first: "First",
+                        last: "Last",
+                        next: "Next",
+                        previous: "Previous"
+                    }
+                }
+            });
+        });
+
+
+
         $("#btn_add_exp").click(function() {
             $.ajax({
                 url: "{{ route('Expense.add') }}",
@@ -187,6 +257,7 @@
                 }
             });
         })
+
 
 
         $(document).on('click', "#btn_submit_expense", function() {
@@ -222,7 +293,8 @@
                 },
                 success: function(response) {
                     if (response.status == 1) {
-                        $("#globalModalView").modal('toggle'); // Adjust modal ID if different
+                        $("#globalModalView").modal(
+                            'toggle'); // Adjust modal ID if different
                         Swal.fire({
                             title: response.message,
                             icon: "success",
@@ -237,7 +309,8 @@
                         let errorMsg = 'Please fix the following errors:\n';
                         for (let field in xhr.responseJSON.errors) {
                             errorMsg += `- ${xhr.responseJSON.errors[field][0]}\n`;
-                            $(`#${field}`).addClass('is-invalid'); // Highlight invalid fields
+                            $(`#${field}`).addClass(
+                                'is-invalid'); // Highlight invalid fields
                         }
                         $('#form-errors').removeClass('d-none').text(errorMsg);
                     } else {
@@ -254,10 +327,6 @@
         function reloadPage() {
             location.reload(); // Or update table dynamically
         }
-
-
-
-
 
 
 
@@ -316,7 +385,8 @@
 
         document.querySelectorAll('.update-status-select').forEach(select => {
             select.addEventListener('change', function() {
-                const expenseId = this.dataset.expenseId; // Assuming you have a `data-expense-id` attribute
+                const expenseId = this.dataset
+                    .expenseId; // Assuming you have a `data-expense-id` attribute
                 const newStatus = this.value;
 
                 this.classList.remove('text-success', 'text-danger', 'text-warning');
@@ -333,7 +403,8 @@
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                            'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]')
                                 .getAttribute('content')
                         },
                         body: JSON.stringify({

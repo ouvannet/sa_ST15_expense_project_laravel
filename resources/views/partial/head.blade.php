@@ -15,12 +15,17 @@
         box-sizing: border-box;
     }
 
-
 </style>
 
-<!-- ================== BEGIN BASE CSS STYLE ================== -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <link href="/assets/css/vendor.min.css" rel="stylesheet" />
-<link href="/assets/css/app.min.css" rel="stylesheet" />
+<link href="/assets/css/app.min.css"     rel="stylesheet" />
 <!-- ================== END BASE CSS STYLE ================== -->
 
 @stack('css')
