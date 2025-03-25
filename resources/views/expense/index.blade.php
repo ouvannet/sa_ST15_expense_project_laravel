@@ -117,10 +117,10 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item text-info" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#invoiceModal">
+                                                <button class="btn btn-sm btn-info preview-btn" data-id="{{ $expense->id }}"
+                                                    data-bs-toggle="modal" data-bs-target="#invoiceModal">
                                                     🖨️ Preview
-                                                </a>
+                                                </button>
                                             </li>
                                         </ul>
                                     </div>
@@ -176,42 +176,6 @@
             }, 1000);
         }
         //let deleteId = null;
-
-
-
-
-        // $(document).ready(function() {
-        //     $('#expensesDataTable').DataTable({
-        //         "lengthMenu": [
-        //             [10, 25, 50, 100, -1],
-        //             [10, 25, 50, 100, "All"]
-        //         ],
-        //         "pageLength": 10,
-        //         "pagingType": "full_numbers",
-        //         "ordering": true, // Enables column sorting
-        //         "responsive": true, // Responsive for mobile devices
-        //         "columnDefs": [{
-        //                 "orderable": false,
-        //                 "targets": [-1]
-        //             } // Disable sorting on last column (Actions)
-        //         ],
-        //         "dom": '<"d-flex justify-content-between"<"flex-grow-1"l><"flex-grow-1"f>>rt<"d-flex justify-content-between"<"flex-grow-1"i><"flex-grow-1"p>>',
-        //         "language": {
-        //             "lengthMenu": "Show _MENU_ entries",
-        //             "info": "Showing _START_ to _END_ of _TOTAL_ entries",
-        //             "infoEmpty": "No entries available",
-        //             "infoFiltered": "(filtered from _MAX_ total entries)",
-        //             "search": "Search:",
-        //             "paginate": {
-        //                 "first": "First",
-        //                 "last": "Last",
-        //                 "next": "›",
-        //                 "previous": "‹"
-        //             }
-        //         }
-        //     });
-        // });
-
         $(document).ready(function() {
             $('#expensesDataTable').DataTable({
                 responsive: true, // Makes table responsive

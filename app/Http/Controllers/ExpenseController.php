@@ -167,12 +167,14 @@ class ExpenseController extends Controller
         // Send the message to the main chat and expense management group
         TelegramHelper::sendMessageToGroups($message, [
             env('TELEGRAM_CHAT_ID'),
-            env('TELEGRAM_GROUP_EXPENSE_MANAGEMENT'),
+            // env('GROUP_BUFFET'),
         ]);
 
         // Send the photo to the main chat
-        TelegramHelper::sendPhoto($path, "Attachment for Expense #{$formattedReference}");
-
+        TelegramHelper::sendPhotoToGroups($path, "Photo", [
+            env('TELEGRAM_CHAT_ID'),
+            // env('GROUP_BUFFET'),
+        ]);
 
         // Return response
         return response()->json([
@@ -229,9 +231,6 @@ class ExpenseController extends Controller
 
     }
 
-
-
-
     public function edit($expense_id)
     {
         $expense = ExpenseModel::find($expense_id);
@@ -242,34 +241,6 @@ class ExpenseController extends Controller
         return view('expense.action.edit', compact('expense', 'categories', 'users', 'recurring_expenses'));
     }
 
-
-    // public function update(Request $req)
-    // {
-    //     $all = $req->all();
-    //     $expense = ExpenseModel::find($all['expense_id']);
-
-    //     $expense->categories_id = $all['category_id'];
-    //     $expense->user_id = $all['user_id'];
-    //     $expense->budget = $all['budget'];
-    //     $expense->budget_balance = $all['budget'];
-    //     $expense->description = $all['description'];
-    //     $expense->attachment = $all['attachment'];
-    //     $expense->status = $all['status'];
-    //     $expense->assign = $all['assigned_to'];
-    //     $expense->date = $all['date'];
-
-
-
-    //     $upd = $expense->save();
-
-    //     if ($upd) {
-    //         $message = ['status' => 1, 'message' => 'Expense Update Successfully'];
-    //     } else {
-    //         $message = ['status' => 0, 'message' => 'Exepse Update Failed'];
-    //     }
-    //     return ($message);
-
-    // }
     public function update(Request $req)
     {
         $all = $req->all();
@@ -286,8 +257,8 @@ class ExpenseController extends Controller
         $expense->description = $all['description'];
         $expense->status = $all['status'];
         $expense->assign = $all['assigned_to'];
-        $expense->date = $all['date'];
-
+        $expense->date = $all['date'];        
+        
         // Check if an attachment is provided
         if ($req->hasFile('attachment')) {
             $file = $req->file('attachment');
@@ -306,15 +277,9 @@ class ExpenseController extends Controller
         }
     }
 
-
-
-
-
-
     public function destroy($expense_id)
     {
         $expense = ExpenseModel::find($expense_id);
-
         if ($expense) {
             // Delete the associated file from storage if it exists
             if ($expense->attachment && Storage::disk('public')->exists($expense->attachment)) {
