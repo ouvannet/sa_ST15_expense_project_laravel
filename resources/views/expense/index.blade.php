@@ -97,27 +97,34 @@
                                 <td>{{ $expense->approver->name ?? 'N/A' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($expense->date)->format('Y-m-d') }}</td>
 
+
                                 <td class="text-center">
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             Actions
                                         </button>
+                                        {{auth()->user()->role}}
+                                        
                                         <ul class="dropdown-menu">
+                                            
+                                            @if (auth()->user()->role->name == 'Admin' || auth()->user()->role->name == 'Manager' || auth()->user()->role->name == 'Account')
+                                                <li>
+                                                    <button class="dropdown-item text-warning" onclick="edit_expense({{ $expense->id }})">
+                                                        ✏️ Edit
+                                                    </button>
+                                                </li>
+                                            @endif
+
+                                            @if (auth()->user()->role->name == 'Admin' || auth()->user()->role->name == 'Manager')
+                                                <li>
+                                                    <button class="dropdown-item text-danger" onclick="delete_expense({{ $expense->id }})">
+                                                        🗑️ Delete
+                                                    </button>
+                                                </li>
+                                            @endif
                                             <li>
-                                                <a class="dropdown-item text-warning" href="#"
-                                                    onclick="edit_expense({{ $expense->id }})">
-                                                    ✏️ Edit
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item text-danger" href="#"
-                                                    onclick="delete_expense({{ $expense->id }})">
-                                                    🗑️ Delete
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <button class="btn btn-sm btn-info preview-btn" data-id="{{ $expense->id }}"
+                                                <button class="dropdown-item text-info preview-btn" data-id="{{ $expense->id }}"
                                                     data-bs-toggle="modal" data-bs-target="#invoiceModal">
                                                     🖨️ Preview
                                                 </button>
@@ -125,7 +132,7 @@
                                         </ul>
                                     </div>
                                 </td>
-
+                            
 
                             </tr>
                         @empty
@@ -175,6 +182,9 @@
                 location.reload();
             }, 1000);
         }
+
+        
+
         //let deleteId = null;
         $(document).ready(function() {
             $('#expensesDataTable').DataTable({
