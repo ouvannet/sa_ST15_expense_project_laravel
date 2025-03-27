@@ -6,7 +6,6 @@
 <head>
     @include('partial.head')
    
-
 </head>
 
 <body class="{{ !empty($bodyClass) ? $bodyClass : '' }}">

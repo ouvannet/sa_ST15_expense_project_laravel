@@ -58,7 +58,7 @@
                         </div>
                         <div class="text-center mt-3">
                             <small class="text-muted">Don't have an account? 
-                                <a href="#" class="text-decoration-none">Sign up</a>
+                                <a href="{{ route('register') }}" class="text-decoration-none">Register Now</a>
                             </small>
                         </div>
                     </form>

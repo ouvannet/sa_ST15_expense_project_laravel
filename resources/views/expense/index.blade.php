@@ -108,7 +108,8 @@
                                         
                                         <ul class="dropdown-menu">
                                             
-                                            @if (auth()->user()->role->name == 'Admin' || auth()->user()->role->name == 'Manager' || auth()->user()->role->name == 'Account')
+                                           
+                                            @if(user_permission(''))
                                                 <li>
                                                     <button class="dropdown-item text-warning" onclick="edit_expense({{ $expense->id }})">
                                                         ✏️ Edit

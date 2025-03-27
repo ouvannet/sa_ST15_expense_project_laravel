@@ -18,11 +18,15 @@ class UserController extends Controller
         $users = UserModel::with(['role','department'])->get();
         return view('user.index', compact('users')); 
     }
+
+    
     public function add(){
         $department=DepartmentModel::all();
         $role=RoleModel::all();
         return view('user.action.add',['department'=>$department,'role'=>$role]);
     }
+
+
     public function submit_add(Request $req){
         $all=$req->all();
         $ins = UserModel::create([
