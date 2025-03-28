@@ -43,7 +43,7 @@
                                 <td>{{ $user->phone ?? '' }}</td>
                                 <td>{{ $user->department->name ?? '' }}</td>
                                 <td>{{ $user->role->name ?? '' }}</td>
-                                <td class="d-flex justify-content-end gap-2">
+                                <td class="gap-2 text-end">
 
                                     @if (user_permission('Edit_User'))
                                         <button onclick="edit_user({{ $user->id }})"

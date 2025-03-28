@@ -45,7 +45,7 @@
                                     class=" {{ $recurring->status == 'active' ? 'text-success' : ($recurring->status == 'inactive' ? 'text-warning' : 'text-danger') }} ">
                                     {{ $recurring->status ?? 'N/A' }}</td>
 
-                                <td class="d-flex justify-content-end gap-2">
+                                <td class="gap-2 text-end">
 
                                     @if (user_permission('Edit_Recurring'))
                                         <button onclick="edit_recurring({{ $recurring->id }})"

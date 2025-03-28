@@ -32,7 +32,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $category->name }}</td>
                                 <td>{{ $category->description }}</td>
-                                <td class="d-flex justify-content-end gap-2">
+                                <td class="gap-2 text-end">
                                     <!-- Edit Button -->
 
                                     @if (user_permission('Edit_Category'))

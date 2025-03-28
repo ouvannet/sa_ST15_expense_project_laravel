@@ -35,7 +35,7 @@
                             <tr>
                                 <td>{{ $rol->id }}</td>
                                 <td>{{ $rol->name }}</td>
-                                <td class="d-flex justify-content-end gap-2">
+                                <td class="gap-2 text-end">
 
                                     @if (user_permission('Set_Permission'))
                                         <button onclick="set_permission({{ $rol->id }})"

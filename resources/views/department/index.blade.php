@@ -30,7 +30,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $department->name }}</td>
                                 <td>{{ $department->description }}</td>
-                                <td class="d-flex justify-content-end gap-2">
+                                <td class="gap-2 text-end">
                                     <!-- Edit Button -->
 
                                     @if (user_permission('Edit_Department'))

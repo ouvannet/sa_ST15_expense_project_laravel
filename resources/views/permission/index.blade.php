@@ -33,7 +33,7 @@
                             <tr>
                                 <td>{{ $per->id }}</td>
                                 <td>{{ $per->name }}</td>
-                                <td class="d-flex justify-content-end gap-2">
+                                <td class="gap-2 text-end">
 
                                     @if (user_permission('Edit_Permission'))
                                     <button onclick="edit_permission({{ $per->id }})"
