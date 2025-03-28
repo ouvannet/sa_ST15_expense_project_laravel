@@ -9,10 +9,13 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Categories List</h5>
-                <button type="button" class="btn btn-primary mb-3" id="btn_add_category" data-bs-toggle="modal"
-                    data-bs-target="#addCategoryModal">
-                    Add Category
-                </button>
+
+                @if (user_permission('Add_Category'))
+                    <button type="button" class="btn btn-primary mb-3" id="btn_add_category" data-bs-toggle="modal"
+                        data-bs-target="#addCategoryModal">
+                        Add Category
+                    </button>
+                @endif
 
                 <table class="table table-striped mb-0">
                     <thead>
@@ -31,17 +34,23 @@
                                 <td>{{ $category->description }}</td>
                                 <td class="d-flex justify-content-end gap-2">
                                     <!-- Edit Button -->
-                                    <button onclick="edit_category({{ $category->id }})"
-                                        class="btn btn-sm btn-warning edit-btn px-3" data-id="{{ $category->id }}"
-                                        data-name="{{ $category->name }}" data-description="{{ $category->description }}">
-                                        Edit
-                                    </button>
 
-                                    <!-- Delete Button -->
-                                    <button onclick="delete_category({{ $category->id }})"
-                                        class="btn btn-sm btn-danger delete-btn px-3" data-id="{{ $category->id }}">
-                                        Delete
-                                    </button>
+                                    @if (user_permission('Edit_Category'))
+                                        <button onclick="edit_category({{ $category->id }})"
+                                            class="btn btn-sm btn-warning edit-btn px-3" data-id="{{ $category->id }}"
+                                            data-name="{{ $category->name }}"
+                                            data-description="{{ $category->description }}">
+                                            Edit
+                                        </button>
+                                    @endif
+
+                                    @if (user_permission('Delete_Category'))
+                                        <!-- Delete Button -->
+                                        <button onclick="delete_category({{ $category->id }})"
+                                            class="btn btn-sm btn-danger delete-btn px-3" data-id="{{ $category->id }}">
+                                            Delete
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

@@ -7,10 +7,13 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Departments List</h5>
-                <button type="button" id="btn_add_department" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                    data-bs-target="#addDepartmentModal">
-                    Add Department
-                </button>
+
+                @if (user_permission('Add_Department'))
+                    <button type="button" id="btn_add_department" class="btn btn-primary mb-3" data-bs-toggle="modal"
+                        data-bs-target="#addDepartmentModal">
+                        Add Department
+                    </button>
+                @endif
 
                 <table class="table table-striped mb-0">
                     <thead>
@@ -29,16 +32,24 @@
                                 <td>{{ $department->description }}</td>
                                 <td class="d-flex justify-content-end gap-2">
                                     <!-- Edit Button -->
-                                    <button onclick="edit_department({{$department->id}})" class="btn btn-sm btn-warning edit-btn px-3" data-id="{{ $department->id }}"
-                                        data-name="{{ $department->name }}"
-                                        data-description="{{ $department->description }}">
-                                        Edit
-                                    </button>
 
-                                    <!-- Delete Button -->
-                                    <button onclick="delete_department({{$department->id}})" class="btn btn-sm btn-danger delete-btn px-3" data-id="{{ $department->id }}">
-                                        Delete
-                                    </button>
+                                    @if (user_permission('Edit_Department'))
+                                        <button onclick="edit_department({{ $department->id }})"
+                                            class="btn btn-sm btn-warning edit-btn px-3" data-id="{{ $department->id }}"
+                                            data-name="{{ $department->name }}"
+                                            data-description="{{ $department->description }}">
+                                            Edit
+                                        </button>
+                                    @endif
+
+
+                                    @if (user_permission('Delete_Department'))
+                                        <!-- Delete Button -->
+                                        <button onclick="delete_department({{ $department->id }})"
+                                            class="btn btn-sm btn-danger delete-btn px-3" data-id="{{ $department->id }}">
+                                            Delete
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
@@ -53,7 +64,7 @@
     </div>
 
 
-   
+
 @endsection
 
 @push('js')

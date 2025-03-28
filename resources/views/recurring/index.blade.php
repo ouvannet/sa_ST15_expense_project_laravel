@@ -7,9 +7,12 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Recurring Expense</h5>
-                <button type="button" class="btn btn-primary mb-3" id="btn_add_recurring">
-                    Create Recurring
-                </button>
+
+                @if (user_permission('Add_Recurring'))
+                    <button type="button" class="btn btn-primary mb-3" id="btn_add_recurring">
+                        Create Recurring
+                    </button>
+                @endif
 
                 <table class="table table-striped mb-0">
                     <thead>
@@ -38,18 +41,25 @@
                                 <td>{{ $recurring->start_date ?? 'N/A' }}</td>
                                 <td>{{ $recurring->end_date ?? 'N/A' }}</td>
                                 <td>{{ $recurring->next_run_date ?? 'N/A' }}</td>
-                                <td class=" {{ $recurring->status == 'active' ? 'text-success' : ($recurring->status =='inactive' ? 'text-warning' : 'text-danger') }} ">
+                                <td
+                                    class=" {{ $recurring->status == 'active' ? 'text-success' : ($recurring->status == 'inactive' ? 'text-warning' : 'text-danger') }} ">
                                     {{ $recurring->status ?? 'N/A' }}</td>
 
                                 <td class="d-flex justify-content-end gap-2">
-                                    <button onclick="edit_recurring({{ $recurring->id }})"
-                                        class="btn btn-sm btn-warning edit-btn">
-                                        Edit
-                                    </button>
-                                    <button onclick="delete_recurring({{ $recurring->id }})"
-                                        class="btn btn-sm btn-danger delete-btn">
-                                        Delete
-                                    </button>
+
+                                    @if (user_permission('Edit_Recurring'))
+                                        <button onclick="edit_recurring({{ $recurring->id }})"
+                                            class="btn btn-sm btn-warning edit-btn">
+                                            Edit
+                                        </button>
+                                    @endif
+
+                                    @if (user_permission('Delete_Recurring'))
+                                        <button onclick="delete_recurring({{ $recurring->id }})"
+                                            class="btn btn-sm btn-danger delete-btn">
+                                            Delete
+                                        </button>
+                                    @endif
                                 </td>
 
                             </tr>
@@ -240,28 +250,28 @@
             });
         });
 
-       // Dynamically handle expense selection
-    //    $(document).on("click", ".expense-item", function() {
-    //         var expenseId = $(this).data("id");
-    //         var expenseAmount = $(this).data("amount");
-    //         var categoryId = $(this).data("category-id");
-    //         var userId = $(this).data("user-id");
-            
+        // Dynamically handle expense selection
+        //    $(document).on("click", ".expense-item", function() {
+        //         var expenseId = $(this).data("id");
+        //         var expenseAmount = $(this).data("amount");
+        //         var categoryId = $(this).data("category-id");
+        //         var userId = $(this).data("user-id");
 
-    //         // Populate hidden fields
-    //         $("#expense_id").val(expenseId);
-    //         $("#selectedExpenseText").text(`Expense ID: ${expenseId} | Category: ${categoryID} | Amount: $${expenseAmount} | User: ${userId}`);
 
-    //         // Insert values into respective form fields
-    //         $("#category_id").val(categoryId); 
-    //         $("#amount").val(expenseAmount);   
-    //         $("#user_id").val(userId);
-    //     });
+        //         // Populate hidden fields
+        //         $("#expense_id").val(expenseId);
+        //         $("#selectedExpenseText").text(`Expense ID: ${expenseId} | Category: ${categoryID} | Amount: $${expenseAmount} | User: ${userId}`);
+
+        //         // Insert values into respective form fields
+        //         $("#category_id").val(categoryId); 
+        //         $("#amount").val(expenseAmount);   
+        //         $("#user_id").val(userId);
+        //     });
 
         // Load add recurring expense modal
         $("#btn_add_recurring").click(function() {
             $.ajax({
-                url: "{{ route('Recurring.add') }}",  // Ensure this route is defined
+                url: "{{ route('Recurring.add') }}", // Ensure this route is defined
                 type: 'GET',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -281,7 +291,7 @@
         $(document).on('click', "#btn_submit_recurring", function() {
             const formData = $("#addRecurringForm").serializeArray();
             $.ajax({
-                url: "{{ route('recurring.submit_add') }}",  // Ensure this route is defined
+                url: "{{ route('recurring.submit_add') }}", // Ensure this route is defined
                 type: 'POST',
                 data: formData,
                 success: function(response) {

@@ -14,9 +14,12 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Permission List</h5>
-                <button type="button" class="btn btn-primary mb-3" id="btn_add_permission">
-                    Add Permission
-                </button>
+
+                @if (user_permission('Add_Permission'))
+                    <button type="button" class="btn btn-primary mb-3" id="btn_add_permission">
+                        Add Permission
+                    </button>
+                @endif
                 <table class="table table-striped mb-0">
                     <thead>
                         <tr>
@@ -31,12 +34,20 @@
                                 <td>{{ $per->id }}</td>
                                 <td>{{ $per->name }}</td>
                                 <td class="d-flex justify-content-end gap-2">
-                                    <button onclick="edit_permission({{$per->id}})" class="btn btn-sm btn-warning edit-btn">
+
+                                    @if (user_permission('Edit_Permission'))
+                                    <button onclick="edit_permission({{ $per->id }})"
+                                        class="btn btn-sm btn-warning edit-btn">
                                         Edit
                                     </button>
-                                    <button onclick="delete_permission({{$per->id}})" class="btn btn-sm btn-danger delete-btn">
+                                    @endif
+
+                                    @if (user_permission('Delete_Permission'))
+                                    <button onclick="delete_permission({{ $per->id }})"
+                                        class="btn btn-sm btn-danger delete-btn">
                                         Delete
                                     </button>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
@@ -45,7 +56,7 @@
                             </tr>
                         @endforelse
                     </tbody>
-                    
+
                 </table>
             </div>
         </div>
@@ -56,40 +67,40 @@
 
 @push('js')
     <script>
-        function reloadPage(){
-            setTimeout(function(){
+        function reloadPage() {
+            setTimeout(function() {
                 location.reload();
             }, 1000);
         }
 
 
-        $("#btn_add_permission").click(function(){
+        $("#btn_add_permission").click(function() {
             $.ajax({
                 url: "{{ route('permission.add') }}",
                 type: 'GET',
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     $("#globalModalView").html(response);
                     $("#globalModalView").modal('toggle');
                 },
-                error: function (xhr) {
-                    console.log(xhr);           
+                error: function(xhr) {
+                    console.log(xhr);
                 }
             });
         })
 
 
 
-        $(document).on('click',"#btn_submit_add_permission",function(){
+        $(document).on('click', "#btn_submit_add_permission", function() {
             const formData = $("#addpermissionForm").serializeArray();
             console.table(formData);
             $.ajax({
-                url: "{{route('permission.submit_add') }}",
+                url: "{{ route('permission.submit_add') }}",
                 type: 'POST',
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
-                    if(response.status==1){
+                    if (response.status == 1) {
                         $("#globalModalView").modal('toggle');
                         Swal.fire({
                             title: response.message,
@@ -99,40 +110,40 @@
                         reloadPage();
                     }
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         })
 
-        function edit_permission(permission_id){
+        function edit_permission(permission_id) {
             console.log(permission_id);
             $.ajax({
                 url: `/permission/${permission_id}/edit`,
                 type: 'GET',
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     $("#globalModalView").html(response);
                     $("#globalModalView").modal('toggle');
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         }
 
-        $(document).on('click',"#btn_submit_edit_permission",function(){
+        $(document).on('click', "#btn_submit_edit_permission", function() {
             const formData = $("#addpermissionForm").serializeArray();
             console.table(formData);
             $.ajax({
                 url: "/permission",
                 type: 'PUT',
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
-                    if(response.status==1){
+                    if (response.status == 1) {
                         $("#globalModalView").modal('toggle');
                         Swal.fire({
                             title: response.message,
@@ -142,15 +153,15 @@
                         reloadPage();
                     }
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         })
 
 
-        function delete_permission(permission_id){
+        function delete_permission(permission_id) {
             Swal.fire({
                 title: "Are you sure?",
                 icon: "warning",
@@ -161,14 +172,14 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/permission/"+permission_id,
+                        url: "/permission/" + permission_id,
                         type: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (response) {
+                        success: function(response) {
                             console.log(response);
-                            if(response.status==1){
+                            if (response.status == 1) {
                                 Swal.fire({
                                     title: "Deleted!",
                                     text: response.message,
@@ -177,9 +188,9 @@
                                 reloadPage();
                             }
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             console.log(xhr);
-                            
+
                         }
                     });
                 }

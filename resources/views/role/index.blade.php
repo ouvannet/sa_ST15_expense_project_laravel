@@ -16,9 +16,12 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Role List</h5>
-                <button type="button" class="btn btn-primary mb-3" id="btn_add_role">
-                    Add Role
-                </button>
+
+                @if (user_permission('Add_Role'))
+                    <button type="button" class="btn btn-primary mb-3" id="btn_add_role">
+                        Add Role
+                    </button>
+                @endif
                 <table class="table table-striped mb-0">
                     <thead>
                         <tr>
@@ -33,15 +36,27 @@
                                 <td>{{ $rol->id }}</td>
                                 <td>{{ $rol->name }}</td>
                                 <td class="d-flex justify-content-end gap-2">
-                                    <button onclick="set_permission({{$rol->id}})" class="btn btn-sm btn-primary">
-                                        Set Permission
-                                    </button>
-                                    <button onclick="edit_role({{$rol->id}})" class="btn btn-sm btn-warning">
+
+                                    @if (user_permission('Set_Permission'))
+                                        <button onclick="set_permission({{ $rol->id }})"
+                                            class="btn btn-sm btn-primary">
+                                            Set Permission
+                                        </button>
+                                    @endif
+
+                                    @if (user_permission('Edit_Role'))
+                                    <button onclick="edit_role({{ $rol->id }})" class="btn btn-sm btn-warning">
                                         Edit
                                     </button>
-                                    <button onclick="delete_role({{$rol->id}})" class="btn btn-sm btn-danger delete-btn">
-                                        Delete
-                                    </button>
+                                    @endif
+
+                                    @if (user_permission('Delete_Role'))
+                                        <button onclick="delete_role({{ $rol->id }})"
+                                            class="btn btn-sm btn-danger delete-btn">
+                                            Delete
+                                        </button>
+                                    @endif
+
                                 </td>
                             </tr>
                         @empty
@@ -50,7 +65,7 @@
                             </tr>
                         @endforelse
                     </tbody>
-                    
+
                 </table>
             </div>
         </div>
@@ -58,36 +73,36 @@
 @endsection
 @push('js')
     <script>
-        function reloadPage(){
-            setTimeout(function(){
+        function reloadPage() {
+            setTimeout(function() {
                 location.reload();
             }, 1000);
         }
-        $("#btn_add_role").click(function(){
+        $("#btn_add_role").click(function() {
             $.ajax({
                 url: "{{ route('role.add') }}",
                 type: 'GET',
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     $("#globalModalView").html(response);
                     $("#globalModalView").modal('toggle');
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         })
-        $(document).on('click',"#btn_submit_add_role",function(){
+        $(document).on('click', "#btn_submit_add_role", function() {
             const formData = $("#addroleForm").serializeArray();
             console.table(formData);
             $.ajax({
                 url: "{{ route('role.submit_add') }}",
                 type: 'POST',
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
-                    if(response.status==1){
+                    if (response.status == 1) {
                         $("#globalModalView").modal('toggle');
                         Swal.fire({
                             title: response.message,
@@ -97,40 +112,40 @@
                         reloadPage();
                     }
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         })
 
-        function edit_role(role){
+        function edit_role(role) {
             console.log(role);
             $.ajax({
                 url: `/role/${role}/edit`,
                 type: 'GET',
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     $("#globalModalView").html(response);
                     $("#globalModalView").modal('toggle');
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         }
 
-        $(document).on('click',"#btn_submit_edit_role",function(){
+        $(document).on('click', "#btn_submit_edit_role", function() {
             const formData = $("#addroleForm").serializeArray();
             console.table(formData);
             $.ajax({
                 url: "/role",
                 type: 'PUT',
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
-                    if(response.status==1){
+                    if (response.status == 1) {
                         $("#globalModalView").modal('toggle');
                         Swal.fire({
                             title: response.message,
@@ -140,14 +155,14 @@
                         reloadPage();
                     }
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         })
 
-        function delete_role(role_id){
+        function delete_role(role_id) {
             Swal.fire({
                 title: "Are you sure?",
                 icon: "warning",
@@ -158,14 +173,14 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/role/"+role_id,
+                        url: "/role/" + role_id,
                         type: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (response) {
+                        success: function(response) {
                             console.log(response);
-                            if(response.status==1){
+                            if (response.status == 1) {
                                 Swal.fire({
                                     title: "Deleted!",
                                     text: response.message,
@@ -174,40 +189,41 @@
                                 reloadPage();
                             }
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             console.log(xhr);
-                            
+
                         }
                     });
                 }
             });
         }
-        function set_permission(role_id){
+
+        function set_permission(role_id) {
             $.ajax({
-                url: "/role/setpermission/"+role_id,
+                url: "/role/setpermission/" + role_id,
                 type: 'GET',
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
                     $("#globalModalView").html(response);
                     $("#globalModalView").modal('toggle');
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         }
 
-        $(document).on('click',"#btn_submit_set_permission_role",function(){
+        $(document).on('click', "#btn_submit_set_permission_role", function() {
             const formData = $("#setPermissionRoleForm").serializeArray();
             console.table(formData);
             $.ajax({
                 url: "/role/setpermission/submit",
                 type: 'POST',
                 data: formData,
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
-                    if(response.status==1){
+                    if (response.status == 1) {
                         $("#globalModalView").modal('toggle');
                         Swal.fire({
                             title: response.message,
@@ -217,9 +233,9 @@
                         reloadPage();
                     }
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     console.log(xhr);
-                    
+
                 }
             });
         })

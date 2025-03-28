@@ -8,10 +8,13 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Expenses List</h5>
-                <button type="button" class="btn btn-primary mb-3" id="btn_add_exp" data-bs-toggle="modal"
-                    data-bs-target="#addExpenseModal">
-                    Add Expense
-                </button>
+
+                @if (user_permission('Add_Expense'))
+                    <button type="button" class="btn btn-primary mb-3" id="btn_add_exp" data-bs-toggle="modal"
+                        data-bs-target="#addExpenseModal">
+                        Add Expense
+                    </button>
+                @endif
 
                 <table id="expensesDataTable" class="table table-striped mb-0">
                     <thead>
@@ -104,36 +107,39 @@
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             Actions
                                         </button>
-                                        {{auth()->user()->role}}
-                                        
+                                        {{ auth()->user()->role }}
+
                                         <ul class="dropdown-menu">
-                                            
-                                           
-                                            @if(user_permission(''))
+
+                                            @if (user_permission('Edit_Expense'))
                                                 <li>
-                                                    <button class="dropdown-item text-warning" onclick="edit_expense({{ $expense->id }})">
+                                                    <button class="dropdown-item text-warning"
+                                                        onclick="edit_expense({{ $expense->id }})">
                                                         ✏️ Edit
                                                     </button>
                                                 </li>
                                             @endif
 
-                                            @if (auth()->user()->role->name == 'Admin' || auth()->user()->role->name == 'Manager')
+                                            @if (user_permission('Delete_Expense'))
                                                 <li>
-                                                    <button class="dropdown-item text-danger" onclick="delete_expense({{ $expense->id }})">
+                                                    <button class="dropdown-item text-danger"
+                                                        onclick="delete_expense({{ $expense->id }})">
                                                         🗑️ Delete
                                                     </button>
                                                 </li>
                                             @endif
+
                                             <li>
-                                                <button class="dropdown-item text-info preview-btn" data-id="{{ $expense->id }}"
-                                                    data-bs-toggle="modal" data-bs-target="#invoiceModal">
+                                                <button class="dropdown-item text-info preview-btn"
+                                                    data-id="{{ $expense->id }}" data-bs-toggle="modal"
+                                                    data-bs-target="#invoiceModal">
                                                     🖨️ Preview
                                                 </button>
                                             </li>
                                         </ul>
                                     </div>
                                 </td>
-                            
+
 
                             </tr>
                         @empty
@@ -148,7 +154,7 @@
     </div>
 
 
-   
+
 
 
     <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
@@ -184,7 +190,7 @@
             }, 1000);
         }
 
-        
+
 
         //let deleteId = null;
         $(document).ready(function() {
