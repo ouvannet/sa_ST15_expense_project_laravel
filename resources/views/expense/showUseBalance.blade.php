@@ -266,7 +266,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center">No usage history found.</td>
+                                <td colspan="12" class="text-center">No usage history found.</td>
                             </tr>
                         @endforelse
                     </tbody>

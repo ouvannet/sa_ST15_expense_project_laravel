@@ -107,10 +107,9 @@
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             Actions
                                         </button>
-                                        {{ auth()->user()->role }}
+                                        {{-- {{ auth()->user()->role }} --}}
 
-                                        <ul class="dropdown-menu">
-
+                                        <ul class="dropdown-menu">  
                                             @if (user_permission('Edit_Expense'))
                                                 <li>
                                                     <button class="dropdown-item text-warning"
@@ -197,8 +196,8 @@
             $('#expensesDataTable').DataTable({
                 responsive: true, // Makes table responsive
                 lengthMenu: [
-                    [10, 20, 50, 100, -1],
-                    [10, 20, 50, 100, "All"]
+                    [5, 10, 20, 50, -1],
+                    [5, 10, 20, 50, "All"]
                 ],
                 pageLength: 10,
                 pagingType: "full_numbers",
