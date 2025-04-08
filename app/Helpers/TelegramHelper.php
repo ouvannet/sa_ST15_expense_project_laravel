@@ -131,11 +131,12 @@ class TelegramHelper
         self::initialize(); // Ensure properties are set
         $url = "https://api.telegram.org/bot" . self::$token . "/sendMessage";
         $responses = [];
-g
+
         if (empty($chatIds)) {
             throw new \Exception("No chat IDs provided for sending message.");
         }
 
+        
         foreach ($chatIds as $id) {
             if ($id) { // Skip if chat ID is null or empty
                 // Log the message before sending

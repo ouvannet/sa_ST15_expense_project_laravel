@@ -23,7 +23,7 @@ class StoreUserPermissions
             $user = Auth::user();
             $permissions = $user->permissions->pluck('name')->toArray(); // Assuming 'permissions' is a relationship
             // Store the permissions in the session
-            dd($permissions);
+            //dd($permissions);
             Session::put('user_permissions', $permissions);
         }
         return $next($request);

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\DashBoardModel;
+use Illuminate\Support\Facades\Auth;
 
 
 class DashboardController extends Controller
@@ -13,7 +14,8 @@ class DashboardController extends Controller
 
     public function index()
     {
-
+        // $user = Auth::user();
+        // dd($user);
         $expenses = DashBoardModel::with(['category'])->get();
 
         $recurrings = DB::table('tbl_recurring_expense')->get();

@@ -1,16 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use App\Models\DepartmentModel;
-
 
 class DepartmentController extends Controller
 {
-
     public function index()
     {
         $departments = DepartmentModel::all();
@@ -22,6 +18,7 @@ class DepartmentController extends Controller
     {
         return view('department.action.add');
     }
+
 
     public function submit_add(Request $req)
     {
@@ -75,7 +72,5 @@ class DepartmentController extends Controller
             $message = ['status' => 0, 'message' => 'Department Deleted Fail.'];
         }
         return ($message);
-
     }
-
 }

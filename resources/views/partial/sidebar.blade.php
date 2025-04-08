@@ -1,10 +1,7 @@
 <!-- BEGIN #sidebar -->
 <div id="sidebar" class="app-sidebar">
-    
-	<!-- BEGIN scrollbar -->
-	<div class="app-sidebar-content" data-scrollbar="true" data-height="100%">
-		<!-- BEGIN menu -->
-		<div class="menu">
+    <div class="app-sidebar-content" data-scrollbar="true" data-height="100%">
+        <div class="menu">
             @php
             $currentUrl = (Request::path() != '/') ? '/'. Request::path() : '/';
 
@@ -50,9 +47,7 @@
                 return $subMenu;
             }
 
-
-
-            foreach (config('sidebar.menu') as $key => $menu) {
+            foreach (app('sidebar.menu') as $key => $menu) {
                 $GLOBALS['parent_active'] = '';
 
                 $hasSub = (!empty($menu['children'])) ? 'has-sub' : '';
@@ -93,19 +88,14 @@
                     ';
                 }
             }
-        @endphp
-        <div class="p-3 px-4 mt-auto hide-on-minified">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="btn btn-danger px-4">Log out</button>
-            </form>
+            @endphp
+            <div class="p-3 px-4 mt-auto hide-on-minified">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn btn-danger px-4">Log out</button>
+                </form>
+            </div>
         </div>
     </div>
-    <!-- END menu -->
-  </div>
-  <!-- END scrollbar -->
-	<!-- BEGIN mobile-sidebar-backdrop -->
-	<button class="app-sidebar-mobile-backdrop" data-dismiss="sidebar-mobile"></button>
-	<!-- END mobile-sidebar-backdrop -->
+    <button class="app-sidebar-mobile-backdrop" data-dismiss="sidebar-mobile"></button>
 </div>
-<!-- END #sidebar -->

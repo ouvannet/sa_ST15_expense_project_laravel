@@ -11,7 +11,6 @@
         <small>Welcome Back. How are you doing?</small>
     </h1>
 
-
     <!-- BEGIN row -->
     <div class="row">
         <!-- BEGIN col-6 -->
@@ -48,6 +47,7 @@
                     </div>
                     <!-- END card -->
                     <div class="card ">
+					
                         <!-- BEGIN card-body -->
                         <div class="card-body">
                             <div class="d-flex mb-4">

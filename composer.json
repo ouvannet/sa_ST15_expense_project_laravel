@@ -29,6 +29,8 @@
         },
         "files": [
             "app/Helpers/PermissionHelper.php"
+
+            
         ]
     },
     "autoload-dev": {
