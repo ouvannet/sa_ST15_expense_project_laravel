@@ -15,16 +15,16 @@ class MenuServiceProvider extends ServiceProvider
             if (Auth::check() && Auth::user()->role) {
                 $roleName = Auth::user()->role->name;
 
-           
+                // Define allowed menu items for each role
                 $allowedItems = [
-                    'admin' => null,
-                    'manager' => ['Dashboard', 'Expense', 'Category', 'People', 'Report'],
-                    'account' => ['Dashboard', 'Expense', 'Report'],
-                    'staff' => ['Dashboard','Report'],
+                    'Admin' => null, // Null means all items
+                    'Manager' => ['Dashboard', 'Expense', 'Category', 'People', 'Report'],
+                    'Account' => ['Dashboard', 'Expense', 'Report'],
+                    'Staff' => ['Dashboard'],
                 ];
 
                 // Filter menu based on role
-                if ($roleName !== 'admin') {
+                if ($roleName !== 'Admin') {
                     $menu['menu'] = array_filter($menu['menu'], function ($item) use ($allowedItems, $roleName) {
                         return isset($item['is_header']) || 
                                isset($item['is_divider']) || 
