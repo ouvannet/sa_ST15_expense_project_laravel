@@ -210,8 +210,6 @@
                             <th scope="col">End Date</th>
                             <th scope="col">Next Date</th>
                             <th scope="col">Status</th>
-                      
-
                         </tr>
                     </thead>
                     <tbody>

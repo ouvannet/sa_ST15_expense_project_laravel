@@ -10,12 +10,14 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule): void
+    protected $commands = [
+        \App\Console\Commands\GenerateRecurringExpenses::class,
+    ];
+    
+    protected function schedule(Schedule $schedule)
     {
-        // Run every day at midnight
-        $schedule->command('expenses:process-recurring')->daily();
+        $schedule->command('expenses:generate-recurring')->daily();
     }
-
     /**
      * Register the commands for the application.
      */

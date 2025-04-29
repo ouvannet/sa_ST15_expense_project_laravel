@@ -12,7 +12,7 @@ use App\Http\Controllers\RecurringController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
-
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ExpenseReportController;
 use App\Http\Controllers\RecurringReportController;
 use App\Http\Controllers\PaymentReportController;

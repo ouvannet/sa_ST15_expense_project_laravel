@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class RecurringModel extends Model
 {
     use HasFactory;
-    public $timestamps = false; // Disable Eloquent's timestamps
+    // public $timestamps = false; // Disable Eloquent's timestamps
     
-    protected $table = 'tbl_recurring_expense'; // Make sure the table name matches
+    // protected $table = 'tbl_recurring_expense'; // Make sure the table name matches
 
     // protected $fillable = [
     //     'category_id',
@@ -21,6 +21,20 @@ class RecurringModel extends Model
     //     'next_run_date',
     //     'status'
     // ];
+
+    protected $table = 'tbl_recurring_expense';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    protected $fillable = [
+        'category_id', 'user_id', 'amount', 'frequency',
+        'start_date', 'end_date', 'next_run_date', 'status',
+    ];
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'next_run_date' => 'date',
+    ];
 
     protected $guarded = [];
     public function expense()
@@ -35,7 +49,7 @@ class RecurringModel extends Model
     {
         return $this->belongsTo(UserModel::class, 'user_id', 'id');
     }
-
+  
 
 
 }

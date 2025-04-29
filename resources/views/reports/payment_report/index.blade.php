@@ -125,10 +125,10 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $usage->expense_id }}</td>
 
-
                                 <td>
                                     <a class="text-decoration-none btn btn-sm btn-primary"
                                         href="{{ route('expense.show', ['id' => $usage->expense_id]) }}">
+                                    
                                         {{ $usage->reference_number ?? 'N/A' }}
                                     </a>
                                 </td>

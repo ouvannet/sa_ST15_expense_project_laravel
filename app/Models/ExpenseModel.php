@@ -14,17 +14,22 @@ class ExpenseModel extends Model
    
 
     protected $table = 'tbl_expense'; // Make sure the table name matches
+    // protected $fillable = [
+    //     'categories_id',
+    //     'user_id',
+    //     'budget',
+    //     'budget_balance',
+    //     'description',
+    //     'attachment',
+    //     'status',
+    //     'assign',
+    //     'date',
+    //     'reference_number',
+    // ];
+    
     protected $fillable = [
-        'categories_id',
-        'user_id',
-        'budget',
-        'budget_balance',
-        'description',
-        'attachment',
-        'status',
-        'assign',
-        'date',
-        'reference_number',
+        'reference_number', 'categories_id', 'user_id', 'budget',
+        'budget_balance', 'status', 'date', 'recurring_expense_id',
     ];
 
 
@@ -33,8 +38,6 @@ class ExpenseModel extends Model
     {
         return $this->belongsTo(CategoryModel::class, 'categories_id', 'id');
     }
-
-
 
     public function user()
     {
@@ -62,6 +65,10 @@ class ExpenseModel extends Model
         return $this->hasMany(ExpenseUsageModel::class, 'expense_id');
     }
 
+    public function recurringExpense()
+    {
+        return $this->belongsTo(RecurringModel::class, 'recurring_expense_id');
+    }
 
 
 }

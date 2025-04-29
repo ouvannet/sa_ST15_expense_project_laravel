@@ -20,7 +20,7 @@ class ExpenseController extends Controller
 {
     public function index()
     {
-        $expenses = ExpenseModel::with(['category', 'requester', 'approver'])->get();
+        $expenses = ExpenseModel::with(['category', 'requester', 'approver','recurringExpense'])->get();
         $categories = CategoryModel::all();
         $users = UserModel::all();
         $recurring_expenses = RecurringModel::all();
@@ -164,7 +164,8 @@ class ExpenseController extends Controller
             . "━━━━━━━━━━━━━━━━━━━━━\n"
             . "🔗 <a href='Open Website{$expense->id}'>View Expense Details</a>";
 
-        // Send the message to the main chat and expense management group
+        //Send the message to the main chat and expense management group
+
         TelegramHelper::sendMessageToGroups($message, [
             env('TELEGRAM_CHAT_ID'),
             // env('GROUP_BUFFET'),
@@ -176,6 +177,7 @@ class ExpenseController extends Controller
             // env('GROUP_BUFFET'),
         ]);
 
+        
         // Return response
         return response()->json([
             'status' => $expense ? 1 : 0,
