@@ -3,7 +3,7 @@
 
 
  <meta charset="utf-8" />
-<title>Studio | @yield('title')</title>
+<title>@yield('title')</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="@yield('metaDescription')" />
 <meta name="author" content="@yield('metaAuthor')" />

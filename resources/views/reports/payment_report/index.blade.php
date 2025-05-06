@@ -22,7 +22,7 @@
                         <div class="card-body">
                             <div class="d-flex mb-4">
                                 <div class="flex-grow-1">
-                                    <h5 class="mb-1">Total Payment</h5>
+                                    <h5 class="mb-1">Total Payment INV</h5>
                                     <div>Show all payment</div>
                                 </div>
                                 <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
@@ -30,10 +30,8 @@
 
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-                                    
-
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
+                                    <div class="flex-grow-1">
+                                        <h3>{{$paymentCount}}</h3>
                                     </div>
                                 </div>
                                 <div
@@ -67,7 +65,7 @@
                         <div class="card-body">
                             <div class="d-flex mb-4">
                                 <div class="flex-grow-1">
-                                    <h5 class="mb-1">Total</h5>
+                                    <h5 class="mb-1">Total Payment</h5>
                                     <div>Show all total amount</div>
                                 </div>
                                 <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
@@ -75,10 +73,8 @@
 
                             <div class="d-flex">
                                 <div class="flex-grow-1">
-
-
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
+                                    <div class="flex-grow-1">
+                                        <h3>${{$totalPayment}}</h3>
                                     </div>
                                 </div>
                                 <div
@@ -128,7 +124,7 @@
                                 <td>
                                     <a class="text-decoration-none btn btn-sm btn-primary"
                                         href="{{ route('expense.show', ['id' => $usage->expense_id]) }}">
-                                    
+
                                         {{ $usage->reference_number ?? 'N/A' }}
                                     </a>
                                 </td>

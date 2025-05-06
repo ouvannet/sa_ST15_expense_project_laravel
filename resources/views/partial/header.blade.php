@@ -19,7 +19,8 @@
         </div>
 
         <a href="/" class="brand-logo">
-            <img src="/assets/img/logo.png" class="invert-dark" alt="" height="20" />
+            {{-- <img src="/assets/img/logo.png" class="invert-dark" alt="" height="20" /> --}}
+            <span>Expense</span>
         </a>
     </div>
     <!-- END brand -->
@@ -94,8 +95,8 @@
         </div>
         <div class="menu-item dropdown">
             <a href="#" data-bs-toggle="dropdown" data-display="static" class="menu-link">
-                <div class="menu-img online">
-                    <img src="/assets/img/ytp.png" alt="" class="ms-100 mh-100 rounded-circle" />
+                <div class="menu-img online w-[50%] h-[50%]">
+                    <img src="/assets/img/ytp.png" alt="" class="h-100 w-100 rounded-circle" />
                 </div>
                 <div class="p-3 menu-text">{{ Auth::user()->email }}</div>
             </a>

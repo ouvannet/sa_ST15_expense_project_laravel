@@ -52,6 +52,50 @@
 
 
         </div>
+
+        <div class="col-xl-3">
+            <!-- BEGIN row -->
+            <div class="row">
+                <!-- BEGIN col-6 -->
+                <div class="">
+                    <!-- BEGIN card -->
+                    <div class="card mb-3">
+                        <!-- BEGIN card-body -->
+                        <div class="card-body">
+                            <div class="d-flex mb-4">
+                                <div class="flex-grow-1">
+                                    <h5 class="mb-1">Pending</h5>
+                                    <div>Show all the Pending expense.</div>
+                                </div>
+                                <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
+                            </div>
+
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                                    {{-- <h3 class="mb-1">${{ number_format($totalExpense, 2) }}</h3> --}}
+                                    <h3 class="mb-1">{{ $pendingCount }}</h3>
+
+                                </div>
+                                <div
+                                    class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="fa fa-circle-check text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END card-body -->
+
+                    </div>
+                    <!-- END card -->
+
+                </div>
+
+                <!-- END row -->
+            </div>
+            <!-- END col-6 -->
+
+
+        </div>
+
         <div class="col-xl-3">
             <!-- BEGIN row -->
             <div class="row">
@@ -94,48 +138,7 @@
 
 
         </div>
-        <div class="col-xl-3">
-            <!-- BEGIN row -->
-            <div class="row">
-                <!-- BEGIN col-6 -->
-                <div class="">
-                    <!-- BEGIN card -->
-                    <div class="card mb-3">
-                        <!-- BEGIN card-body -->
-                        <div class="card-body">
-                            <div class="d-flex mb-4">
-                                <div class="flex-grow-1">
-                                    <h5 class="mb-1">Completed</h5>
-                                    <div>Show all the completed expense.</div>
-                                </div>
-                                <a href="javascript:;" class="text-secondary"><i class="fa fa-redo"></i></a>
-                            </div>
 
-                            <div class="d-flex">
-                                <div class="flex-grow-1">
-                                    {{-- <h3 class="mb-1">${{ number_format($totalExpense, 2) }}</h3> --}}
-                                    <h3 class="mb-1">{{ $completedCount }}</h3>
-
-                                </div>
-                                <div
-                                    class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
-                                    <i class="fa fa-circle-check text-primary"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END card-body -->
-
-                    </div>
-                    <!-- END card -->
-
-                </div>
-
-                <!-- END row -->
-            </div>
-            <!-- END col-6 -->
-
-
-        </div>
         <div class="col-xl-3">
             <!-- BEGIN row -->
             <div class="row">

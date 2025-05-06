@@ -16,10 +16,13 @@ class PaymentReportController extends Controller
 
     public function index(){
 
-        
+
         $expense_usages = ExpenseUsageModel::all();
-    
-        return view('reports.payment_report.index', compact('expense_usages')); 
+
+        $paymentCount = DB::table('tbl_expense_usage')->count();
+        $totalPayment = DB::table('tbl_expense_usage')->sum('amount');
+
+        return view('reports.payment_report.index', compact('expense_usages','paymentCount','totalPayment'));
     }
 
 
@@ -27,5 +30,5 @@ class PaymentReportController extends Controller
 
 
 
-    
+
 }

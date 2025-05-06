@@ -26,10 +26,10 @@ class ExpenseReportController extends Controller
 
         // Count records for each status
         $approvedCount = DB::table('tbl_expense')->where('status', 'Approved')->count();
-        $completedCount = DB::table('tbl_expense')->where('status', 'Completed')->count();
+        $pendingCount = DB::table('tbl_expense')->where('status', 'Pending')->count();
         $canceledCount = DB::table('tbl_expense')->where('status', 'Canceled')->count();
 
-        return view('reports.expense_report.index', compact('users', 'categories', 'expenses', 'totalExpense', 'approvedCount', 'completedCount', 'canceledCount'));
+        return view('reports.expense_report.index', compact('users', 'categories', 'expenses', 'totalExpense', 'approvedCount', 'pendingCount', 'canceledCount'));
     }
 
 

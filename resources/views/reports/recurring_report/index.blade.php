@@ -34,10 +34,6 @@
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                                     <h3 class="mb-1">${{ number_format($totalRecurringExpense, 2) }}</h3>
-                                 
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
-                                    </div>
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
@@ -78,10 +74,6 @@
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                                     <h3>{{$activeCount}}</h3>
-                              
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
-                                    </div>
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
@@ -122,10 +114,6 @@
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                                     <h3>{{$pausedCount}}</h3>
-                                    
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
-                                    </div>
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
@@ -166,10 +154,6 @@
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                                     <h3>{{$canceledCount}}</h3>
-                                
-                                    <div class="text-success fw-600 fs-13px">
-                                        <i class="fa fa-caret-up"></i> +3.59%
-                                    </div>
                                 </div>
                                 <div
                                     class="w-50px h-50px bg-primary bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center">
@@ -197,7 +181,7 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-3 fw-bold">Recurring List </h5>
-                
+
 
                 <table class="table table-striped mb-0">
                     <thead>
